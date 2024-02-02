@@ -13,7 +13,7 @@ func main() {
 	myWindow := myApp.NewWindow("groupie-trackers")
 
 	// Titre
-	title := widget.NewLabel("Welcome to My App")
+	title := widget.NewLabel("Welcome to groupie-trackers")
 
 	// Bouttons
 	button1 := widget.NewButton("Go to tracker", func() {
@@ -21,7 +21,7 @@ func main() {
 		fmt.Println("Button 1 clicked!")
 	})
 
-	button2 := widget.NewButton("Click me too!", func() {
+	button2 := widget.NewButton("About", func() {
 		// Button click event handler
 		fmt.Println("Button 2 clicked!")
 	})
@@ -31,8 +31,8 @@ func main() {
 	// Create a container to hold all the widgets
 	content := container.NewHBox(
 		title,
-		button1 nil,
-		button2 nil,
+		button1,
+		button2,
 		// Add other widgets here
 	)
 
