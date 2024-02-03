@@ -14,7 +14,7 @@ type APIUrl struct {
 	Relation  string `json:"relation"`
 }
 
-type ArtistAPI struct {
+type Artist struct {
 	ID           int64    `json:"id"`
 	Image        string   `json:"image"`
 	Name         string   `json:"name"`
@@ -26,7 +26,7 @@ type ArtistAPI struct {
 	Relations    string   `json:"relations"`
 }
 
-type AllArtistsData []ArtistAPI
+type AllArtistsData []Artist
 
 type AllLocations struct {
 	Index []LocationsAPI `json:"index"`
