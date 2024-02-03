@@ -19,11 +19,11 @@ func ArtistbyCreationDateRange(allArtists AllArtists, startdate, enddate int) Al
 	return artistList
 }
 
-func ArtistbyCreationDateCheck(allArtists AllArtists, date []int) AllArtists {
+func ArtistbyCreationDateCheck(allArtists AllArtists, dates []int) AllArtists {
 	var artistList AllArtists
 
 	for i := 0; i < len(allArtists); i++ {
-		if IsNumberinSlice(int(allArtists[i].CreationDate), date) {
+		if IsNumberinSlice(int(allArtists[i].CreationDate), dates) {
 			artistList = append(artistList, allArtists[i])
 		}
 	}
@@ -51,6 +51,28 @@ func ArtistbyFirstAlbumDate(allArtists AllArtists, startdate, enddate string) Al
 		if artistParts[2] >= startParts[2] && artistParts[1] >= startParts[1] && artistParts[0] >= startParts[0] &&
 			artistParts[2] <= endParts[2] && artistParts[1] <= endParts[1] && artistParts[0] <= endParts[0] {
 			artistList = append(artistList, allArtists[i])
+		}
+
+	}
+	return artistList
+}
+
+func ArtistbyFirstAlbumDateCheck(allArtists AllArtists, dates []string) AllArtists {
+	var artistList AllArtists
+
+	for i := 0; i < len(allArtists); i++ {
+		artistParts, err := DateStringToIntSlice(allArtists[i].FirstAlbum)
+		if err != nil {
+			fmt.Println("Error:", err)
+		}
+		for j := 0; j < len(dates); j++ {
+			datesParts, err := DateStringToIntSlice(dates[j])
+			if err != nil {
+				fmt.Println("Error:", err)
+			}
+			if artistParts[2] >= datesParts[2] && artistParts[1] == datesParts[1] && artistParts[0] == datesParts[0] {
+				artistList = append(artistList, allArtists[i])
+			}
 		}
 
 	}
