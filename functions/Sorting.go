@@ -1,6 +1,9 @@
 package functions
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type AlbumDate struct {
 	day   int
@@ -124,13 +127,22 @@ func ArtistbyLocations(allArtists AllArtists, allLocations AllLocations, locatio
 	return artistList
 }
 
-// func ArtistbyLocationsRange(allArtists AllArtists, allLocations AllLocations, locations string) AllArtists {
-// 	var artistList AllArtists
+func ArtistbyCountry(allArtists AllArtists, allLocations AllLocations, country []string) AllArtists {
+	var artistList AllArtists
 
-// 	for i := 0; i < len(allLocations.Index); i++ {
-// 		if IsStringInSlice(locations, allLocations.Index[i].Locations) {
-// 			artistList = append(artistList, allArtists[i])
-// 		}
-// 	}
-// 	return artistList
-// }
+	for i := 0; i < len(allLocations.Index); i++ {
+
+		for j := 0; j < len(country); j++ {
+
+			for k := 0; k < len(allLocations.Index[i].Locations); k++ {
+
+				if strings.Split(allLocations.Index[i].Locations[k], "-")[len(strings.Split(allLocations.Index[i].Locations[k], "-"))-1] == country[j] {
+					artistList = append(artistList, allArtists[i])
+				}
+				break
+			}
+		}
+
+	}
+	return artistList
+}

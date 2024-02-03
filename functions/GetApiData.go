@@ -57,7 +57,6 @@ type Relation struct {
 }
 
 func GetApiData(url string) []byte {
-	// url := "https://groupietrackers.herokuapp.com/api"
 	resp, err := http.Get(url)
 	if err != nil {
 		log.Fatal(err)
