@@ -23,12 +23,12 @@ type Account struct {
 
 var dataAccount AccountData
 
-func main() {
-	//Appeler la fonction login sur la page de connection
-	login("test", "mdp")
-	//Appeler la fonction register si la fonction login returne false
-	register("test", "mdp", "mauvaismdp")
-}
+// func main() {
+// 	//Appeler la fonction login sur la page de connection
+// 	login("chems", "mdp")
+// 	//Appeler la fonction register si la fonction login returne false
+// 	register("test", "mdp", "mauvaismdp")
+// }
 
 // Return true if the username is in the DB, false if not
 func findAccount(username string) bool {
