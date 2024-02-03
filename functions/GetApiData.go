@@ -26,23 +26,23 @@ type Artist struct {
 	Relations    string   `json:"relations"`
 }
 
-type AllArtistsData []Artist
+type AllArtists []Artist
 
 type AllLocations struct {
-	Index []LocationsAPI `json:"index"`
+	Index []Locations `json:"index"`
 }
 
-type LocationsAPI struct {
+type Locations struct {
 	ID        int64    `json:"id"`
 	Locations []string `json:"locations"`
 	Dates     string   `json:"dates"`
 }
 
 type AllDates struct {
-	Index []DatesAPI `json:"index"`
+	Index []Dates `json:"index"`
 }
 
-type DatesAPI struct {
+type Dates struct {
 	ID    int64    `json:"id"`
 	Dates []string `json:"dates"`
 }
@@ -82,8 +82,8 @@ func ApiUrl() APIUrl {
 	return r
 }
 
-func ArtistData() AllArtistsData {
-	var r AllArtistsData
+func ArtistData() AllArtists {
+	var r AllArtists
 	data := GetApiData("https://groupietrackers.herokuapp.com/api/artists")
 	json.Unmarshal(data, &r)
 	return r

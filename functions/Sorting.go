@@ -8,8 +8,8 @@ type AlbumDate struct {
 	year  int
 }
 
-func ArtistbyCreationDate(allArtists AllArtistsData, startdate, enddate int) AllArtistsData {
-	var artistList AllArtistsData
+func ArtistbyCreationDate(allArtists AllArtists, startdate, enddate int) AllArtists {
+	var artistList AllArtists
 
 	for i := 0; i < len(allArtists); i++ {
 		if int64(startdate) <= allArtists[i].CreationDate && allArtists[i].CreationDate <= int64(enddate) {
@@ -19,8 +19,8 @@ func ArtistbyCreationDate(allArtists AllArtistsData, startdate, enddate int) All
 	return artistList
 }
 
-func ArtistbyFirstAlbumDate(allArtists AllArtistsData, startdate, enddate string) AllArtistsData {
-	var artistList AllArtistsData
+func ArtistbyFirstAlbumDate(allArtists AllArtists, startdate, enddate string) AllArtists {
+	var artistList AllArtists
 
 	startParts, err := DateStringToIntSlice(startdate)
 	if err != nil {
@@ -46,11 +46,22 @@ func ArtistbyFirstAlbumDate(allArtists AllArtistsData, startdate, enddate string
 	return artistList
 }
 
-func ArtistbyNumberofMember(allArtists AllArtistsData, listnumber []int) AllArtistsData {
-	var artistList AllArtistsData
+func ArtistbyNumberofMember(allArtists AllArtists, listnumber []int) AllArtists {
+	var artistList AllArtists
 
 	for i := 0; i < len(allArtists); i++ {
 		if IsNumberinSlice(len(allArtists[i].Members), listnumber) {
+			artistList = append(artistList, allArtists[i])
+		}
+	}
+	return artistList
+}
+
+func ArtistbyLoactions(allArtists AllArtists, allLocations AllLocations, locations string) AllArtists {
+	var artistList AllArtists
+
+	for i := 0; i < len(allLocations.Index); i++ {
+		if IsStringInSlice(locations, allLocations.Index[i].Locations) {
 			artistList = append(artistList, allArtists[i])
 		}
 	}
