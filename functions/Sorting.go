@@ -83,7 +83,7 @@ func ArtistbyFirstAlbumDateCheck(allArtists AllArtists, dates []string) AllArtis
 	return artistList
 }
 
-func ArtistbyNumberofMemberRange(allArtists AllArtists, startnumber, endnumber int) AllArtists {
+func ArtistbyNumberofMemberRange(allArtists AllArtists, startnumber, endnumber int) AllArtists { // Range Version
 	var artistList AllArtists
 
 	for i := 0; i < len(allArtists); i++ {
@@ -98,7 +98,7 @@ func ArtistbyNumberofMemberRange(allArtists AllArtists, startnumber, endnumber i
 	return artistList
 }
 
-func ArtistbyNumberofMemberCheck(allArtists AllArtists, listnumber []int) AllArtists {
+func ArtistbyNumberofMemberCheck(allArtists AllArtists, listnumber []int) AllArtists { // Check Version
 	var artistList AllArtists
 
 	for i := 0; i < len(allArtists); i++ {
@@ -109,13 +109,28 @@ func ArtistbyNumberofMemberCheck(allArtists AllArtists, listnumber []int) AllArt
 	return artistList
 }
 
-func ArtistbyLoactions(allArtists AllArtists, allLocations AllLocations, locations string) AllArtists {
+func ArtistbyLocations(allArtists AllArtists, allLocations AllLocations, locations []string) AllArtists {
 	var artistList AllArtists
 
 	for i := 0; i < len(allLocations.Index); i++ {
-		if IsStringInSlice(locations, allLocations.Index[i].Locations) {
-			artistList = append(artistList, allArtists[i])
+
+		for j := 0; j < len(locations); j++ {
+
+			if IsStringInSlice(locations[j], allLocations.Index[i].Locations) {
+				artistList = append(artistList, allArtists[i])
+			}
 		}
 	}
 	return artistList
 }
+
+// func ArtistbyLocationsRange(allArtists AllArtists, allLocations AllLocations, locations string) AllArtists {
+// 	var artistList AllArtists
+
+// 	for i := 0; i < len(allLocations.Index); i++ {
+// 		if IsStringInSlice(locations, allLocations.Index[i].Locations) {
+// 			artistList = append(artistList, allArtists[i])
+// 		}
+// 	}
+// 	return artistList
+// }
