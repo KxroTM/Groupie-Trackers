@@ -10,8 +10,7 @@ func main() {
 	// fmt.Println(API)
 
 	ArtistData := functions.ArtistData()
-	// fmt.Println(ArtistData[0])
-	fmt.Println(len(functions.ArtistbyFirstAlbumDate(ArtistData, "04-10-2008", "04-10-2009")))
+	fmt.Println(ArtistData[0])
 
 	// LocationsData := functions.LocationsData()
 	// fmt.Println(LocationsData.Index[0])

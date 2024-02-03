@@ -45,3 +45,14 @@ func ArtistbyFirstAlbumDate(allArtists AllArtistsData, startdate, enddate string
 	}
 	return artistList
 }
+
+func ArtistbyNumberofMember(allArtists AllArtistsData, listnumber []int) AllArtistsData {
+	var artistList AllArtistsData
+
+	for i := 0; i < len(allArtists); i++ {
+		if IsNumberinSlice(len(allArtists[i].Members), listnumber) {
+			artistList = append(artistList, allArtists[i])
+		}
+	}
+	return artistList
+}

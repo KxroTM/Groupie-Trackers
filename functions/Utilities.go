@@ -19,3 +19,12 @@ func DateStringToIntSlice(dateString string) ([]int, error) {
 
 	return intSlice, nil
 }
+
+func IsNumberinSlice(number int, slice []int) bool {
+	for _, value := range slice {
+		if value == number {
+			return true
+		}
+	}
+	return false
+}
