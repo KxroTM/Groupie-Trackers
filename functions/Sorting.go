@@ -8,11 +8,22 @@ type AlbumDate struct {
 	year  int
 }
 
-func ArtistbyCreationDate(allArtists AllArtists, startdate, enddate int) AllArtists {
+func ArtistbyCreationDateRange(allArtists AllArtists, startdate, enddate int) AllArtists {
 	var artistList AllArtists
 
 	for i := 0; i < len(allArtists); i++ {
 		if int64(startdate) <= allArtists[i].CreationDate && allArtists[i].CreationDate <= int64(enddate) {
+			artistList = append(artistList, allArtists[i])
+		}
+	}
+	return artistList
+}
+
+func ArtistbyCreationDateCheck(allArtists AllArtists, date []int) AllArtists {
+	var artistList AllArtists
+
+	for i := 0; i < len(allArtists); i++ {
+		if IsNumberinSlice(int(allArtists[i].CreationDate), date) {
 			artistList = append(artistList, allArtists[i])
 		}
 	}
