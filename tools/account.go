@@ -11,14 +11,16 @@ import (
 
 type AccountData struct {
 	Account []struct {
-		Username string `json:"Unsername"`
-		Password string `json:"Password"`
+		Username  string   `json:"Username"`
+		Password  string   `json:"Password"`
+		Favorites []string `json:"Favorites"`
 	} `json:"account"`
 }
 
 type Account struct {
-	Username string `json:"Unsername"`
-	Password string `json:"Password"`
+	Username  string   `json:"Username"`
+	Password  string   `json:"Password"`
+	Favorites []string `json:"Favorites"`
 }
 
 var dataAccount AccountData
@@ -30,20 +32,21 @@ var dataAccount AccountData
 // 	register("test", "mdp", "mauvaismdp")
 // }
 
-// Return true if the username is in the DB, false if not
-func findAccount(username string) bool {
-	data, err := os.ReadFile("db.json")
+// Function for loading the all db
+func LoadDb() {
+	data, err := os.ReadFile("./database/account.json")
 	if err != nil {
 		log.Println("Erreur lors de la lecture du fichier :", err)
-		return false
 	}
 
 	err = json.Unmarshal(data, &dataAccount)
 	if err != nil {
 		log.Println("Erreur lors de la conversion JSON :", err)
-		return false
 	}
+}
 
+// Return true if the username is in the DB, false if not
+func findAccount(username string) bool {
 	utilisateurTrouve := false
 
 	for _, compte := range dataAccount.Account {
@@ -61,8 +64,9 @@ func userBuild(username string) *Account {
 	for i := 0; i < len(dataAccount.Account); i++ {
 		if dataAccount.Account[i].Username == username {
 			user := &Account{
-				Username: dataAccount.Account[i].Username,
-				Password: dataAccount.Account[i].Password,
+				Username:  dataAccount.Account[i].Username,
+				Password:  dataAccount.Account[i].Password,
+				Favorites: dataAccount.Account[i].Favorites,
 			}
 			return user
 		}
@@ -91,7 +95,7 @@ func updateDB() {
 		return
 	}
 
-	err = os.WriteFile("db.json", data, 0644)
+	err = os.WriteFile("./database/account.json", data, 0644)
 	if err != nil {
 		log.Println("Erreur lors de l'écriture dans le fichier :", err)
 		return
