@@ -8,7 +8,9 @@ type AlbumDate struct {
 	year  int
 }
 
-func ArtistbyCreationDateRange(allArtists AllArtists, startdate, enddate int) AllArtists {
+// Sort Artist by Date
+
+func ArtistbyCreationDateRange(allArtists AllArtists, startdate, enddate int) AllArtists { // Range Version
 	var artistList AllArtists
 
 	for i := 0; i < len(allArtists); i++ {
@@ -19,7 +21,7 @@ func ArtistbyCreationDateRange(allArtists AllArtists, startdate, enddate int) Al
 	return artistList
 }
 
-func ArtistbyCreationDateCheck(allArtists AllArtists, dates []int) AllArtists {
+func ArtistbyCreationDateCheck(allArtists AllArtists, dates []int) AllArtists { // Check Version
 	var artistList AllArtists
 
 	for i := 0; i < len(allArtists); i++ {
@@ -30,7 +32,9 @@ func ArtistbyCreationDateCheck(allArtists AllArtists, dates []int) AllArtists {
 	return artistList
 }
 
-func ArtistbyFirstAlbumDate(allArtists AllArtists, startdate, enddate string) AllArtists {
+// Sort Artist by date of First Album
+
+func ArtistbyFirstAlbumDateRange(allArtists AllArtists, startdate, enddate string) AllArtists { // Range Version
 	var artistList AllArtists
 
 	startParts, err := DateStringToIntSlice(startdate)
@@ -57,7 +61,7 @@ func ArtistbyFirstAlbumDate(allArtists AllArtists, startdate, enddate string) Al
 	return artistList
 }
 
-func ArtistbyFirstAlbumDateCheck(allArtists AllArtists, dates []string) AllArtists {
+func ArtistbyFirstAlbumDateCheck(allArtists AllArtists, dates []string) AllArtists { // Check Version
 	var artistList AllArtists
 
 	for i := 0; i < len(allArtists); i++ {
@@ -79,7 +83,22 @@ func ArtistbyFirstAlbumDateCheck(allArtists AllArtists, dates []string) AllArtis
 	return artistList
 }
 
-func ArtistbyNumberofMember(allArtists AllArtists, listnumber []int) AllArtists {
+func ArtistbyNumberofMemberRange(allArtists AllArtists, startnumber, endnumber int) AllArtists {
+	var artistList AllArtists
+
+	for i := 0; i < len(allArtists); i++ {
+		numMembers := len(allArtists[i].Members)
+
+		// Check if the number of members is within the specified range
+		if numMembers >= startnumber && numMembers <= endnumber {
+			artistList = append(artistList, allArtists[i])
+		}
+	}
+
+	return artistList
+}
+
+func ArtistbyNumberofMemberCheck(allArtists AllArtists, listnumber []int) AllArtists {
 	var artistList AllArtists
 
 	for i := 0; i < len(allArtists); i++ {
