@@ -58,14 +58,16 @@ func GenerateMapImageURL(lat, lon float64) string {
 	return fmt.Sprintf("%s/%.6f,%.6f/15?mapSize=600,400&key=%s", bingMapsStaticURL, lat, lon, bingMapsAPIKey)
 }
 
+//Exemple d'utilisation des fonctions de mapping a l'aide de deux api :
+
 // func main() {
-// 	address := "Germany Mainz"
+// 	address := "north_carolina-usa"
 // 	lat, lng, err := Groupie_Trackers.AddressToCoordinates(address)
 // 	if err != nil {
 // 		fmt.Println("Error:", err)
 // 		return
 // 	}
-// 	imageURL := GenerateMapImageURL(lat, lng, bingMapsAPIKey)
+// 	imageURL := Groupie_Trackers.GenerateMapImageURL(lat, lng)
 // 	fmt.Println(lat, lng)
 // 	fmt.Printf("URL de l'image de la carte : %s\n", imageURL)
 // }
