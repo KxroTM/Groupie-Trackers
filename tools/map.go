@@ -55,7 +55,7 @@ func AddressToCoordinates(address string) (float64, float64, error) {
 
 func GenerateMapImageURL(lat, lon float64) string {
 	const bingMapsStaticURL = "https://dev.virtualearth.net/REST/v1/Imagery/Map/Road"
-	return fmt.Sprintf("%s/%.6f,%.6f/15?mapSize=600,400&key=%s", bingMapsStaticURL, lat, lon, bingMapsAPIKey)
+	return fmt.Sprintf("%s/%.6f,%.6f/16?mapSize=800,500&pp=%.6f,%.6f;66&mapLayer=Basemap,Buildings&key=%s", bingMapsStaticURL, lat, lon, lat, lon, bingMapsAPIKey)
 }
 
 //Exemple d'utilisation des fonctions de mapping a l'aide de deux api :
