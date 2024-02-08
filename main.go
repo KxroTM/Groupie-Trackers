@@ -31,9 +31,8 @@ func main() {
 	// for _, data := range datas {
 	// 	fmt.Println(data.Name)
 	// }
-	fmt.Println(Groupie_Trackers.SearchByMember("ac"))
-	fmt.Println("=================================================================")
-	fmt.Println(Groupie_Trackers.SearchByName("ac"))
+
+	fmt.Println(Groupie_Trackers.SearchByLocation("paris"))
 	// address := "Ynov Nanterre France"
 	// lat, lng, err := Groupie_Trackers.AddressToCoordinates(address)
 	// if err != nil {
