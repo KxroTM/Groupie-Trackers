@@ -1,44 +1,39 @@
 package main
 
 import (
-	"fmt"
-
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
 )
 
 func main() {
-	myApp := app.New()
-	myWindow := myApp.NewWindow("groupie-trackers")
+	a := app.New()                     // Create a new application
+	w := a.NewWindow("Page d'accueil") // Create a new window
 
-	// Titre
-	title := widget.NewLabel("Welcome to groupie-trackers")
-
-	// Bouttons
-	button1 := widget.NewButton("Go to tracker", func() {
-		// Button click event handler
-		fmt.Println("Button 1 clicked!")
+	// Create three buttons
+	btn1 := widget.NewButton("Bouton 1", func() {
+		// Open a new window with the main page
+		homepage()
+	})
+	btn2 := widget.NewButton("Bouton 2", func() {
+		// Show a dialog with a message
+		dialog.NewInformation("Info", "Vous avez cliqué sur le bouton 2", w).Show()
+	})
+	btn3 := widget.NewButton("Bouton 3", func() {
+		// Show a dialog with a message
+		dialog.NewInformation("Info", "Vous avez cliqué sur le bouton 3", w).Show()
 	})
 
-	button2 := widget.NewButton("About", func() {
-		// Button click event handler
-		fmt.Println("Button 2 clicked!")
-	})
+	// Create a vertical box with the buttons
+	vBox := container.NewVBox(btn1, btn2, btn3)
 
-	// Create other widgets for your home page content
+	// Create a widget.Card with a title and the buttons
+	card := widget.NewCard("Groupie-Trackers", "", vBox)
 
-	// Create a container to hold all the widgets
-	content := container.NewHBox(
-		title,
-		button1,
-		button2,
-		// Add other widgets here
-	)
+	// Create a centered container with the widget.Card
+	centerContainer := container.NewCenter(card)
 
-	// Set the content of the window to the container
-	myWindow.SetContent(content)
-
-	// Show the window and run the app
-	myWindow.ShowAndRun()
+	w.SetContent(centerContainer) // Set the window's content
+	w.ShowAndRun()                // Show the window and run the application
 }
