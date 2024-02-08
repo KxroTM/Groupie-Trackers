@@ -1,4 +1,4 @@
-package main
+package Groupie_Trackers
 
 import (
 	"fyne.io/fyne/v2"
@@ -10,7 +10,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-func main() {
+func login() {
 	myApp := app.New()
 	myWindow := myApp.NewWindow("Groupie Trackers")
 
