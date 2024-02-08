@@ -8,10 +8,27 @@ import (
 func SearchByMember(input string) []Artist {
 	data := ArtistData()
 	var result []Artist
+	in := false
 	for i := 0; i < len(data); i++ {
 		for j := 0; j < len(data[i].Members); j++ {
 			if strings.Contains(strings.ToLower(data[i].Members[j]), strings.ToLower(input)) {
 				result = append(result, data[i])
+			}
+		}
+	}
+
+	for i := 0; i < len(data); i++ {
+		for j := 0; j < len(data[i].Name); j++ {
+			if strings.Contains(strings.ToLower(data[i].Name), strings.ToLower(input)) {
+				for k := 0; k < len(data); k++ {
+					if data[i].ID == data[k].ID {
+						in = true
+					}
+				}
+				if !in {
+					result = append(result, data[i])
+					break
+				}
 			}
 		}
 	}

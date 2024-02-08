@@ -31,15 +31,18 @@ func main() {
 	// for _, data := range datas {
 	// 	fmt.Println(data.Name)
 	// }
-	address := "Ynov Nanterre France"
-	lat, lng, err := Groupie_Trackers.AddressToCoordinates(address)
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
-	}
-	imageURL := Groupie_Trackers.GenerateMapImageURL(lat, lng)
-	fmt.Println(lat, lng)
-	fmt.Printf("URL de l'image de la carte : %s\n", imageURL)
+	fmt.Println(Groupie_Trackers.SearchByMember("ac"))
+	fmt.Println("=================================================================")
+	fmt.Println(Groupie_Trackers.SearchByName("ac"))
+	// address := "Ynov Nanterre France"
+	// lat, lng, err := Groupie_Trackers.AddressToCoordinates(address)
+	// if err != nil {
+	// 	fmt.Println("Error:", err)
+	// 	return
+	// }
+	// imageURL := Groupie_Trackers.GenerateMapImageURL(lat, lng)
+	// fmt.Println(lat, lng)
+	// fmt.Printf("URL de l'image de la carte : %s\n", imageURL)
 }
 
 func init() {
