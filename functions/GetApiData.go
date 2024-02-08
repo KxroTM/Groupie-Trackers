@@ -1,4 +1,4 @@
-package functions
+package Groupie_Trackers
 
 import (
 	"encoding/json"
