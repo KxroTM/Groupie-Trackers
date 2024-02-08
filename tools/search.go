@@ -30,6 +30,20 @@ func SearchByName(input string) Artist {
 	return Artist{}
 }
 
+func SearchByLocation(input string) []Artist {
+	data := LocationsData()
+	datas := ArtistData()
+	var result []Artist
+	for i := 0; i < len(data.Index); i++ {
+		for j := 0; j < len(data.Index[i].Locations); j++ {
+			if strings.Contains(strings.ToLower(data.Index[i].Locations[j]), strings.ToLower(input)) {
+				result = append(result, datas[i])
+			}
+		}
+	}
+	return result
+}
+
 func FinalResearch(input string) {
 	result := SearchByMember(input)
 	result2 := SearchByName(input)
