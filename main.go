@@ -1,91 +1,70 @@
 package main
 
 import (
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
 
 func main() {
-	a := app.New()                     // Create a new application
-	w := a.NewWindow("Page d'accueil") // Create a new window
+	myApp := app.New()
+	myWindow := myApp.NewWindow("Groupie Trackers")
 
-	// Create three buttons
-	btn1 := widget.NewButton("Se connecter", func() {
-		// Create a new window
-		w2 := a.NewWindow("Se connecter")
+	// Configuration de base pour agrandir les éléments de formulaire
+	username := widget.NewEntry()
+	username.SetPlaceHolder("Username")
+	email := widget.NewEntry()
+	email.SetPlaceHolder("Email (only for signup)")
+	password := widget.NewPasswordEntry()
+	password.SetPlaceHolder("Password")
 
-		// Create a form with an entry and a button
-		form := &widget.Form{
-			Items: []*widget.FormItem{
-				{Text: "Nom d'utilisateur", Widget: widget.NewEntry()},
-				{Text: "Mot de passe", Widget: widget.NewPasswordEntry()},
-			},
-			OnSubmit: func() {
-				// Declare the form variable
-				var form *widget.Form = nil
-
-				// Get the values from the form
-				username := form.Items[0].Widget.(*widget.Entry).Text
-				password := form.Items[1].Widget.(*widget.Entry).Text
-
-				// Print the values
-				println("Nom d'utilisateur:", username)
-				println("Mot de passe:", password)
-			},
-		}
-
-		// Set the window's content to the form
-		w2.SetContent(form)
-
-		w2.Show() // Show the window
+	loginBtn := widget.NewButton("Login", func() {
+		dialog.ShowInformation("Login", "Login logic here", myWindow)
 	})
-	btn2 := widget.NewButton("Créer un compte", func() {
-		// Create a new window
-		w3 := a.NewWindow("Créer un compte")
-
-		// Create a form with an entry and a button
-		form := &widget.Form{
-			Items: []*widget.FormItem{
-				{Text: "Nom d'utilisateur", Widget: widget.NewEntry()},
-				{Text: "Mot de passe", Widget: widget.NewPasswordEntry()},
-				{Text: "Confirmer le mot de passe", Widget: widget.NewPasswordEntry()},
-			},
-			OnSubmit: func() {
-				// Declare the form variable
-				var form *widget.Form = nil
-
-				// Get the values from the form
-				username := form.Items[0].Widget.(*widget.Entry).Text
-				password := form.Items[1].Widget.(*widget.Entry).Text
-				confirmPassword := form.Items[2].Widget.(*widget.Entry).Text
-
-				// Print the values
-				println("Nom d'utilisateur:", username)
-				println("Mot de passe:", password)
-				println("Confirmer le mot de passe:", confirmPassword)
-			},
-		}
-
-		// Set the window's content to the form
-		w3.SetContent(form)
-
-		w3.Show() // Show the window
+	signupBtn := widget.NewButton("Signup", func() {
+		dialog.ShowInformation("Signup", "Signup logic here", myWindow)
 	})
-	btn3 := widget.NewButton("Quitter l'application", func() {
-		// Close the application
-		a.Quit()
+	quitBtn := widget.NewButton("Quitter l'application", func() {
+		// Ferme l' application
+		myApp.Quit()
 	})
 
-	// Create a vertical box with the buttons
-	vBox := container.NewVBox(btn1, btn2, btn3)
+	loginBtn.Importance = widget.HighImportance
+	signupBtn.Importance = widget.HighImportance
 
-	// Create a widget.Card with a title and the buttons
-	card := widget.NewCard("Groupie-Trackers", "", vBox)
+	form := container.NewVBox(
+		username,
+		email,
+		password,
+		container.NewVBox(loginBtn, signupBtn, quitBtn),
+	)
 
-	// Create a centered container with the widget.Card
-	centerContainer := container.NewCenter(card)
+	// Ajout d'un titre avec un effet d'ombre
+	title := canvas.NewText("Groupie Trackers", theme.ForegroundColor())
+	title.TextStyle = fyne.TextStyle{Bold: true}
+	title.TextSize = 24 // Taille de police plus grande pour le titre
 
-	w.SetContent(centerContainer) // Set the window's content
-	w.ShowAndRun()                // Show the window and run the application
+	shadow := canvas.NewText("Groupie Trackers", theme.ShadowColor())
+	shadow.TextStyle = fyne.TextStyle{Bold: true}
+	shadow.TextSize = 24
+	shadow.Move(fyne.NewPos(2, 2)) // Déplacement léger pour créer l'effet d'ombre
+
+	titleContainer := container.NewWithoutLayout(shadow, title) // Superpose le texte et son ombre
+
+	content := container.NewVBox(
+		titleContainer,
+		form,
+	)
+	centeredContent := container.NewCenter(content)
+
+	myWindow.SetContent(centeredContent)
+	myWindow.Resize(fyne.NewSize(600, 400)) // Agrandissement de la fenêtre
+
+	myWindow.SetMaster()
+
+	myWindow.ShowAndRun()
 }
