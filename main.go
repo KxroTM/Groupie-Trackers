@@ -13,8 +13,8 @@ func main() {
 
 	// Create three buttons
 	btn1 := widget.NewButton("Bouton 1", func() {
-		// Open a new window with the main page
-		homepage()
+		// Show a dialog with a message
+		dialog.NewInformation("Info", "Vous avez cliqué sur le bouton 1", w).Show()
 	})
 	btn2 := widget.NewButton("Bouton 2", func() {
 		// Show a dialog with a message
