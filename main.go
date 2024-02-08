@@ -20,9 +20,9 @@ func main() {
 		// Show a dialog with a message
 		dialog.NewInformation("Info", "Vous avez cliqué sur le bouton 2", w).Show()
 	})
-	btn3 := widget.NewButton("Bouton 3", func() {
-		// Show a dialog with a message
-		dialog.NewInformation("Info", "Vous avez cliqué sur le bouton 3", w).Show()
+	btn3 := widget.NewButton("Quitter l'application", func() {
+		// Close the application
+		a.Quit()
 	})
 
 	// Create a vertical box with the buttons
