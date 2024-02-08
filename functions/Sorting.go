@@ -138,8 +138,8 @@ func ArtistbyCountry(allArtists AllArtists, allLocations AllLocations, country [
 
 				if strings.Split(allLocations.Index[i].Locations[k], "-")[len(strings.Split(allLocations.Index[i].Locations[k], "-"))-1] == country[j] {
 					artistList = append(artistList, allArtists[i])
+					break
 				}
-				break
 			}
 		}
 
