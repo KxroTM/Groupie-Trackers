@@ -10,7 +10,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-func login() {
+func Login() {
 	myApp := app.New()
 	myWindow := myApp.NewWindow("Groupie Trackers")
 
@@ -33,8 +33,8 @@ func login() {
 	username.TextStyle = fyne.TextStyle{Bold: true}
 	email.TextStyle = fyne.TextStyle{Bold: true}
 	password.TextStyle = fyne.TextStyle{Bold: true}
-	loginBtn.TextStyle = fyne.TextStyle{Bold: true}
-	signupBtn.TextStyle = fyne.TextStyle{Bold: true}
+	// loginBtn.TextStyle = fyne.TextStyle{Bold: true}
+	// signupBtn.TextStyle = fyne.TextStyle{Bold: true}
 
 	loginBtn.Importance = widget.HighImportance
 	signupBtn.Importance = widget.HighImportance

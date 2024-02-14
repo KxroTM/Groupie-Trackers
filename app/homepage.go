@@ -22,10 +22,11 @@ func Homepage() {
 	password.SetPlaceHolder("Password")
 
 	loginBtn := widget.NewButton("Login", func() {
+
 		dialog.ShowInformation("Login", "Login logic here", myWindow)
 	})
 	signupBtn := widget.NewButton("Signup", func() {
-		dialog.ShowInformation("Signup", "Signup logic here", myWindow)
+		dialog.ShowInformation("Signup", "OUVRIR UNE PAGE DE SIGNUP", myWindow)
 	})
 	quitBtn := widget.NewButton("Quitter l'application", func() {
 		// Ferme l' application
