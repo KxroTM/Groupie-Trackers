@@ -1,7 +1,14 @@
 package main
 
-import Groupie_Trackers "Groupie_Trackers/app"
+import (
+	app "Groupie_Trackers/go/app"
+	functions "Groupie_Trackers/go/functions"
+)
 
 func main() {
-	Groupie_Trackers.Homepage() // Appel de la fonction Homepage du fichier homepage.go
+	app.Homepage() // Appel de la fonction Homepage du fichier homepage.go
+}
+
+func init() {
+	functions.LoadDb()
 }

@@ -1,6 +1,9 @@
-package Groupie_Trackers
+package app
 
 import (
+	"Groupie_Trackers/go/functions"
+	"image/color"
+
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
@@ -20,10 +23,17 @@ func Homepage() {
 	username.SetPlaceHolder("Username")
 	password := widget.NewPasswordEntry()
 	password.SetPlaceHolder("Password")
+	text := canvas.NewText("", color.White)
+	text.Alignment = fyne.TextAlignCenter
 
 	loginBtn := widget.NewButton("Login", func() {
-
-		dialog.ShowInformation("Login", "Login logic here", myWindow)
+		if !functions.Login(username.Text, password.Text) {
+			text.Text = "Mauvais mot de passe !"
+		} else {
+			text.Text = ""
+			dialog.ShowInformation("Login", "OUVRE LA PAGE DE LAPPLI", myWindow)
+		}
+		// dialog.ShowInformation("Login", "Login logic here", myWindow)
 	})
 	signupBtn := widget.NewButton("Signup", func() {
 		dialog.ShowInformation("Signup", "OUVRIR UNE PAGE DE SIGNUP", myWindow)
@@ -43,6 +53,7 @@ func Homepage() {
 		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace supplémentaire
 		username,
 		password,
+		text,
 		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace pour séparer les éléments
 		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace supplémentaire
 		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace supplémentaire

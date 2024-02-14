@@ -1,4 +1,4 @@
-package Groupie_Trackers
+package app
 
 import (
 	"fyne.io/fyne/v2"
