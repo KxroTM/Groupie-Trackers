@@ -16,7 +16,7 @@ import (
 
 func Homepage() {
 	myApp := app.New()
-	myWindow := myApp.NewWindow("Groupie Trackers")
+	myWindow := myApp.NewWindow("Groupie-Trackers")
 
 	// Configuration de base pour agrandir les éléments de formulaire
 	username := widget.NewEntry()
@@ -36,8 +36,27 @@ func Homepage() {
 		// dialog.ShowInformation("Login", "Login logic here", myWindow)
 	})
 	signupBtn := widget.NewButton("Signup", func() {
-		dialog.ShowInformation("Signup", "OUVRIR UNE PAGE DE SIGNUP", myWindow)
+		// Create signup form elements
+		signupUsername := widget.NewEntry()
+		signupUsername.SetPlaceHolder("Username")
+		signupPassword := widget.NewPasswordEntry()
+		signupPassword.SetPlaceHolder("Password")
+		signupConfirmPassword := widget.NewPasswordEntry()
+		signupConfirmPassword.SetPlaceHolder("Confirm Password")
+
+		signupForm := container.NewVBox(
+			signupUsername,
+			signupPassword,
+			signupConfirmPassword,
+		)
+
+		signupDialog := dialog.NewCustom("Signup", "Create Account", signupForm, myWindow)
+
+		signupDialog.Resize(fyne.NewSize(400, 200)) // Agrandissement de la fenêtre
+
+		signupDialog.Show()
 	})
+
 	quitBtn := widget.NewButton("Quitter l'application", func() {
 		// Ferme l' application
 		myApp.Quit()
@@ -55,8 +74,6 @@ func Homepage() {
 		password,
 		text,
 		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace pour séparer les éléments
-		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace supplémentaire
-		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace supplémentaire
 		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace supplémentaire
 		container.NewVBox(loginBtn, signupBtn, quitBtn),
 	)
