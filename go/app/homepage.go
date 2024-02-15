@@ -16,7 +16,7 @@ import (
 
 func Homepage() {
 	myApp := app.New()
-	myWindow := myApp.NewWindow("Groupie Trackers")
+	myWindow := myApp.NewWindow("Groupie-Trackers")
 
 	// Configuration de base pour agrandir les éléments de formulaire
 	username := widget.NewEntry()
@@ -44,15 +44,17 @@ func Homepage() {
 		signupConfirmPassword := widget.NewPasswordEntry()
 		signupConfirmPassword.SetPlaceHolder("Confirm Password")
 
-		// Create a form container for the signup elements
 		signupForm := container.NewVBox(
 			signupUsername,
 			signupPassword,
 			signupConfirmPassword,
 		)
 
-		// Show the custom dialog with the signup form
-		dialog.ShowCustom("Signup", "Create Account", signupForm, myWindow)
+		signupDialog := dialog.NewCustom("Signup", "Create Account", signupForm, myWindow)
+
+		signupDialog.Resize(fyne.NewSize(400, 200)) // Agrandissement de la fenêtre
+
+		signupDialog.Show()
 	})
 
 	quitBtn := widget.NewButton("Quitter l'application", func() {
