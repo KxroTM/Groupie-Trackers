@@ -3,6 +3,7 @@ package app
 import (
 	"Groupie_Trackers/go/functions"
 	"image/color"
+	"os"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
@@ -31,10 +32,18 @@ func Homepage() {
 			text.Text = "Mauvais mot de passe !"
 		} else {
 			text.Text = ""
-			dialog.ShowInformation("Login", "OUVRE LA PAGE DE LAPPLI", myWindow)
+			dialog.ShowInformation("Login", "OUVRE LA PAGE DE L'APPLICATION", myWindow)
+			// Open the mainpage.go file
+			file, err := os.Open("/go/app/mainpage.go")
+			if err != nil {
+				dialog.ShowError(err, myWindow)
+				return
+			}
+			defer file.Close()
+			// Use the file...
 		}
-		// dialog.ShowInformation("Login", "Login logic here", myWindow)
 	})
+
 	signupBtn := widget.NewButton("Signup", func() {
 		// Create signup form elements
 		signupUsername := widget.NewEntry()
