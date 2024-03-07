@@ -1,9 +1,7 @@
 package app
 
 import (
-	"Groupie_Trackers/go/functions"
 	"image/color"
-	"os"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
@@ -28,20 +26,23 @@ func Homepage() {
 	text.Alignment = fyne.TextAlignCenter
 
 	loginBtn := widget.NewButton("Login", func() {
-		if !functions.Login(username.Text, password.Text) {
-			text.Text = "Mauvais mot de passe !"
-		} else {
-			text.Text = ""
-			dialog.ShowInformation("Login", "OUVRE LA PAGE DE L'APPLICATION", myWindow)
-			// Open the mainpage.go file
-			file, err := os.Open("/go/app/mainpage.go")
-			if err != nil {
-				dialog.ShowError(err, myWindow)
-				return
+		/*
+			if !functions.Login(username.Text, password.Text) {
+				text.Text = "Mauvais mot de passe !"
+			} else {
+				text.Text = ""
+				dialog.ShowInformation("Login", "OUVRE LA PAGE DE L'APPLICATION", myWindow)
+				// Open the mainpage.go file
+				file, err := os.Open("/go/app/mainpage.go")
+				if err != nil {
+					dialog.ShowError(err, myWindow)
+					return
+				}
+				defer file.Close()
+				// Use the file...
 			}
-			defer file.Close()
-			// Use the file...
-		}
+		*/
+		Mainpage()
 	})
 
 	signupBtn := widget.NewButton("Signup", func() {

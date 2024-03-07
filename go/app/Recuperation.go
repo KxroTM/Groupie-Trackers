@@ -1,16 +1,17 @@
-package main
+package app
 
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"net/http"
+
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
-	"io/ioutil"
-	"net/http"
 )
 
 type Artist struct {
@@ -98,7 +99,7 @@ func createNavBar() *fyne.Container {
 	return container.NewHBox(layout.NewSpacer(), homeButton, aboutButton, contactButton, layout.NewSpacer())
 }
 
-func main() {
+func Mainpage() {
 	myApp := app.New()
 	myWindow := myApp.NewWindow("Hip Hop Showcase")
 
@@ -116,5 +117,5 @@ func main() {
 	myWindow.SetContent(mainContent)
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
-	myWindow.ShowAndRun()
+	myWindow.Show()
 }
