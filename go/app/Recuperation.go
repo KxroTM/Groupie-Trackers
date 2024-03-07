@@ -148,5 +148,6 @@ func Mainpage() {
 	myWindow.SetContent(container.NewBorder(topContent, nil, nil, nil, gridContainer))
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
-	myWindow.ShowAndRun()
+	//myWindow.ShowAndRun()
+	myWindow.Show()
 }
