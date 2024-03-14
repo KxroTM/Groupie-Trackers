@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
@@ -126,8 +125,7 @@ func filterArtists(artists []Artist, filterText string) []Artist {
 }
 
 // Modification de la fonction main pour intégrer la barre de recherche
-func Mainpage() {
-	myApp := app.New()
+func Mainpage(myApp fyne.App) {
 	myWindow := myApp.NewWindow("Hip Hop Showcase")
 
 	navBar := createNavBar()
@@ -148,6 +146,5 @@ func Mainpage() {
 	myWindow.SetContent(container.NewBorder(topContent, nil, nil, nil, gridContainer))
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
-	//myWindow.ShowAndRun()
 	myWindow.Show()
 }

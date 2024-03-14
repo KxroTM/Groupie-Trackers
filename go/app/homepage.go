@@ -42,7 +42,7 @@ func Homepage() {
 				// Use the file...
 			}
 		*/
-		Mainpage()
+		Mainpage(myApp)
 	})
 
 	signupBtn := widget.NewButton("Signup", func() {
