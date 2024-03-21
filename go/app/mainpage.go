@@ -3,8 +3,10 @@ package app
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"image"
+	"io"
 	"net/http"
+	"os"
 	"strings"
 
 	"fyne.io/fyne/v2"
@@ -18,6 +20,13 @@ type Artist struct {
 	Name     string `json:"name"`
 	ImageURL string `json:"image"`
 }
+
+type ImageEntry struct {
+	URL   string
+	Image *canvas.Image
+}
+
+var imageCache []*ImageEntry
 
 func fetchArtists() ([]Artist, error) {
 	url := "https://groupietrackers.herokuapp.com/api/artists"
@@ -41,35 +50,50 @@ func fetchArtists() ([]Artist, error) {
 }
 
 func loadImageFromURL(url string) *canvas.Image {
+	for _, imageEntry := range imageCache {
+		if imageEntry.URL == url {
+			return imageEntry.Image
+		}
+	}
+
+	image := downloadImage(url)
+	imageEntry := &ImageEntry{URL: url, Image: image}
+	imageCache = append(imageCache, imageEntry)
+
+	return image
+}
+
+func downloadImage(url string) *canvas.Image {
 	resp, err := http.Get(url)
 	if err != nil {
 		fmt.Println("Failed to download image:", err)
-		return canvas.NewImageFromFile("placeholder.png")
+		return canvas.NewImageFromImage(image.NewRGBA(image.Rect(0, 0, 1, 1)))
 	}
 	defer resp.Body.Close()
 
-	data, err := ioutil.ReadAll(resp.Body)
+	data, err := io.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println("Failed to read image data:", err)
-		return canvas.NewImageFromFile("placeholder.png")
+		return canvas.NewImageFromImage(image.NewRGBA(image.Rect(0, 0, 1, 1)))
 	}
 
-	tmpFile, err := ioutil.TempFile("", "image-*.png")
+	tmpFile, err := os.CreateTemp("", "image-*.png")
 	if err != nil {
 		fmt.Println("Failed to create a temp file for the image:", err)
-		return canvas.NewImageFromFile("placeholder.png")
+		return canvas.NewImageFromImage(image.NewRGBA(image.Rect(0, 0, 1, 1)))
 	}
 	defer tmpFile.Close()
 
 	_, err = tmpFile.Write(data)
 	if err != nil {
 		fmt.Println("Failed to write image data to temp file:", err)
-		return canvas.NewImageFromFile("placeholder.png")
+		return canvas.NewImageFromImage(image.NewRGBA(image.Rect(0, 0, 1, 1)))
 	}
 
 	image := canvas.NewImageFromFile(tmpFile.Name())
 	image.FillMode = canvas.ImageFillContain
 	image.SetMinSize(fyne.NewSize(200, 200))
+
 	return image
 }
 
@@ -137,11 +161,15 @@ func Mainpage(myApp fyne.App) {
 	}
 
 	artistsGrid := createArtistsGrid(artists)
-	gridContainer := container.NewMax() // Utilisation de NewMax pour pouvoir rafraîchir dynamiquement le contenu
+	gridContainer := container.NewStack() // Utilisation de NewMax pour pouvoir rafraîchir dynamiquement le contenu
 	gridContainer.Add(artistsGrid)
 
 	searchBar := createSearchBar(artists, gridContainer)
 	topContent := container.NewVBox(navBar, searchBar)
+
+	myWindow.SetOnClosed(func() {
+		myApp.Quit()
+	})
 
 	myWindow.SetContent(container.NewBorder(topContent, nil, nil, nil, gridContainer))
 	myWindow.CenterOnScreen()
