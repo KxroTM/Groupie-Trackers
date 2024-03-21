@@ -52,7 +52,7 @@ func findAccount(username string) bool {
 }
 
 // Create the struct with the user's information
-func userBuild(username string) *Account {
+func UserBuild(username string) *Account {
 	for i := 0; i < len(dataAccount.Account); i++ {
 		if dataAccount.Account[i].Username == username {
 			user := &Account{
@@ -102,7 +102,7 @@ func checkPassword(password, hashedPassword string) bool {
 // Function for login
 func Login(username, password string) bool {
 	if findAccount(username) {
-		user := userBuild(username)
+		user := UserBuild(username)
 		if checkPassword(password, user.Password) {
 			log.Printf("Connecté en tant que %s", username)
 			return true

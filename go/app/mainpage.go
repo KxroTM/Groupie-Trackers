@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"image"
+	"image/color"
 	"io"
 	"net/http"
 	"os"
@@ -119,8 +120,11 @@ func createNavBar() *fyne.Container {
 	homeButton := widget.NewButton("Accueil", nil)
 	aboutButton := widget.NewButton("À Propos", nil)
 	contactButton := widget.NewButton("Contact", nil)
+	text := canvas.NewText("Welcome "+user.Username, color.White)
+	space := canvas.NewText(text.Text, color.Transparent)
+	space2 := canvas.NewText("      ", color.Transparent)
 
-	return container.NewHBox(layout.NewSpacer(), homeButton, aboutButton, contactButton, layout.NewSpacer())
+	return container.NewHBox(layout.NewSpacer(), space, space2, homeButton, aboutButton, contactButton, layout.NewSpacer(), text, space2)
 }
 
 func createSearchBar(artists []Artist, gridContainer *fyne.Container) fyne.CanvasObject {
@@ -146,33 +150,4 @@ func filterArtists(artists []Artist, filterText string) []Artist {
 		}
 	}
 	return filtered
-}
-
-// Modification de la fonction main pour intégrer la barre de recherche
-func Mainpage(myApp fyne.App) {
-	myWindow := myApp.NewWindow("Hip Hop Showcase")
-
-	navBar := createNavBar()
-
-	artists, err := fetchArtists()
-	if err != nil {
-		fmt.Println("Erreur lors de la récupération des artistes:", err)
-		return
-	}
-
-	artistsGrid := createArtistsGrid(artists)
-	gridContainer := container.NewStack() // Utilisation de NewMax pour pouvoir rafraîchir dynamiquement le contenu
-	gridContainer.Add(artistsGrid)
-
-	searchBar := createSearchBar(artists, gridContainer)
-	topContent := container.NewVBox(navBar, searchBar)
-
-	myWindow.SetOnClosed(func() {
-		myApp.Quit()
-	})
-
-	myWindow.SetContent(container.NewBorder(topContent, nil, nil, nil, gridContainer))
-	myWindow.CenterOnScreen()
-	myWindow.Resize(fyne.NewSize(800, 600))
-	myWindow.Show()
 }

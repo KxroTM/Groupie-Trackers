@@ -2,6 +2,7 @@ package app
 
 import (
 	"Groupie_Trackers/go/functions"
+	"fmt"
 	"image/color"
 
 	"fyne.io/fyne/v2"
@@ -15,6 +16,7 @@ import (
 )
 
 var MyApp = app.New()
+var user *functions.Account
 
 func LoginPage(app fyne.App) {
 	myWindow := app.NewWindow("Groupie-Trackers")
@@ -32,6 +34,7 @@ func LoginPage(app fyne.App) {
 		if !functions.Login(username.Text, password.Text) {
 			text.Text = "Mot de passe incorrect ou compte inexistant "
 		} else {
+			user = functions.UserBuild(username.Text)
 			text.Text = ""
 			Mainpage(app)
 			myWindow.Hide()
@@ -111,6 +114,8 @@ func SignupPage(app fyne.App) {
 			signupText.Text = "Mot de passe incorrect ou utilisateur déjà existant"
 		} else {
 			dialog.ShowInformation("Login", "Compte crée", myWindow)
+			LoginPage(app)
+			myWindow.Hide()
 		}
 	})
 
@@ -167,4 +172,31 @@ func SignupPage(app fyne.App) {
 	myWindow.CenterOnScreen()
 
 	myWindow.Show() // Affiche la fenêtre et lance l'application
+}
+
+func Mainpage(myApp fyne.App) {
+	myWindow := myApp.NewWindow("Hip Hop Showcase")
+
+	navBar := createNavBar()
+	artists, err := fetchArtists()
+	if err != nil {
+		fmt.Println("Erreur lors de la récupération des artistes:", err)
+		return
+	}
+
+	artistsGrid := createArtistsGrid(artists)
+	gridContainer := container.NewStack() // Utilisation de NewMax pour pouvoir rafraîchir dynamiquement le contenu
+	gridContainer.Add(artistsGrid)
+
+	searchBar := createSearchBar(artists, gridContainer)
+	topContent := container.NewVBox(navBar, searchBar)
+
+	myWindow.SetOnClosed(func() {
+		myApp.Quit()
+	})
+
+	myWindow.SetContent(container.NewBorder(topContent, nil, nil, nil, gridContainer))
+	myWindow.CenterOnScreen()
+	myWindow.Resize(fyne.NewSize(800, 600))
+	myWindow.Show()
 }
