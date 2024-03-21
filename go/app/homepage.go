@@ -32,11 +32,9 @@ func Homepage() {
 			text.Text = "Mot de passe incorrect ou compte inexistant "
 		} else {
 			text.Text = ""
-			dialog.ShowInformation("Login", "Connexion réussi", myWindow)
-			//faire en sorte que la page de connexion se ferme et laisse place a celle ci
 			Mainpage(myApp)
+			myWindow.Hide()
 		}
-
 	})
 
 	signupBtn := widget.NewButton("Signup", func() {
@@ -55,7 +53,6 @@ func Homepage() {
 				signupText.Text = "Mot de passe incorrect ou utilisateur déjà existant"
 			} else {
 				dialog.ShowInformation("Login", "Compte crée", myWindow)
-				// logique
 			}
 		})
 
