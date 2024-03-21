@@ -24,13 +24,6 @@ type Account struct {
 
 var dataAccount AccountData
 
-// func main() {
-// 	//Appeler la fonction login sur la page de connection
-// 	login("chems", "mdp")
-// 	//Appeler la fonction register si la fonction login returne false
-// 	register("test", "mdp", "mauvaismdp")
-// }
-
 // Function for loading the all db
 func LoadDb() {
 	data, err := os.ReadFile("./database/account.json")
