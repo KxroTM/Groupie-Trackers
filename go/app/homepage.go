@@ -1,6 +1,8 @@
 package app
 
 import (
+	"Groupie_Trackers/go/functions"
+	"fmt"
 	"image/color"
 
 	"fyne.io/fyne/v2"
@@ -26,23 +28,16 @@ func Homepage() {
 	text.Alignment = fyne.TextAlignCenter
 
 	loginBtn := widget.NewButton("Login", func() {
-		/*
-			if !functions.Login(username.Text, password.Text) {
-				text.Text = "Mauvais mot de passe !"
-			} else {
-				text.Text = ""
-				dialog.ShowInformation("Login", "OUVRE LA PAGE DE L'APPLICATION", myWindow)
-				// Open the mainpage.go file
-				file, err := os.Open("/go/app/mainpage.go")
-				if err != nil {
-					dialog.ShowError(err, myWindow)
-					return
-				}
-				defer file.Close()
-				// Use the file...
-			}
-		*/
-		Mainpage(myApp)
+
+		if !functions.Login(username.Text, password.Text) {
+			text.Text = "Mot de passe incorrect ou compte inexistant "
+		} else {
+			text.Text = ""
+			dialog.ShowInformation("Login", "Connexion réussi", myWindow)
+			//faire en sorte que la page de connexion se ferme et laisse place a celle ci
+			Mainpage(myApp)
+		}
+
 	})
 
 	signupBtn := widget.NewButton("Signup", func() {
@@ -54,13 +49,20 @@ func Homepage() {
 		signupConfirmPassword := widget.NewPasswordEntry()
 		signupConfirmPassword.SetPlaceHolder("Confirm Password")
 
+		AccountBtn := widget.NewButton("Create Account", func() {
+			fmt.Println(signupUsername.Text)
+			fmt.Println(signupPassword.Text)
+			fmt.Println(signupConfirmPassword.Text)
+		})
+
 		signupForm := container.NewVBox(
 			signupUsername,
 			signupPassword,
 			signupConfirmPassword,
+			AccountBtn,
 		)
 
-		signupDialog := dialog.NewCustom("Signup", "Create Account", signupForm, myWindow)
+		signupDialog := dialog.NewCustom("Signup", "Close", signupForm, myWindow)
 
 		signupDialog.Resize(fyne.NewSize(400, 200)) // Agrandissement de la fenêtre
 

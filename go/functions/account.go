@@ -139,10 +139,7 @@ func Login(username, password string) bool {
 		if checkPassword(password, user.Password) {
 			log.Printf("Connecté en tant que %s", username)
 			return true
-		} //else {
-		// 	log.Printf("Mauvais mot de passe !")
-		// 	return Login(retry())
-		// }
+		}
 	}
 	return false
 }
