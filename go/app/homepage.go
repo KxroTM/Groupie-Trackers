@@ -2,7 +2,6 @@ package app
 
 import (
 	"Groupie_Trackers/go/functions"
-	"fmt"
 	"image/color"
 
 	"fyne.io/fyne/v2"
@@ -48,24 +47,32 @@ func Homepage() {
 		signupPassword.SetPlaceHolder("Password")
 		signupConfirmPassword := widget.NewPasswordEntry()
 		signupConfirmPassword.SetPlaceHolder("Confirm Password")
+		signupText := canvas.NewText("", color.White)
+		signupText.Alignment = fyne.TextAlignCenter
 
 		AccountBtn := widget.NewButton("Create Account", func() {
-			fmt.Println(signupUsername.Text)
-			fmt.Println(signupPassword.Text)
-			fmt.Println(signupConfirmPassword.Text)
+			if !functions.Register(signupUsername.Text, signupPassword.Text, signupConfirmPassword.Text) {
+				signupText.Text = "Mot de passe incorrect ou utilisateur déjà existant"
+			} else {
+				dialog.ShowInformation("Login", "Compte crée", myWindow)
+				// logique
+			}
 		})
+
+		AccountBtn.Resize(fyne.NewSize(10, 10)) //Marche pas
 
 		signupForm := container.NewVBox(
 			signupUsername,
 			signupPassword,
 			signupConfirmPassword,
+			container.NewVBox(layout.NewSpacer()), // Ajout d'un espace pour séparer les éléments
+			signupText,
+			container.NewVBox(layout.NewSpacer()), // Ajout d'un espace pour séparer les éléments
 			AccountBtn,
 		)
-
 		signupDialog := dialog.NewCustom("Signup", "Close", signupForm, myWindow)
 
 		signupDialog.Resize(fyne.NewSize(400, 200)) // Agrandissement de la fenêtre
-
 		signupDialog.Show()
 	})
 

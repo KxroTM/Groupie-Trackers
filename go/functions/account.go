@@ -4,7 +4,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 )
@@ -107,31 +106,6 @@ func checkPassword(password, hashedPassword string) bool {
 	return hashedPassword == hashPasswordSHA256(password)
 }
 
-// Function for retry if the register's conditions are not respected
-func try() (username, password, password2 string) {
-	var newUsername string
-	var newPassword string
-	var newPassword2 string
-	fmt.Println("Veuillez choisir un pseudo")
-	fmt.Scan(&newUsername)
-	fmt.Println("Veuillez choisir un mot de passe")
-	fmt.Scan(&newPassword)
-	fmt.Println("Veuillez confirmer votre mot de passe")
-	fmt.Scan(&newPassword2)
-	return newUsername, newPassword, newPassword2
-}
-
-// Function for retry if the login's conditions are not respected
-func retry() (username, password string) {
-	var newUsername string
-	var newPassword string
-	fmt.Println("Pseudo : ")
-	fmt.Scan(&newUsername)
-	fmt.Println("Mot de passe : ")
-	fmt.Scan(&newPassword)
-	return newUsername, newPassword
-}
-
 // Function for login
 func Login(username, password string) bool {
 	if findAccount(username) {
@@ -145,19 +119,13 @@ func Login(username, password string) bool {
 }
 
 // Function for register
-func Register(username, password, passwordcheck string) {
-	if password == passwordcheck && !findAccount(username) {
+func Register(username, password, passwordcheck string) bool {
+	if password == passwordcheck && !findAccount(username) && username != "" && password != "" && passwordcheck != "" {
 		createUser(username, password)
 		log.Printf("Utilisateur créé : %s", username)
-	} else {
-		if findAccount(username) {
-			fmt.Println("Compte déjà existant")
-			Register(try())
-		} else {
-			fmt.Println("Veuillez saisir le même mot de passe !")
-			Register(try())
-		}
+		return true
 	}
+	return false
 }
 
 // Function for hash a password
