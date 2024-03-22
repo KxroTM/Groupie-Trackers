@@ -5,12 +5,6 @@ import (
 	"strings"
 )
 
-type AlbumDate struct {
-	day   int
-	month int
-	year  int
-}
-
 // Sort Artist by Date
 
 func ArtistbyCreationDateRange(allArtists AllArtists, startdate, enddate int) AllArtists { // Range Version
