@@ -1,14 +1,13 @@
 package app
 
 import (
-	"encoding/json"
+	"Groupie_Trackers/go/functions"
 	"fmt"
 	"image"
 	"image/color"
 	"io"
 	"net/http"
 	"os"
-	"strings"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
@@ -28,27 +27,6 @@ type ImageEntry struct {
 }
 
 var imageCache []*ImageEntry
-
-func fetchArtists() ([]Artist, error) {
-	url := "https://groupietrackers.herokuapp.com/api/artists"
-	resp, err := http.Get(url)
-	if err != nil {
-		return nil, fmt.Errorf("error fetching artists: %v", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("API request failed with status: %s", resp.Status)
-	}
-
-	var artists []Artist
-	err = json.NewDecoder(resp.Body).Decode(&artists)
-	if err != nil {
-		return nil, fmt.Errorf("error decoding API response: %v", err)
-	}
-
-	return artists, nil
-}
 
 func loadImageFromURL(url string) *canvas.Image {
 	for _, imageEntry := range imageCache {
@@ -98,11 +76,11 @@ func downloadImage(url string) *canvas.Image {
 	return image
 }
 
-func createArtistsGrid(artists []Artist) fyne.CanvasObject {
+func createArtistsGrid(artists []functions.Artist) fyne.CanvasObject {
 	var artistCards []fyne.CanvasObject
 
 	for _, artist := range artists {
-		image := loadImageFromURL(artist.ImageURL)
+		image := loadImageFromURL(artist.Image)
 		label := widget.NewLabel(artist.Name)
 		label.Alignment = fyne.TextAlignCenter // Assurez l'alignement du texte au centre sous l'image
 
@@ -127,27 +105,16 @@ func createNavBar() *fyne.Container {
 	return container.NewHBox(layout.NewSpacer(), space, space2, homeButton, aboutButton, contactButton, layout.NewSpacer(), text, space2)
 }
 
-func createSearchBar(artists []Artist, gridContainer *fyne.Container) fyne.CanvasObject {
+func createSearchBar(artists []functions.Artist, gridContainer *fyne.Container) fyne.CanvasObject {
 	searchEntry := widget.NewEntry()
 	searchEntry.SetPlaceHolder("Rechercher un artiste...")
 
 	searchEntry.OnChanged = func(text string) {
-		filteredArtists := filterArtists(artists, text)
+		filteredArtists := functions.Search(artists, text)
 		newGrid := createArtistsGrid(filteredArtists)
 		gridContainer.Objects = []fyne.CanvasObject{newGrid}
 		gridContainer.Refresh()
 	}
 
 	return searchEntry
-}
-
-// Fonction pour filtrer les artistes basé sur la saisie de l'utilisateur
-func filterArtists(artists []Artist, filterText string) []Artist {
-	var filtered []Artist
-	for _, artist := range artists {
-		if filterText == "" || strings.HasPrefix(strings.ToLower(artist.Name), strings.ToLower(filterText)) {
-			filtered = append(filtered, artist)
-		}
-	}
-	return filtered
 }

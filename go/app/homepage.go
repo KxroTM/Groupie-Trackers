@@ -2,7 +2,6 @@ package app
 
 import (
 	"Groupie_Trackers/go/functions"
-	"fmt"
 	"image/color"
 
 	"fyne.io/fyne/v2"
@@ -178,11 +177,11 @@ func Mainpage(myApp fyne.App) {
 	myWindow := myApp.NewWindow("Hip Hop Showcase")
 
 	navBar := createNavBar()
-	artists, err := fetchArtists()
-	if err != nil {
-		fmt.Println("Erreur lors de la récupération des artistes:", err)
-		return
-	}
+	artists := functions.ArtistData()
+	// if err != nil {
+	// 	fmt.Println("Erreur lors de la récupération des artistes:", err)
+	// 	return
+	// }
 
 	artistsGrid := createArtistsGrid(artists)
 	gridContainer := container.NewStack() // Utilisation de NewMax pour pouvoir rafraîchir dynamiquement le contenu
