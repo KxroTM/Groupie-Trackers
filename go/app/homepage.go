@@ -16,10 +16,11 @@ import (
 
 var MyApp = app.New()
 var user *functions.Account
+var Icon, _ = fyne.LoadResourceFromPath("./src/icon/icon.png")
 
 func LoginPage(app fyne.App) {
 	myWindow := app.NewWindow("Groupie-Trackers")
-
+	myWindow.SetIcon(Icon)
 	// Configuration de base pour agrandir les éléments de formulaire
 	username := widget.NewEntry()
 	username.SetPlaceHolder("Username")
@@ -44,7 +45,7 @@ func LoginPage(app fyne.App) {
 		myWindow.Hide()
 	})
 
-	quitBtn := widget.NewButton("Quitter l'application", func() {
+	quitBtn := widget.NewButton("Close the app", func() {
 		// Ferme l' application
 		app.Quit()
 	})
@@ -96,6 +97,7 @@ func LoginPage(app fyne.App) {
 
 func SignupPage(app fyne.App) {
 	myWindow := app.NewWindow("Groupie-Trackers")
+	myWindow.SetIcon(Icon)
 
 	// Configuration de base pour agrandir les éléments de formulaire
 	signupUsername := widget.NewEntry()
@@ -123,7 +125,7 @@ func SignupPage(app fyne.App) {
 		myWindow.Hide()
 	})
 
-	quitBtn := widget.NewButton("Quitter l'application", func() {
+	quitBtn := widget.NewButton("Close the app", func() {
 		// Ferme l' application
 		app.Quit()
 	})
@@ -175,6 +177,7 @@ func SignupPage(app fyne.App) {
 
 func Mainpage(myApp fyne.App) {
 	myWindow := myApp.NewWindow("Hip Hop Showcase")
+	myWindow.SetIcon(Icon)
 
 	navBar := createNavBar()
 	artists := functions.ArtistData()
