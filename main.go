@@ -1,7 +1,7 @@
 package main
 
 import (
-	Groupie_Trackers "Groupie_Trackers/tools"
+	Groupie_Trackers "Groupie_Trackers/go"
 	"fmt"
 )
 
