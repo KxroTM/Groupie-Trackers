@@ -16,11 +16,6 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-type Artist struct {
-	Name     string `json:"name"`
-	ImageURL string `json:"image"`
-}
-
 type ImageEntry struct {
 	URL   string
 	Image *canvas.Image
