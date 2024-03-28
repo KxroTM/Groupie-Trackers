@@ -103,7 +103,7 @@ func createNavBar(myWindow fyne.Window) *fyne.Container {
 		myWindow.Hide()
 	})
 
-	text := canvas.NewText("Welcome "+user.Username, color.White)
+	text := canvas.NewText("Welcome "+user.Username, color.Black)
 	space := canvas.NewText(text.Text, color.Transparent)
 	space2 := canvas.NewText("      ", color.Transparent)
 
