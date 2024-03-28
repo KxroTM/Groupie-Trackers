@@ -204,11 +204,45 @@ func Propospage() {
 	myWindow := MyApp.NewWindow("À Propos")
 	myWindow.SetIcon(Icon)
 
-	text := canvas.NewText("Groupie Trackers est une application de gestion d'information sur des Artistes musicales", color.White)
+	text := canvas.NewText("Groupie Tracker : Projet de création d'une application pour suivre les groupes de musique.", color.White)
 	text.Alignment = fyne.TextAlignCenter
 
+	text2 := canvas.NewText("Utilisation d'une API pour manipuler les données sur les artistes, les lieux et les dates de concerts.", color.White)
+	text2.Alignment = fyne.TextAlignCenter
+
+	text3 := canvas.NewText("Objectif : Créer une application conviviale affichant les informations sur les groupes via diverses visualisations de données.", color.White)
+	text3.Alignment = fyne.TextAlignCenter
+
+	text4 := canvas.NewText("Focus sur la création d'événements/actions interactifs, comme les appels client-serveur.", color.White)
+	text4.Alignment = fyne.TextAlignCenter
+
+	text5 := canvas.NewText("Implémentation d'une géolocalisation des concerts sur une carte.", color.White)
+	text5.Alignment = fyne.TextAlignCenter
+
+	text6 := canvas.NewText("Création d'une barre de recherche permettant de rechercher des membres ou des artistes.", color.White)
+	text6.Alignment = fyne.TextAlignCenter
+
+	text7 := canvas.NewText("Intégration de filtres pour afficher les groupes selon différents critères.", color.White)
+	text7.Alignment = fyne.TextAlignCenter
+
+	text8 := canvas.NewText("Respect des 8 règles d'interface de Schneiderman pour les visualisations de données.", color.White)
+	text8.Alignment = fyne.TextAlignCenter
+
+	text9 := canvas.NewText("Développement en Go, en suivant les bonnes pratiques et en utilisant uniquement les packages standard et Fyne.", color.White)
+	text9.Alignment = fyne.TextAlignCenter
+
+	text10 := canvas.NewText("Aides et ressources fournies pour la mise en œuvre, y compris des exemples d'API RESTful et de GUI avec Fyne.", color.White)
+	text10.Alignment = fyne.TextAlignCenter
+
+	text11 := canvas.NewText("Bonus possibles : Intégration d'un lecteur Spotify et création d'un système de favoris.", color.White)
+	text11.Alignment = fyne.TextAlignCenter
+
 	navBar := createNavBar(myWindow)
+<<<<<<< HEAD
 	content := container.NewStack(container.NewBorder(navBar, nil, nil, nil, container.NewCenter(text)))
+=======
+	content := container.NewMax(container.NewBorder(navBar, nil, nil, nil, container.NewCenter(container.NewVBox(text, text2, text3, text4, text5, text6, text7, text8, text9, text10, text11))))
+>>>>>>> 9384c4f79af5a2a6d2837d227441937ac8003b44
 	myWindow.SetContent(content)
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
