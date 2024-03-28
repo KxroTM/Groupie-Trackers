@@ -207,12 +207,8 @@ func Propospage() {
 	text := canvas.NewText("Groupie Trackers est une application de gestion d'information sur des Artistes musicales", color.Black)
 	text.Alignment = fyne.TextAlignCenter
 
-	button := widget.NewButton("Retour", func() {
-		Mainpage(MyApp)
-		myWindow.Hide()
-	})
-
-	content := container.NewMax(container.NewBorder(button, nil, nil, nil, container.NewCenter(text)))
+	navBar := createNavBar(myWindow)
+	content := container.NewVBox(navBar)
 	myWindow.SetContent(content)
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
@@ -229,12 +225,9 @@ func Contactpage() {
 	email := canvas.NewText("Email: GroupieTrackers@Ynov.com", color.Black)
 	email.Alignment = fyne.TextAlignCenter
 
-	button := widget.NewButton("Retour", func() {
-		Mainpage(MyApp)
-		myWindow.Hide()
-	})
+	navBar := createNavBar(myWindow)
 
-	content := container.NewMax(container.NewBorder(button, nil, nil, nil, container.NewCenter(container.NewVBox(text, email))))
+	content := container.NewVBox(navBar)
 	myWindow.SetContent(content)
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
