@@ -89,8 +89,11 @@ func createArtistsGrid(artists []functions.Artist) fyne.CanvasObject {
 	return scrollContainer
 }
 
-func createNavBar() *fyne.Container {
-	homeButton := widget.NewButton("Accueil", nil)
+func createNavBar(myWindow fyne.Window) *fyne.Container {
+	homeButton := widget.NewButton("Accueil", func() {
+		LoginPage(MyApp)
+		myWindow.Hide()
+	})
 	aboutButton := widget.NewButton("À Propos", nil)
 	contactButton := widget.NewButton("Contact", nil)
 	text := canvas.NewText("Welcome "+user.Username, color.White)

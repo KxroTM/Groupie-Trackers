@@ -179,7 +179,7 @@ func Mainpage(myApp fyne.App) {
 	myWindow := myApp.NewWindow("Hip Hop Showcase")
 	myWindow.SetIcon(Icon)
 
-	navBar := createNavBar()
+	navBar := createNavBar(myWindow)
 	artists := functions.ArtistData()
 	// if err != nil {
 	// 	fmt.Println("Erreur lors de la récupération des artistes:", err)
