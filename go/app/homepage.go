@@ -20,7 +20,7 @@ var user *functions.Account
 var Icon, _ = fyne.LoadResourceFromPath("./src/icon/icon.png")
 
 func LoginPage(app fyne.App) {
-	myWindow := app.NewWindow("Groupie-Trackers")
+	myWindow := app.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
 	// Configuration de base pour agrandir les éléments de formulaire
 	username := widget.NewEntry()
@@ -37,7 +37,7 @@ func LoginPage(app fyne.App) {
 		} else {
 			user = functions.UserBuild(username.Text)
 			text.Text = ""
-			Mainpage(app)
+			HomePage(app)
 			myWindow.Hide()
 		}
 	})
@@ -97,7 +97,7 @@ func LoginPage(app fyne.App) {
 }
 
 func SignupPage(app fyne.App) {
-	myWindow := app.NewWindow("Groupie-Trackers")
+	myWindow := app.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
 
 	// Configuration de base pour agrandir les éléments de formulaire
@@ -176,8 +176,8 @@ func SignupPage(app fyne.App) {
 	myWindow.Show() // Affiche la fenêtre et lance l'application
 }
 
-func Mainpage(myApp fyne.App) {
-	myWindow := myApp.NewWindow("Hip Hop Showcase")
+func SearchPage(myApp fyne.App) {
+	myWindow := myApp.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
 
 	navBar := createNavBar(myWindow)
@@ -200,8 +200,8 @@ func Mainpage(myApp fyne.App) {
 	myWindow.Show()
 }
 
-func Propospage() {
-	myWindow := MyApp.NewWindow("À Propos")
+func Propospage(myApp fyne.App) {
+	myWindow := MyApp.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
 
 	text := canvas.NewText("Groupie Tracker : Projet de création d'une application pour suivre les groupes de musique.", color.White)
@@ -239,14 +239,19 @@ func Propospage() {
 
 	navBar := createNavBar(myWindow)
 	content := container.NewStack(container.NewBorder(navBar, nil, nil, nil, container.NewCenter(container.NewVBox(text, text2, text3, text4, text5, text6, text7, text8, text9, text10, text11))))
+
+	myWindow.SetOnClosed(func() {
+		myApp.Quit()
+	})
+
 	myWindow.SetContent(content)
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()
 }
 
-func Contactpage() {
-	myWindow := MyApp.NewWindow("Contact")
+func Contactpage(myApp fyne.App) {
+	myWindow := MyApp.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
 
 	text := canvas.NewText("Contactez-nous à l'adresse suivante:", color.White)
@@ -258,14 +263,18 @@ func Contactpage() {
 	navBar := createNavBar(myWindow)
 
 	content := container.NewStack(container.NewBorder(navBar, nil, nil, nil, container.NewCenter(container.NewVBox(text, email))))
+
+	myWindow.SetOnClosed(func() {
+		myApp.Quit()
+	})
 	myWindow.SetContent(content)
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()
 }
 
-func ArtistPage(artist functions.Artist) {
-	myWindow := MyApp.NewWindow(artist.Name)
+func ArtistPage(artist functions.Artist, myApp fyne.App) {
+	myWindow := MyApp.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
 	navBar := createNavBar(myWindow)
 
@@ -312,7 +321,7 @@ func ArtistPage(artist functions.Artist) {
 	creationDate := canvas.NewText("Creation Date : "+strconv.Itoa(int(artist.CreationDate)), color.White)
 	album := canvas.NewText("First Album : "+artist.FirstAlbum, color.White)
 	concert := widget.NewButton("Concerts", func() {
-		ConcertPage(artist)
+		ConcertPage(artist, MyApp)
 		myWindow.Hide()
 	})
 	concertButton := container.NewHBox(layout.NewSpacer(), concert, layout.NewSpacer())
@@ -331,19 +340,53 @@ func ArtistPage(artist functions.Artist) {
 		form := container.NewVBox(navBar, txt, txt, txt, txt, image, txt, name, member, creationDate, album, txt, concertButton)
 		myWindow.SetContent(form)
 	}
+
+	myWindow.SetOnClosed(func() {
+		myApp.Quit()
+	})
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()
 }
 
-func ConcertPage(artist functions.Artist) {
-	myWindow := MyApp.NewWindow("Contact")
+func ConcertPage(artist functions.Artist, myApp fyne.App) {
+	myWindow := MyApp.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
 
 	navBar := createNavBar(myWindow)
 
 	content := container.NewStack(container.NewBorder(navBar, nil, nil, nil))
+
+	myWindow.SetOnClosed(func() {
+		myApp.Quit()
+	})
 	myWindow.SetContent(content)
+	myWindow.CenterOnScreen()
+	myWindow.Resize(fyne.NewSize(800, 600))
+	myWindow.Show()
+}
+
+func HomePage(myApp fyne.App) {
+	myWindow := MyApp.NewWindow("Groupie Trackers")
+	myWindow.SetIcon(Icon)
+
+	navBar := createNavBar(myWindow)
+	rdmBar := createRandomArtistsGrid(myWindow)
+	rdmBar.Resize(fyne.NewSize(800, 600))
+	spacer := canvas.NewText("", color.White)
+	title := canvas.NewText("Groupie Trackers", color.White)
+	title.TextSize = 42
+	title.Alignment = fyne.TextAlignCenter
+	subtitle := canvas.NewText(" Découvrez de nouveau artistes : ", color.White)
+	subtitle.TextSize = 20
+
+	topContent := container.NewVBox(navBar, spacer, spacer, title, spacer, spacer, subtitle, spacer, rdmBar)
+
+	myWindow.SetContent(container.NewBorder(topContent, nil, nil, nil))
+
+	myWindow.SetOnClosed(func() {
+		myApp.Quit()
+	})
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()

@@ -6,6 +6,7 @@ import (
 	"image"
 	"image/color"
 	"io"
+	"math/rand"
 	"net/http"
 	"os"
 
@@ -79,7 +80,7 @@ func createArtistsGrid(artists []functions.Artist, w fyne.Window) fyne.CanvasObj
 		image := loadImageFromURL(artist.Image)
 		image.FillMode = canvas.ImageFillContain
 		button := widget.NewButton(artist.Name, func() {
-			ArtistPage(artistTemp)
+			ArtistPage(artistTemp, MyApp)
 			w.Hide()
 		})
 		card := container.NewVBox(image, button)
@@ -94,19 +95,24 @@ func createArtistsGrid(artists []functions.Artist, w fyne.Window) fyne.CanvasObj
 
 func createNavBar(myWindow fyne.Window) *fyne.Container {
 	homeButton := widget.NewButton("Accueil", func() {
-		Mainpage(MyApp)
+		HomePage(MyApp)
 		myWindow.Hide()
 	})
-	aboutButton := widget.NewButton("À Propos", func() {
-		Propospage()
-		myWindow.Hide()
-	})
-	contactButton := widget.NewButton("Contact", func() {
-		Contactpage()
-		myWindow.Hide()
-	})
-	loginButton := widget.NewButton("Se déconnecter", func() {
+	// aboutButton := widget.NewButton("À Propos", func() {
+	// 	Propospage(MyApp)
+	// 	myWindow.Hide()
+	// })
+	// contactButton := widget.NewButton("Contact", func() {
+	// 	Contactpage(MyApp)
+	// 	myWindow.Hide()
+	// })
+	logoutButton := widget.NewButton("Se déconnecter", func() {
 		LoginPage(MyApp)
+		myWindow.Hide()
+	})
+
+	researchButton := widget.NewButton("Rechercher", func() {
+		SearchPage(MyApp)
 		myWindow.Hide()
 	})
 
@@ -114,7 +120,7 @@ func createNavBar(myWindow fyne.Window) *fyne.Container {
 	space := canvas.NewText(text.Text, color.Transparent)
 	space2 := canvas.NewText("      ", color.Transparent)
 
-	return container.NewHBox(layout.NewSpacer(), space, space2, homeButton, aboutButton, contactButton, loginButton, layout.NewSpacer(), text, space2)
+	return container.NewHBox(layout.NewSpacer(), space, space2, homeButton, researchButton, logoutButton, layout.NewSpacer(), text, space2)
 }
 
 func createSearchBar(artists []functions.Artist, gridContainer *fyne.Container, w fyne.Window) fyne.CanvasObject {
@@ -129,4 +135,61 @@ func createSearchBar(artists []functions.Artist, gridContainer *fyne.Container, 
 	}
 
 	return searchEntry
+}
+
+func createRandomArtistsGrid(w fyne.Window) fyne.CanvasObject {
+	var artistCards []fyne.CanvasObject
+	var artists []functions.Artist
+	artistsContent := functions.ArtistData()
+	check1 := false
+	check2 := false
+	check3 := false
+
+	for i := 0; i < len(artistsContent); i++ {
+		if len(artists) == 4 {
+			break
+		}
+		artistsTemp := artistsContent[rand.Intn(len(artistsContent))]
+		artistsTemp2 := artistsContent[rand.Intn(len(artistsContent))]
+		artistsTemp3 := artistsContent[rand.Intn(len(artistsContent))]
+
+		for i := 0; i < len(artists); i++ {
+			if artistsTemp.Name == artists[i].Name {
+				check1 = true
+			}
+			if artistsTemp2.Name == artists[i].Name {
+				check2 = true
+			}
+			if artistsTemp3.Name == artists[i].Name {
+				check3 = true
+			}
+		}
+		if !check1 {
+			artists = append(artists, artistsTemp)
+		} else if !check2 {
+			artists = append(artists, artistsTemp2)
+		} else if !check3 {
+			artists = append(artists, artistsTemp3)
+		}
+
+		if i == len(artistsContent)-1 && len(artists) < 4 {
+			artists = append(artists, artistsContent[0])
+		}
+	}
+
+	for _, artist := range artists {
+		artistTemp := artist
+		image := loadImageFromURL(artist.Image)
+		image.FillMode = canvas.ImageFillContain
+		button := widget.NewButton(artist.Name, func() {
+			ArtistPage(artistTemp, MyApp)
+			w.Hide()
+		})
+		card := container.NewVBox(image, button)
+		artistCards = append(artistCards, card)
+	}
+
+	grid := container.NewGridWithColumns(4, artistCards...)
+
+	return grid
 }
