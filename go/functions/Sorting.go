@@ -149,3 +149,11 @@ func SortByFirstAlbumDescending(allArtists AllArtists) AllArtists {
 	})
 	return allArtists
 }
+
+// Sort Artist by date of First Album (Ascending)
+func SortByFirstAlbumAscending(allArtists AllArtists) AllArtists {
+	sort.Slice(allArtists, func(i, j int) bool {
+		return parseDate(allArtists[i].FirstAlbum) < parseDate(allArtists[j].FirstAlbum)
+	})
+	return allArtists
+}

@@ -372,7 +372,8 @@ func HomePage(myApp fyne.App) {
 
 	navBar := createNavBar(myWindow)
 	rdmBar := createRandomArtistsGrid(myWindow)
-	lastAlbumBar := createLastArtistsGrid(myWindow)
+	lastAlbumBar := createCustomArtistsGrid(myWindow, functions.SortByFirstAlbumDescending(functions.ArtistData()))
+	firstAlbumBar := createCustomArtistsGrid(myWindow, functions.SortByFirstAlbumAscending(functions.ArtistData()))
 	spacer := canvas.NewText("", color.White)
 	title := canvas.NewText("Groupie Trackers", color.White)
 	title.TextSize = 42
@@ -380,9 +381,12 @@ func HomePage(myApp fyne.App) {
 	title.TextStyle = fyne.TextStyle{Bold: true}
 	subtitle := canvas.NewText(" Découvrez de nouveaux artistes : ", color.White)
 	subtitle.TextSize = 16
-	subtitle2 := canvas.NewText(" Dernières sorties : ", color.White)
+	subtitle2 := canvas.NewText(" Découvrez les dernières sorties : ", color.White)
 	subtitle2.TextSize = 16
-	content := container.NewVBox(navBar, spacer, spacer, title, spacer, spacer, subtitle, spacer, rdmBar, spacer, subtitle2, spacer, lastAlbumBar)
+	subtitle3 := canvas.NewText(" Redécouvrez le meilleur des vieux albums : ", color.White)
+	subtitle3.TextSize = 16
+	content := container.NewVBox(navBar, spacer, spacer, title, spacer, spacer,
+		subtitle, spacer, rdmBar, spacer, subtitle2, spacer, lastAlbumBar, spacer, subtitle3, spacer, firstAlbumBar)
 
 	scrollContainer := container.NewVScroll(content)
 
