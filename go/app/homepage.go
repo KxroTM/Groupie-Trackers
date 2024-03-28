@@ -378,7 +378,7 @@ func HomePage(myApp fyne.App) {
 	title.TextSize = 42
 	title.Alignment = fyne.TextAlignCenter
 	title.TextStyle = fyne.TextStyle{Bold: true}
-	subtitle := canvas.NewText(" Découvrez de nouveau artistes : ", color.White)
+	subtitle := canvas.NewText(" Découvrez de nouveaux artistes : ", color.White)
 	subtitle.TextSize = 16
 	subtitle2 := canvas.NewText(" Dernières sorties : ", color.White)
 	subtitle2.TextSize = 16
