@@ -105,12 +105,16 @@ func createNavBar(myWindow fyne.Window) *fyne.Container {
 		Contactpage()
 		myWindow.Hide()
 	})
+	loginButton := widget.NewButton("Se déconnecter", func() {
+		LoginPage(MyApp)
+		myWindow.Hide()
+	})
 
 	text := canvas.NewText("Welcome "+user.Username, color.White)
 	space := canvas.NewText(text.Text, color.Transparent)
 	space2 := canvas.NewText("      ", color.Transparent)
 
-	return container.NewHBox(layout.NewSpacer(), space, space2, homeButton, aboutButton, contactButton, layout.NewSpacer(), text, space2)
+	return container.NewHBox(layout.NewSpacer(), space, space2, homeButton, aboutButton, contactButton, loginButton, layout.NewSpacer(), text, space2)
 }
 
 func createSearchBar(artists []functions.Artist, gridContainer *fyne.Container, w fyne.Window) fyne.CanvasObject {
