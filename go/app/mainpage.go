@@ -12,7 +12,6 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 )
@@ -91,24 +90,12 @@ func createArtistsGrid(artists []functions.Artist) fyne.CanvasObject {
 }
 
 func createNavBar() *fyne.Container {
-<<<<<<< HEAD
-	homeButton := widget.NewButton("Accueil", func() {
-		Homepage()
-	})
-	aboutButton := widget.NewButton("À Propos", func() {
-		dialog.ShowInformation("À Propos", "Cette application affiche des informations sur les artistes de musique Hip Hop.", nil)
-	})
-	contactButton := widget.NewButton("Contact", func() {
-		dialog.ShowInformation("Contact", "Vous pouvez nous contacter à l'adresse suivante :", nil)
-	})
-=======
 	homeButton := widget.NewButton("Accueil", nil)
 	aboutButton := widget.NewButton("À Propos", nil)
 	contactButton := widget.NewButton("Contact", nil)
 	text := canvas.NewText("Welcome "+user.Username, color.White)
 	space := canvas.NewText(text.Text, color.Transparent)
 	space2 := canvas.NewText("      ", color.Transparent)
->>>>>>> main
 
 	return container.NewHBox(layout.NewSpacer(), space, space2, homeButton, aboutButton, contactButton, layout.NewSpacer(), text, space2)
 }
