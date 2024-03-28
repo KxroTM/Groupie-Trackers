@@ -208,7 +208,7 @@ func Propospage() {
 	text.Alignment = fyne.TextAlignCenter
 
 	navBar := createNavBar(myWindow)
-	content := container.NewMax(container.NewBorder(navBar, nil, nil, nil, container.NewCenter(text)))
+	content := container.NewStack(container.NewBorder(navBar, nil, nil, nil, container.NewCenter(text)))
 	myWindow.SetContent(content)
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
@@ -227,7 +227,7 @@ func Contactpage() {
 
 	navBar := createNavBar(myWindow)
 
-	content := container.NewMax(container.NewBorder(navBar, nil, nil, nil, container.NewCenter(container.NewVBox(text, email))))
+	content := container.NewStack(container.NewBorder(navBar, nil, nil, nil, container.NewCenter(container.NewVBox(text, email))))
 	myWindow.SetContent(content)
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
@@ -282,7 +282,7 @@ func ArtistPage(artist functions.Artist) {
 	creationDate := canvas.NewText("Creation Date : "+strconv.Itoa(int(artist.CreationDate)), color.White)
 	album := canvas.NewText("First Album : "+artist.FirstAlbum, color.White)
 	concert := widget.NewButton("Concerts", func() {
-		Mainpage(MyApp)
+		ConcertPage(artist)
 		myWindow.Hide()
 	})
 	concertButton := container.NewHBox(layout.NewSpacer(), concert, layout.NewSpacer())
@@ -293,14 +293,26 @@ func ArtistPage(artist functions.Artist) {
 	creationDate.Alignment = fyne.TextAlignCenter
 	album.Alignment = fyne.TextAlignCenter
 
-	txt := canvas.NewText(" ", color.White)
 	if len(artist.Members) > 4 {
-		form := container.NewVBox(navBar, txt, txt, txt, txt, image, txt, name, member, member2, creationDate, album, txt, concertButton)
+		form := container.NewVBox(navBar, nil, nil, nil, nil, image, nil, name, member, member2, creationDate, album, nil, concertButton)
 		myWindow.SetContent(form)
 	} else {
-		form := container.NewVBox(navBar, txt, txt, txt, txt, image, txt, name, member, creationDate, album, txt, concertButton)
+		form := container.NewVBox(navBar, nil, nil, nil, nil, image, nil, name, member, creationDate, album, nil, concertButton)
 		myWindow.SetContent(form)
 	}
+	myWindow.CenterOnScreen()
+	myWindow.Resize(fyne.NewSize(800, 600))
+	myWindow.Show()
+}
+
+func ConcertPage(artist functions.Artist) {
+	myWindow := MyApp.NewWindow("Contact")
+	myWindow.SetIcon(Icon)
+
+	navBar := createNavBar(myWindow)
+
+	content := container.NewStack(container.NewBorder(navBar, nil, nil, nil))
+	myWindow.SetContent(content)
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()
