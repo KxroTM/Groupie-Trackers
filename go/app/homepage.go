@@ -238,11 +238,7 @@ func Propospage() {
 	text11.Alignment = fyne.TextAlignCenter
 
 	navBar := createNavBar(myWindow)
-<<<<<<< HEAD
-	content := container.NewStack(container.NewBorder(navBar, nil, nil, nil, container.NewCenter(text)))
-=======
-	content := container.NewMax(container.NewBorder(navBar, nil, nil, nil, container.NewCenter(container.NewVBox(text, text2, text3, text4, text5, text6, text7, text8, text9, text10, text11))))
->>>>>>> 9384c4f79af5a2a6d2837d227441937ac8003b44
+	content := container.NewStack(container.NewBorder(navBar, nil, nil, nil, container.NewCenter(container.NewVBox(text, text2, text3, text4, text5, text6, text7, text8, text9, text10, text11))))
 	myWindow.SetContent(content)
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
