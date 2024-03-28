@@ -75,10 +75,11 @@ func createArtistsGrid(artists []functions.Artist, w fyne.Window) fyne.CanvasObj
 	var artistCards []fyne.CanvasObject
 
 	for _, artist := range artists {
+		artistTemp := artist
 		image := loadImageFromURL(artist.Image)
 		image.FillMode = canvas.ImageFillContain
 		button := widget.NewButton(artist.Name, func() {
-			ArtistPage(artist)
+			ArtistPage(artistTemp)
 			w.Hide()
 		})
 		card := container.NewVBox(image, button)
