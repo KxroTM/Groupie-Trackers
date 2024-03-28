@@ -71,15 +71,17 @@ func downloadImage(url string) *canvas.Image {
 	return image
 }
 
-func createArtistsGrid(artists []functions.Artist) fyne.CanvasObject {
+func createArtistsGrid(artists []functions.Artist, w fyne.Window) fyne.CanvasObject {
 	var artistCards []fyne.CanvasObject
 
 	for _, artist := range artists {
 		image := loadImageFromURL(artist.Image)
-		label := widget.NewLabel(artist.Name)
-		label.Alignment = fyne.TextAlignCenter // Assurez l'alignement du texte au centre sous l'image
-
-		card := container.NewVBox(image, label)
+		image.FillMode = canvas.ImageFillContain
+		button := widget.NewButton(artist.Name, func() {
+			ArtistPage(artist)
+			w.Hide()
+		})
+		card := container.NewVBox(image, button)
 		artistCards = append(artistCards, card)
 	}
 
@@ -91,7 +93,7 @@ func createArtistsGrid(artists []functions.Artist) fyne.CanvasObject {
 
 func createNavBar(myWindow fyne.Window) *fyne.Container {
 	homeButton := widget.NewButton("Accueil", func() {
-		LoginPage(MyApp)
+		Mainpage(MyApp)
 		myWindow.Hide()
 	})
 	aboutButton := widget.NewButton("À Propos", func() {
@@ -110,13 +112,13 @@ func createNavBar(myWindow fyne.Window) *fyne.Container {
 	return container.NewHBox(layout.NewSpacer(), space, space2, homeButton, aboutButton, contactButton, layout.NewSpacer(), text, space2)
 }
 
-func createSearchBar(artists []functions.Artist, gridContainer *fyne.Container) fyne.CanvasObject {
+func createSearchBar(artists []functions.Artist, gridContainer *fyne.Container, w fyne.Window) fyne.CanvasObject {
 	searchEntry := widget.NewEntry()
 	searchEntry.SetPlaceHolder("Rechercher un artiste...")
 
 	searchEntry.OnChanged = func(text string) {
 		filteredArtists := functions.Search(artists, text)
-		newGrid := createArtistsGrid(filteredArtists)
+		newGrid := createArtistsGrid(filteredArtists, w)
 		gridContainer.Objects = []fyne.CanvasObject{newGrid}
 		gridContainer.Refresh()
 	}
