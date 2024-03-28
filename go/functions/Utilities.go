@@ -37,3 +37,11 @@ func IsStringInSlice(str string, slice []string) bool {
 	}
 	return false
 }
+
+func parseDate(dateStr string) string {
+	parts := strings.Split(dateStr, "-")
+	if len(parts) != 3 {
+		return ""
+	}
+	return parts[2] + "-" + parts[1] + "-" + parts[0]
+}

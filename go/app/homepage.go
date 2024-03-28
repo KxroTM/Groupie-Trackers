@@ -372,17 +372,21 @@ func HomePage(myApp fyne.App) {
 
 	navBar := createNavBar(myWindow)
 	rdmBar := createRandomArtistsGrid(myWindow)
-	rdmBar.Resize(fyne.NewSize(800, 600))
+	lastAlbumBar := createLastArtistsGrid(myWindow)
 	spacer := canvas.NewText("", color.White)
 	title := canvas.NewText("Groupie Trackers", color.White)
 	title.TextSize = 42
 	title.Alignment = fyne.TextAlignCenter
+	title.TextStyle = fyne.TextStyle{Bold: true}
 	subtitle := canvas.NewText(" Découvrez de nouveau artistes : ", color.White)
-	subtitle.TextSize = 20
+	subtitle.TextSize = 16
+	subtitle2 := canvas.NewText(" Dernières sorties : ", color.White)
+	subtitle2.TextSize = 16
+	content := container.NewVBox(navBar, spacer, spacer, title, spacer, spacer, subtitle, spacer, rdmBar, spacer, subtitle2, spacer, lastAlbumBar)
 
-	topContent := container.NewVBox(navBar, spacer, spacer, title, spacer, spacer, subtitle, spacer, rdmBar)
+	scrollContainer := container.NewVScroll(content)
 
-	myWindow.SetContent(container.NewBorder(topContent, nil, nil, nil))
+	myWindow.SetContent(scrollContainer)
 
 	myWindow.SetOnClosed(func() {
 		myApp.Quit()

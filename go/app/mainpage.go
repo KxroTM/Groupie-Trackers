@@ -193,3 +193,30 @@ func createRandomArtistsGrid(w fyne.Window) fyne.CanvasObject {
 
 	return grid
 }
+
+func createLastArtistsGrid(w fyne.Window) fyne.CanvasObject {
+	var artistCards []fyne.CanvasObject
+	var artists []functions.Artist
+
+	artistContent := functions.SortByFirstAlbumDescending(functions.ArtistData())
+
+	for i := 0; i < 4; i++ {
+		artists = append(artists, artistContent[i])
+	}
+
+	for _, artist := range artists {
+		artistTemp := artist
+		image := loadImageFromURL(artist.Image)
+		image.FillMode = canvas.ImageFillContain
+		button := widget.NewButton(artist.Name, func() {
+			ArtistPage(artistTemp, MyApp)
+			w.Hide()
+		})
+		card := container.NewVBox(image, button)
+		artistCards = append(artistCards, card)
+	}
+
+	grid := container.NewGridWithColumns(4, artistCards...)
+
+	return grid
+}

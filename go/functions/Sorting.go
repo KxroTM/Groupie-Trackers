@@ -2,6 +2,7 @@ package functions
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 )
 
@@ -139,4 +140,12 @@ func ArtistbyCountry(allArtists AllArtists, allLocations AllLocations, country [
 
 	}
 	return artistList
+}
+
+// Sort Artist by date of First Album (Ascending)
+func SortByFirstAlbumDescending(allArtists AllArtists) AllArtists {
+	sort.Slice(allArtists, func(i, j int) bool {
+		return parseDate(allArtists[i].FirstAlbum) > parseDate(allArtists[j].FirstAlbum)
+	})
+	return allArtists
 }
