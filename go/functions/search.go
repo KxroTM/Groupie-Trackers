@@ -4,8 +4,7 @@ import (
 	"strings"
 )
 
-func Search(input string) []Artist {
-	data := ArtistData()
+func Search(data AllArtists, input string) []Artist {
 	var result []Artist
 	var in = false
 	for i := 0; i < len(data); i++ {

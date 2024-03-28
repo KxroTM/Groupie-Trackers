@@ -7,7 +7,7 @@ import (
 
 // Function to add content to user's favorites
 func AddToFavorites(username, content string) {
-	user := userBuild(username)
+	user := UserBuild(username)
 	if user != nil {
 		for _, favorite := range user.Favorites {
 			if strings.Contains(favorite, content) {
@@ -31,7 +31,7 @@ func AddToFavorites(username, content string) {
 
 // Function to delete content from user's favorites
 func DeleteFavorite(username, content string) {
-	user := userBuild(username)
+	user := UserBuild(username)
 	if user != nil {
 		for i, favorite := range user.Favorites {
 			if strings.Contains(favorite, content) {

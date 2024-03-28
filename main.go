@@ -6,8 +6,8 @@ import (
 )
 
 func main() {
-	app.Homepage() // Appel de la fonction Homepage du fichier homepage.go
-	//app.Mainpage() // Appel de la fonction mainPage du fichier mainpage.go
+	app.LoginPage(app.MyApp) // Appel de la fonction Homepage du fichier homepage.go
+	app.MyApp.Run()
 }
 
 func init() {
