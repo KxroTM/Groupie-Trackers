@@ -41,7 +41,7 @@ func AddressToCoordinates(address string) (float64, float64, error) {
 
 	results := result["results"].([]interface{})
 	if len(results) == 0 {
-		return 0, 0, fmt.Errorf("No results found for the given address")
+		return 0, 0, fmt.Errorf("no results found for the given address")
 	}
 
 	geometry := results[0].(map[string]interface{})["geometry"].(map[string]interface{})
