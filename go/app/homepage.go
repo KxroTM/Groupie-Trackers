@@ -3,6 +3,7 @@ package app
 import (
 	"Groupie_Trackers/go/functions"
 	"image/color"
+	"strconv"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
@@ -181,16 +182,12 @@ func Mainpage(myApp fyne.App) {
 
 	navBar := createNavBar(myWindow)
 	artists := functions.ArtistData()
-	// if err != nil {
-	// 	fmt.Println("Erreur lors de la récupération des artistes:", err)
-	// 	return
-	// }
 
-	artistsGrid := createArtistsGrid(artists)
+	artistsGrid := createArtistsGrid(artists, myWindow)
 	gridContainer := container.NewStack() // Utilisation de NewMax pour pouvoir rafraîchir dynamiquement le contenu
 	gridContainer.Add(artistsGrid)
 
-	searchBar := createSearchBar(artists, gridContainer)
+	searchBar := createSearchBar(artists, gridContainer, myWindow)
 	topContent := container.NewVBox(navBar, searchBar)
 
 	myWindow.SetOnClosed(func() {
@@ -239,6 +236,42 @@ func Contactpage() {
 
 	content := container.NewMax(container.NewBorder(button, nil, nil, nil, container.NewCenter(container.NewVBox(text, email))))
 	myWindow.SetContent(content)
+	myWindow.CenterOnScreen()
+	myWindow.Resize(fyne.NewSize(800, 600))
+	myWindow.Show()
+}
+
+func ArtistPage(artist functions.Artist) {
+	myWindow := MyApp.NewWindow(artist.Name)
+	myWindow.SetIcon(Icon)
+	navBar := createNavBar(myWindow)
+
+	image := loadImageFromURL(artist.Image)
+	image.FillMode = canvas.ImageFillContain
+
+	name := canvas.NewText("Name : "+artist.Name, color.White)
+	members := ""
+	for _, member := range artist.Members {
+		members += member + ", "
+	}
+	member := canvas.NewText("Members : "+members, color.White)
+	creationDate := canvas.NewText("Creation Date : "+strconv.Itoa(int(artist.CreationDate)), color.White)
+	album := canvas.NewText("First Album : "+artist.FirstAlbum, color.White)
+	concert := widget.NewButton("Concerts", func() {
+		Mainpage(MyApp)
+		myWindow.Hide()
+	})
+	concertButton := container.NewHBox(layout.NewSpacer(), concert, layout.NewSpacer())
+
+	name.Alignment = fyne.TextAlignCenter
+	member.Alignment = fyne.TextAlignCenter
+	creationDate.Alignment = fyne.TextAlignCenter
+	album.Alignment = fyne.TextAlignCenter
+
+	txt := canvas.NewText(" ", color.White)
+
+	form := container.NewVBox(navBar, txt, txt, txt, txt, image, txt, name, member, creationDate, album, txt, concertButton)
+	myWindow.SetContent(form)
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()
