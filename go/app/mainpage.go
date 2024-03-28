@@ -94,8 +94,15 @@ func createNavBar(myWindow fyne.Window) *fyne.Container {
 		LoginPage(MyApp)
 		myWindow.Hide()
 	})
-	aboutButton := widget.NewButton("À Propos", nil)
-	contactButton := widget.NewButton("Contact", nil)
+	aboutButton := widget.NewButton("À Propos", func() {
+		Propospage()
+		myWindow.Hide()
+	})
+	contactButton := widget.NewButton("Contact", func() {
+		Contactpage()
+		myWindow.Hide()
+	})
+
 	text := canvas.NewText("Welcome "+user.Username, color.White)
 	space := canvas.NewText(text.Text, color.Transparent)
 	space2 := canvas.NewText("      ", color.Transparent)
