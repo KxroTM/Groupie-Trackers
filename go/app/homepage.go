@@ -322,12 +322,13 @@ func ArtistPage(artist functions.Artist) {
 	member2.Alignment = fyne.TextAlignCenter
 	creationDate.Alignment = fyne.TextAlignCenter
 	album.Alignment = fyne.TextAlignCenter
+	txt := canvas.NewText("", color.White)
 
 	if len(artist.Members) > 4 {
-		form := container.NewVBox(navBar, nil, nil, nil, nil, image, nil, name, member, member2, creationDate, album, nil, concertButton)
+		form := container.NewVBox(navBar, txt, txt, txt, txt, image, txt, name, member, member2, creationDate, album, txt, concertButton)
 		myWindow.SetContent(form)
 	} else {
-		form := container.NewVBox(navBar, nil, nil, nil, nil, image, nil, name, member, creationDate, album, nil, concertButton)
+		form := container.NewVBox(navBar, txt, txt, txt, txt, image, txt, name, member, creationDate, album, txt, concertButton)
 		myWindow.SetContent(form)
 	}
 	myWindow.CenterOnScreen()
