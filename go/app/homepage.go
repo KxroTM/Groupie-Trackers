@@ -244,10 +244,41 @@ func ArtistPage(artist functions.Artist) {
 
 	name := canvas.NewText("Name : "+artist.Name, color.White)
 	members := ""
-	for _, member := range artist.Members {
-		members += member + ", "
+	members2 := ""
+	if len(artist.Members) > 4 {
+		for i := 0; i < len(artist.Members)/2; i++ {
+			if i == 0 {
+				members += artist.Members[i]
+			} else {
+				members += ", " + artist.Members[i]
+			}
+		}
+
+		for i := len(artist.Members) / 2; i < len(artist.Members); i++ {
+			if i == len(artist.Members) {
+				members2 += artist.Members[i]
+			} else if i == len(artist.Members)/2 {
+				members2 += artist.Members[i]
+			} else {
+				members2 += ", " + artist.Members[i]
+			}
+		}
+
+	} else {
+		for i := 0; i < len(artist.Members); i++ {
+			if i == 0 {
+				members += artist.Members[i]
+			} else if i == len(artist.Members) {
+				members += artist.Members[i]
+			} else {
+				members += ", " + artist.Members[i]
+			}
+		}
 	}
+
 	member := canvas.NewText("Members : "+members, color.White)
+	member2 := canvas.NewText(members2, color.White)
+
 	creationDate := canvas.NewText("Creation Date : "+strconv.Itoa(int(artist.CreationDate)), color.White)
 	album := canvas.NewText("First Album : "+artist.FirstAlbum, color.White)
 	concert := widget.NewButton("Concerts", func() {
@@ -258,13 +289,18 @@ func ArtistPage(artist functions.Artist) {
 
 	name.Alignment = fyne.TextAlignCenter
 	member.Alignment = fyne.TextAlignCenter
+	member2.Alignment = fyne.TextAlignCenter
 	creationDate.Alignment = fyne.TextAlignCenter
 	album.Alignment = fyne.TextAlignCenter
 
 	txt := canvas.NewText(" ", color.White)
-
-	form := container.NewVBox(navBar, txt, txt, txt, txt, image, txt, name, member, creationDate, album, txt, concertButton)
-	myWindow.SetContent(form)
+	if len(artist.Members) > 4 {
+		form := container.NewVBox(navBar, txt, txt, txt, txt, image, txt, name, member, member2, creationDate, album, txt, concertButton)
+		myWindow.SetContent(form)
+	} else {
+		form := container.NewVBox(navBar, txt, txt, txt, txt, image, txt, name, member, creationDate, album, txt, concertButton)
+		myWindow.SetContent(form)
+	}
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()
