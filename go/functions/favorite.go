@@ -33,28 +33,32 @@ func AddToFavorites(username, content string) {
 func DeleteFavorite(username, content string) {
 	user := UserBuild(username)
 	if user != nil {
+		found := false
 		for i, favorite := range user.Favorites {
-			if strings.Contains(favorite, content) {
+			if favorite == content {
 				user.Favorites = append(user.Favorites[:i], user.Favorites[i+1:]...)
-				break
-			} else {
-				log.Printf("%s n'est pas dans les favoris de %s.", content, username)
-				return
-			}
-		}
-		for i := range dataAccount.Account {
-			if dataAccount.Account[i].Username == username {
-				dataAccount.Account[i] = *user
+				found = true
 				break
 			}
 		}
-		updateDB()
-		log.Printf("%s supprimé des favoris de %s", content, username)
+		if found {
+			for i := range dataAccount.Account {
+				if dataAccount.Account[i].Username == username {
+					dataAccount.Account[i] = *user
+					break
+				}
+			}
+			updateDB()
+			log.Printf("%s supprimé des favoris de %s", content, username)
+		} else {
+			log.Printf("%s n'est pas dans les favoris de %s.", content, username)
+		}
 	} else {
 		log.Printf("Erreur %s n'est pas dans la base de donnée", username)
 	}
 }
 
+// Function to check if content is in user's favorites
 func IsInFavorite(username, content string) bool {
 	user := UserBuild(username)
 	if user != nil {
