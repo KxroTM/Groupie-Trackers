@@ -2,6 +2,7 @@ package app
 
 import (
 	"Groupie_Trackers/go/functions"
+	"fmt"
 	"image/color"
 	"strconv"
 
@@ -273,6 +274,7 @@ func Contactpage(myApp fyne.App) {
 	myWindow.Show()
 }
 
+// Systeme de favoris a gerer ici
 func ArtistPage(artist functions.Artist, myApp fyne.App) {
 	myWindow := MyApp.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
@@ -326,6 +328,13 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 	})
 	concertButton := container.NewHBox(layout.NewSpacer(), concert, layout.NewSpacer())
 
+	favorite := widget.NewButton("Ajouter aux favoris", func() {
+		fmt.Println("Ajouté aux favoris")
+		functions.AddToFavorites(user.Username, artist.Name)
+	})
+
+	favoriteButton := container.NewHBox(layout.NewSpacer(), favorite, layout.NewSpacer())
+
 	name.Alignment = fyne.TextAlignCenter
 	member.Alignment = fyne.TextAlignCenter
 	member2.Alignment = fyne.TextAlignCenter
@@ -334,10 +343,10 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 	txt := canvas.NewText("", color.White)
 
 	if len(artist.Members) > 4 {
-		form := container.NewVBox(navBar, txt, txt, txt, txt, image, txt, name, member, member2, creationDate, album, txt, concertButton)
+		form := container.NewVBox(navBar, txt, txt, txt, txt, image, favoriteButton, txt, name, member, member2, creationDate, album, txt, concertButton)
 		myWindow.SetContent(form)
 	} else {
-		form := container.NewVBox(navBar, txt, txt, txt, txt, image, txt, name, member, creationDate, album, txt, concertButton)
+		form := container.NewVBox(navBar, txt, txt, txt, txt, image, favoriteButton, txt, name, member, creationDate, album, txt, concertButton)
 		myWindow.SetContent(form)
 	}
 
@@ -367,6 +376,7 @@ func ConcertPage(artist functions.Artist, myApp fyne.App) {
 }
 
 func HomePage(myApp fyne.App) {
+	user = functions.UserBuild(user.Username)
 	myWindow := MyApp.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
 
@@ -374,6 +384,7 @@ func HomePage(myApp fyne.App) {
 	rdmBar := createRandomArtistsGrid(myWindow)
 	lastAlbumBar := createCustomArtistsGrid(myWindow, functions.SortByFirstAlbumDescending(functions.ArtistData()))
 	firstAlbumBar := createCustomArtistsGrid(myWindow, functions.SortByFirstAlbumAscending(functions.ArtistData()))
+	favoriteBar := createFavoriteGrid(myWindow, *user)
 	spacer := canvas.NewText("", color.White)
 	title := canvas.NewText("Groupie Trackers", color.White)
 	title.TextSize = 42
@@ -385,8 +396,21 @@ func HomePage(myApp fyne.App) {
 	subtitle2.TextSize = 16
 	subtitle3 := canvas.NewText(" Redécouvrez le meilleur des vieux albums : ", color.White)
 	subtitle3.TextSize = 16
+	subtitle4 := canvas.NewText(" Vos favoris : ", color.White)
+	subtitle4.TextSize = 16
+
+	favoriteButton := widget.NewButton("Mes favoris", func() {
+		FavoritePage(myApp)
+		myWindow.Hide()
+	})
+
+	favoriteButton.Importance = widget.HighImportance
+
+	favorite := container.NewHBox(subtitle4, layout.NewSpacer(), favoriteButton, spacer)
+
 	content := container.NewVBox(navBar, spacer, spacer, title, spacer, spacer,
-		subtitle, spacer, rdmBar, spacer, subtitle2, spacer, lastAlbumBar, spacer, subtitle3, spacer, firstAlbumBar)
+		subtitle, spacer, rdmBar, spacer, subtitle2, spacer, lastAlbumBar, spacer, subtitle3, spacer, firstAlbumBar,
+		spacer, favorite, spacer, favoriteBar)
 
 	scrollContainer := container.NewVScroll(content)
 
@@ -395,6 +419,31 @@ func HomePage(myApp fyne.App) {
 	myWindow.SetOnClosed(func() {
 		myApp.Quit()
 	})
+	myWindow.CenterOnScreen()
+	myWindow.Resize(fyne.NewSize(800, 600))
+	myWindow.Show()
+}
+
+func FavoritePage(myApp fyne.App) {
+	myWindow := MyApp.NewWindow("Groupie Trackers")
+	myWindow.SetIcon(Icon)
+	user = functions.UserBuild(user.Username)
+
+	spacer := canvas.NewText("", color.White)
+	navBar := createNavBar(myWindow)
+	favoriteBar := createAllFavoriteGrid(myWindow, *user)
+	title := canvas.NewText("Mes favoris", color.White)
+	title.TextSize = 30
+	title.TextStyle = fyne.TextStyle{Bold: true}
+	title.Alignment = fyne.TextAlignCenter
+
+	content := container.NewVBox(navBar, spacer, spacer, title, spacer, favoriteBar)
+	scrollContainer := container.NewVScroll(content)
+
+	myWindow.SetOnClosed(func() {
+		myApp.Quit()
+	})
+	myWindow.SetContent(scrollContainer)
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()
