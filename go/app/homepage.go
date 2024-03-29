@@ -2,7 +2,6 @@ package app
 
 import (
 	"Groupie_Trackers/go/functions"
-	"fmt"
 	"image/color"
 	"strconv"
 
@@ -328,13 +327,6 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 	})
 	concertButton := container.NewHBox(layout.NewSpacer(), concert, layout.NewSpacer())
 
-	favorite := widget.NewButton("Ajouter aux favoris", func() {
-		fmt.Println("Ajouté aux favoris")
-		functions.AddToFavorites(user.Username, artist.Name)
-	})
-
-	favoriteButton := container.NewHBox(layout.NewSpacer(), favorite, layout.NewSpacer())
-
 	name.Alignment = fyne.TextAlignCenter
 	member.Alignment = fyne.TextAlignCenter
 	member2.Alignment = fyne.TextAlignCenter
@@ -343,11 +335,51 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 	txt := canvas.NewText("", color.White)
 
 	if len(artist.Members) > 4 {
-		form := container.NewVBox(navBar, txt, txt, txt, txt, image, favoriteButton, txt, name, member, member2, creationDate, album, txt, concertButton)
-		myWindow.SetContent(form)
+		if !functions.IsInFavorite(user.Username, artist.Name) {
+			favorite := widget.NewButton("Ajouter aux favoris", func() {
+				functions.AddToFavorites(user.Username, artist.Name)
+				ArtistPage(artist, myApp)
+				myWindow.Hide()
+			})
+
+			favoriteButton := container.NewHBox(layout.NewSpacer(), favorite, layout.NewSpacer())
+			form := container.NewVBox(navBar, txt, txt, txt, txt, image, favoriteButton, txt, name, member, member2, creationDate, album, txt, concertButton)
+			myWindow.SetContent(form)
+		} else {
+			favorite := widget.NewButton("Retirer des favoris", func() {
+				functions.DeleteFavorite(user.Username, artist.Name)
+				ArtistPage(artist, myApp)
+				myWindow.Hide()
+			})
+
+			favoriteButton := container.NewHBox(layout.NewSpacer(), favorite, layout.NewSpacer())
+			form := container.NewVBox(navBar, txt, txt, txt, txt, image, favoriteButton, txt, name, member, member2, creationDate, album, txt, concertButton)
+			myWindow.SetContent(form)
+
+		}
 	} else {
-		form := container.NewVBox(navBar, txt, txt, txt, txt, image, favoriteButton, txt, name, member, creationDate, album, txt, concertButton)
-		myWindow.SetContent(form)
+		if !functions.IsInFavorite(user.Username, artist.Name) {
+			favorite := widget.NewButton("Ajouter aux favoris", func() {
+				functions.AddToFavorites(user.Username, artist.Name)
+				ArtistPage(artist, myApp)
+				myWindow.Hide()
+			})
+
+			favoriteButton := container.NewHBox(layout.NewSpacer(), favorite, layout.NewSpacer())
+			form := container.NewVBox(navBar, txt, txt, txt, txt, image, favoriteButton, txt, name, member, creationDate, album, txt, concertButton)
+			myWindow.SetContent(form)
+		} else {
+			favorite := widget.NewButton("Retirer des favoris", func() {
+				functions.DeleteFavorite(user.Username, artist.Name)
+				ArtistPage(artist, myApp)
+				myWindow.Hide()
+			})
+
+			favoriteButton := container.NewHBox(layout.NewSpacer(), favorite, layout.NewSpacer())
+			form := container.NewVBox(navBar, txt, txt, txt, txt, image, favoriteButton, txt, name, member, creationDate, album, txt, concertButton)
+			myWindow.SetContent(form)
+
+		}
 	}
 
 	myWindow.SetOnClosed(func() {

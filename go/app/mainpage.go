@@ -227,13 +227,15 @@ func createFavoriteGrid(w fyne.Window, user functions.Account) fyne.CanvasObject
 	var artists []functions.Artist
 
 	if len(user.Favorites) == 0 {
-		text := canvas.NewText("Vous n'avez pas d'artistes favoris", color.White)
-		return text
+		spacer := canvas.NewText("", color.White)
+		card := container.NewVBox(spacer, spacer, spacer, spacer, spacer, spacer, spacer, spacer)
+		return card
+
 	}
 
 	artistContent := functions.ArtistData()
 
-	for i := 0; i < 4; i++ {
+	for i := 0; i < len(user.Favorites) && i < 4; i++ {
 		for j := 0; j < len(artistContent); j++ {
 			if user.Favorites[i] == artistContent[j].Name {
 				artists = append(artists, artistContent[j])
@@ -263,7 +265,7 @@ func createAllFavoriteGrid(w fyne.Window, user functions.Account) fyne.CanvasObj
 	var artists []functions.Artist
 
 	if len(user.Favorites) == 0 {
-		text := canvas.NewText("Vous n'avez pas d'artistes favoris", color.White)
+		text := canvas.NewText("Votre liste de favori est vide.", color.White)
 		return text
 	}
 
