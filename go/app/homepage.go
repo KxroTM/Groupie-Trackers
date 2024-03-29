@@ -17,7 +17,7 @@ import (
 
 var MyApp = app.New()
 var user *functions.Account
-var Icon, _ = fyne.LoadResourceFromPath("./src/icon/icon.png")
+var Icon, _ = fyne.LoadResourceFromPath("./src/icon/Groupie-Trackers.png")
 
 func LoginPage(app fyne.App) {
 	myWindow := app.NewWindow("Groupie Trackers")
@@ -277,6 +277,8 @@ func Contactpage(myApp fyne.App) {
 func ArtistPage(artist functions.Artist, myApp fyne.App) {
 	myWindow := MyApp.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
+	user = functions.UserBuild(user.Username)
+
 	navBar := createNavBar(myWindow)
 
 	image := loadImageFromURL(artist.Image)
