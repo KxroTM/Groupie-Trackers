@@ -273,7 +273,6 @@ func Contactpage(myApp fyne.App) {
 	myWindow.Show()
 }
 
-// Systeme de favoris a gerer ici
 func ArtistPage(artist functions.Artist, myApp fyne.App) {
 	myWindow := MyApp.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
