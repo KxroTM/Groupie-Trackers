@@ -6,10 +6,12 @@ import (
 )
 
 func main() {
-	app.LoginPage(app.MyApp) // Appel de la fonction Homepage du fichier homepage.go
+	// start the app by calling the login page
+	app.LoginPage(app.MyApp)
 	app.MyApp.Run()
 }
 
+// Load the database
 func init() {
 	functions.LoadDb()
 }

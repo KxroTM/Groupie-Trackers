@@ -441,13 +441,13 @@ func HomePage(myApp fyne.App) {
 
 	favorite := container.NewHBox(subtitle4, layout.NewSpacer(), favoriteButton, spacer)
 
-	content := container.NewVBox(navBar, spacer, spacer, title, spacer, spacer,
+	content := container.NewVBox(spacer, spacer, title, spacer, spacer,
 		subtitle, spacer, rdmBar, spacer, subtitle2, spacer, lastAlbumBar, spacer, subtitle3, spacer, firstAlbumBar,
 		spacer, favorite, spacer, favoriteBar)
 
 	scrollContainer := container.NewVScroll(content)
 
-	myWindow.SetContent(scrollContainer)
+	myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, scrollContainer))
 
 	myWindow.SetOnClosed(func() {
 		myApp.Quit()
@@ -470,13 +470,13 @@ func FavoritePage(myApp fyne.App) {
 	title.TextStyle = fyne.TextStyle{Bold: true}
 	title.Alignment = fyne.TextAlignCenter
 
-	content := container.NewVBox(navBar, spacer, spacer, title, spacer, favoriteBar)
+	content := container.NewVBox(spacer, spacer, title, spacer, favoriteBar)
 	scrollContainer := container.NewVScroll(content)
 
 	myWindow.SetOnClosed(func() {
 		myApp.Quit()
 	})
-	myWindow.SetContent(scrollContainer)
+	myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, scrollContainer))
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()
@@ -533,7 +533,7 @@ func ChangePasswordPage(myApp fyne.App) {
 	title.TextSize = 28
 	title.TextStyle = fyne.TextStyle{Bold: true}
 	title.Alignment = fyne.TextAlignCenter
-	spacer := canvas.NewText("", color.Transparent)
+	// spacer := canvas.NewText("", color.Transparent)
 	oldPassword := widget.NewPasswordEntry()
 	oldPassword.SetPlaceHolder("Ancien Mot de Passe")
 	newPassword := widget.NewPasswordEntry()
@@ -553,13 +553,32 @@ func ChangePasswordPage(myApp fyne.App) {
 		}
 	})
 
-	buttonContent := container.NewHBox(layout.NewSpacer(), changePasswordButton, layout.NewSpacer())
-	form := container.NewVBox(navBar, spacer, spacer, spacer, spacer, title, spacer, spacer, spacer, oldPassword, newPassword, confirmPassword, spacer, text, spacer, buttonContent)
+	changePasswordButton.Importance = widget.HighImportance
+	form := container.NewVBox(
+		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace pour séparer les éléments
+		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace supplémentaire
+		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace supplémentaire
+		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace supplémentaire
+		oldPassword,
+		newPassword,
+		confirmPassword,
+		container.NewVBox(layout.NewSpacer()),
+		text,
+		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace pour séparer les éléments
+		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace supplémentaire
+		container.NewVBox(changePasswordButton),
+	)
+
+	content := container.NewVBox(
+		title,
+		form,
+	)
+	centeredContent := container.NewCenter(content)
 
 	myWindow.SetOnClosed(func() {
 		myApp.Quit()
 	})
-	myWindow.SetContent(form)
+	myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, centeredContent))
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()
