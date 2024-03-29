@@ -54,3 +54,15 @@ func DeleteFavorite(username, content string) {
 		log.Printf("Erreur %s n'est pas dans la base de donnée", username)
 	}
 }
+
+func IsInFavorite(username, content string) bool {
+	user := UserBuild(username)
+	if user != nil {
+		for _, favorite := range user.Favorites {
+			if strings.Contains(favorite, content) {
+				return true
+			}
+		}
+	}
+	return false
+}

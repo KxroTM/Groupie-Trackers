@@ -218,3 +218,65 @@ func createCustomArtistsGrid(w fyne.Window, artistContent functions.AllArtists) 
 
 	return grid
 }
+
+func createFavoriteGrid(w fyne.Window, user functions.Account) fyne.CanvasObject {
+	var artistCards []fyne.CanvasObject
+	var artists []functions.Artist
+
+	artistContent := functions.ArtistData()
+
+	for i := 0; i < 4; i++ {
+		for j := 0; j < len(artistContent); j++ {
+			if user.Favorites[i] == artistContent[j].Name {
+				artists = append(artists, artistContent[j])
+			}
+		}
+	}
+
+	for _, artist := range artists {
+		artistTemp := artist
+		image := loadImageFromURL(artist.Image)
+		image.FillMode = canvas.ImageFillContain
+		button := widget.NewButton(artist.Name, func() {
+			ArtistPage(artistTemp, MyApp)
+			w.Hide()
+		})
+		card := container.NewVBox(image, button)
+		artistCards = append(artistCards, card)
+	}
+
+	grid := container.NewGridWithColumns(4, artistCards...)
+
+	return grid
+}
+
+func createAllFavoriteGrid(w fyne.Window, user functions.Account) fyne.CanvasObject {
+	var artistCards []fyne.CanvasObject
+	var artists []functions.Artist
+
+	artistContent := functions.ArtistData()
+
+	for i := 0; i < len(user.Favorites); i++ {
+		for j := 0; j < len(artistContent); j++ {
+			if user.Favorites[i] == artistContent[j].Name {
+				artists = append(artists, artistContent[j])
+			}
+		}
+	}
+
+	for _, artist := range artists {
+		artistTemp := artist
+		image := loadImageFromURL(artist.Image)
+		image.FillMode = canvas.ImageFillContain
+		button := widget.NewButton(artist.Name, func() {
+			ArtistPage(artistTemp, MyApp)
+			w.Hide()
+		})
+		card := container.NewVBox(image, button)
+		artistCards = append(artistCards, card)
+	}
+
+	grid := container.NewGridWithColumns(4, artistCards...)
+
+	return grid
+}
