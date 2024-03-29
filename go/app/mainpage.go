@@ -123,7 +123,8 @@ func createNavBar(myWindow fyne.Window) *fyne.Container {
 	space := canvas.NewText(text.Text, color.Transparent)
 	space2 := canvas.NewText("      ", color.Transparent)
 
-	content := container.NewHBox(layout.NewSpacer(), space, space2, homeButton, researchButton, favoriteButton, accountButton, logoutButton, layout.NewSpacer(), text, space2)
+	content := container.NewHBox(layout.NewSpacer(), space, space2, homeButton, researchButton, favoriteButton,
+		accountButton, logoutButton, layout.NewSpacer(), text, space2)
 
 	return container.NewVBox(space2, content, space2)
 }

@@ -22,7 +22,7 @@ func AddToFavorites(username, content string) {
 				break
 			}
 		}
-		updateDB()
+		UpdateDB()
 		log.Printf("%s ajouté aux favoris de %s", content, username)
 	} else {
 		log.Printf("Erreur %s n'est pas dans la base de donnée", username)
@@ -48,7 +48,7 @@ func DeleteFavorite(username, content string) {
 					break
 				}
 			}
-			updateDB()
+			UpdateDB()
 			log.Printf("%s supprimé des favoris de %s", content, username)
 		} else {
 			log.Printf("%s n'est pas dans les favoris de %s.", content, username)
@@ -69,7 +69,7 @@ func DeleteAllFavorites(username string) {
 				break
 			}
 		}
-		updateDB()
+		UpdateDB()
 		log.Printf("Tous les favoris de %s ont été supprimés", username)
 	} else {
 		log.Printf("Erreur %s n'est pas dans la base de donnée", username)
@@ -87,4 +87,22 @@ func IsInFavorite(username, content string) bool {
 		}
 	}
 	return false
+}
+
+func AddPpf(username, content string) {
+	user := UserBuild(username)
+	if user != nil {
+		user.Ppf = content
+
+		for i := range dataAccount.Account {
+			if dataAccount.Account[i].Username == username {
+				dataAccount.Account[i] = *user
+				break
+			}
+		}
+		UpdateDB()
+		log.Printf("%s ajouté aux ppf de %s", content, username)
+	} else {
+		log.Printf("Erreur %s n'est pas dans la base de donnée", username)
+	}
 }

@@ -489,12 +489,15 @@ func AccountPage(myApp fyne.App) {
 	myWindow.SetIcon(Icon)
 	user = functions.UserBuild(user.Username)
 
-	spacer := canvas.NewText("", color.White)
 	navBar := createNavBar(myWindow)
 	title := canvas.NewText("Mon Compte", color.White)
 	title.TextSize = 30
 	title.TextStyle = fyne.TextStyle{Bold: true}
 	title.Alignment = fyne.TextAlignCenter
+	subtitle := canvas.NewText("Nom d'utilisateur : "+user.Username, color.White)
+	subtitle.TextSize = 20
+	subtitle.Alignment = fyne.TextAlignCenter
+	spacer := canvas.NewText("", color.White)
 
 	changePasswordButton := widget.NewButton("Changer de mot de passe", func() {
 		ChangePasswordPage(myApp)
@@ -507,16 +510,56 @@ func AccountPage(myApp fyne.App) {
 		PasswordChange = false
 	}
 
-	buttonContent := container.NewHBox(layout.NewSpacer(), changePasswordButton, layout.NewSpacer())
+	if PpfChange {
+		dialog.ShowInformation("Changement de photo de profil", "Photo de profil changée", myWindow)
+		PpfChange = false
+	}
 
-	content := container.NewVBox(navBar, spacer, spacer, title, spacer, buttonContent)
+	changePpfButton := widget.NewButton("Changer de photo de profil", func() {
+		ChangePpf(myApp)
+		myWindow.Hide()
+	})
 
-	scrollContainer := container.NewVScroll(content)
+	if user.Ppf == "" {
+		form := container.NewVBox(
+			spacer,
+			spacer,
+			subtitle,
+			spacer,
+			changePasswordButton,
+			changePpfButton,
+		)
+
+		content := container.NewVBox(
+			title,
+			form,
+		)
+
+		centeredContent := container.NewCenter(content)
+		myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, centeredContent))
+	} else {
+
+		ppf := loadImageFromURL(user.Ppf) // JARRIVE PAS A REDIMENTIONNER LIMAGE
+		form := container.NewVBox(
+			spacer,
+			changePasswordButton,
+			changePpfButton,
+		)
+
+		content := container.NewVBox(
+			title,
+			ppf,
+			subtitle,
+			form,
+		)
+
+		centeredContent := container.NewCenter(content)
+		myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, centeredContent))
+	}
 
 	myWindow.SetOnClosed(func() {
 		myApp.Quit()
 	})
-	myWindow.SetContent(scrollContainer)
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()
@@ -581,5 +624,58 @@ func ChangePasswordPage(myApp fyne.App) {
 	myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, centeredContent))
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
+	myWindow.Show()
+}
+
+var PpfChange = false
+
+func ChangePpf(myApp fyne.App) {
+	myWindow := myApp.NewWindow("Image Copier")
+	myWindow.SetIcon(Icon)
+	user = functions.UserBuild(user.Username)
+
+	navBar := createNavBar(myWindow)
+
+	title := canvas.NewText("Changer d'image de profil", color.White)
+	title.TextSize = 28
+	title.TextStyle = fyne.TextStyle{Bold: true}
+	title.Alignment = fyne.TextAlignCenter
+	entry := widget.NewEntry()
+	entry.SetPlaceHolder("URL de l'image")
+
+	copyButton := widget.NewButton("Sélectionner une image", func() {
+		if entry.Text == "" {
+			dialog.ShowInformation("Erreur", "Veuillez entrer une URL valide", myWindow)
+			return
+		}
+		functions.AddPpf(user.Username, entry.Text)
+		PpfChange = true
+		AccountPage(myApp)
+		myWindow.Hide()
+	})
+	copyButton.Importance = widget.HighImportance
+
+	form := container.NewVBox(
+		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace pour séparer les éléments
+		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace supplémentaire
+		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace supplémentaire
+		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace supplémentaire
+		entry,
+		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace pour séparer les éléments
+		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace supplémentaire
+		container.NewVBox(copyButton),
+	)
+
+	content := container.NewVBox(
+		title,
+		form,
+	)
+
+	centeredContent := container.NewCenter(content)
+
+	myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, centeredContent))
+	myWindow.SetContent(form)
+	myWindow.CenterOnScreen()
+	myWindow.Resize(fyne.NewSize(300, 200))
 	myWindow.Show()
 }

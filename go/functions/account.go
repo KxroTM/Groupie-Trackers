@@ -14,6 +14,7 @@ type AccountData struct {
 		Username  string   `json:"Username"`
 		Password  string   `json:"Password"`
 		Favorites []string `json:"Favorites"`
+		Ppf       string   `json:"Ppf"`
 	} `json:"account"`
 }
 
@@ -22,6 +23,7 @@ type Account struct {
 	Username  string   `json:"Username"`
 	Password  string   `json:"Password"`
 	Favorites []string `json:"Favorites"`
+	Ppf       string   `json:"Ppf"`
 }
 
 // Variable for the db
@@ -62,6 +64,7 @@ func UserBuild(username string) *Account {
 				Username:  dataAccount.Account[i].Username,
 				Password:  dataAccount.Account[i].Password,
 				Favorites: dataAccount.Account[i].Favorites,
+				Ppf:       dataAccount.Account[i].Ppf,
 			}
 			return user
 		}
@@ -79,11 +82,11 @@ func createUser(username string, password string) {
 	}
 
 	dataAccount.Account = append(dataAccount.Account, newUser)
-	updateDB()
+	UpdateDB()
 }
 
 // Update the db
-func updateDB() {
+func UpdateDB() {
 	data, err := json.Marshal(dataAccount)
 	if err != nil {
 		log.Println("Erreur lors de la conversion JSON :", err)
@@ -137,7 +140,7 @@ func ChangePassword(username, oldPassword, newPassword, newPasswordCheck string)
 				break
 			}
 		}
-		updateDB()
+		UpdateDB()
 		log.Printf("Mot de passe de %s modifié", username)
 		return true
 	}
