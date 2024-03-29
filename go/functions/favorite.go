@@ -10,7 +10,7 @@ func AddToFavorites(username, content string) {
 	user := UserBuild(username)
 	if user != nil {
 		for _, favorite := range user.Favorites {
-			if strings.Contains(favorite, content) {
+			if favorite == content {
 				log.Printf("%s est déjà dans les favoris de %s.", content, username)
 				return
 			}
