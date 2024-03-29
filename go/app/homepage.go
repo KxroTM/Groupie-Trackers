@@ -24,13 +24,13 @@ func LoginPage(app fyne.App) {
 	myWindow.SetIcon(Icon)
 	// Configuration de base pour agrandir les éléments de formulaire
 	username := widget.NewEntry()
-	username.SetPlaceHolder("Username")
+	username.SetPlaceHolder("Nom d'Utilisateur")
 	password := widget.NewPasswordEntry()
-	password.SetPlaceHolder("Password")
+	password.SetPlaceHolder("Mot de Passe")
 	text := canvas.NewText("", color.White)
 	text.Alignment = fyne.TextAlignCenter
 
-	loginBtn := widget.NewButton("Login", func() {
+	loginBtn := widget.NewButton("Se Connecter", func() {
 
 		if !functions.Login(username.Text, password.Text) {
 			text.Text = "Mot de passe incorrect ou compte inexistant "
@@ -41,12 +41,12 @@ func LoginPage(app fyne.App) {
 			myWindow.Hide()
 		}
 	})
-	signupBtn := widget.NewButton("Signup", func() {
+	signupBtn := widget.NewButton("S'inscrire", func() {
 		SignupPage(app)
 		myWindow.Hide()
 	})
 
-	quitBtn := widget.NewButton("Close the app", func() {
+	quitBtn := widget.NewButton("Fermer l'Application", func() {
 		// Ferme l' application
 		app.Quit()
 	})
@@ -102,31 +102,31 @@ func SignupPage(app fyne.App) {
 
 	// Configuration de base pour agrandir les éléments de formulaire
 	signupUsername := widget.NewEntry()
-	signupUsername.SetPlaceHolder("Username")
+	signupUsername.SetPlaceHolder("Nom d'Utilisateur")
 	signupPassword := widget.NewPasswordEntry()
-	signupPassword.SetPlaceHolder("Password")
+	signupPassword.SetPlaceHolder("Mot de Passe")
 	signupConfirmPassword := widget.NewPasswordEntry()
-	signupConfirmPassword.SetPlaceHolder("Password Verification")
+	signupConfirmPassword.SetPlaceHolder("Verification de Mot de Passe")
 	signupText := canvas.NewText("", color.White)
 	signupText.Alignment = fyne.TextAlignCenter
 
-	signupBtn := widget.NewButton("Signup", func() {
+	signupBtn := widget.NewButton("S'inscrire", func() {
 
 		if !functions.Register(signupUsername.Text, signupPassword.Text, signupConfirmPassword.Text) {
 			signupText.Text = "Mot de passe incorrect ou utilisateur déjà existant"
 		} else {
-			dialog.ShowInformation("Login", "Compte crée", myWindow)
+			dialog.ShowInformation("Se Connecter", "Compte crée", myWindow)
 			LoginPage(app)
 			myWindow.Hide()
 		}
 	})
 
-	loginBtn := widget.NewButton("Login", func() {
+	loginBtn := widget.NewButton("Se Connecter", func() {
 		LoginPage(app)
 		myWindow.Hide()
 	})
 
-	quitBtn := widget.NewButton("Close the app", func() {
+	quitBtn := widget.NewButton("Fermer l'Application", func() {
 		// Ferme l' application
 		app.Quit()
 	})
@@ -281,7 +281,7 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 	image := loadImageFromURL(artist.Image)
 	image.FillMode = canvas.ImageFillContain
 
-	name := canvas.NewText("Name : "+artist.Name, color.White)
+	name := canvas.NewText("Nom : "+artist.Name, color.White)
 	members := ""
 	members2 := ""
 	if len(artist.Members) > 4 {
@@ -315,11 +315,11 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 		}
 	}
 
-	member := canvas.NewText("Members : "+members, color.White)
+	member := canvas.NewText("Membres : "+members, color.White)
 	member2 := canvas.NewText(members2, color.White)
 
-	creationDate := canvas.NewText("Creation Date : "+strconv.Itoa(int(artist.CreationDate)), color.White)
-	album := canvas.NewText("First Album : "+artist.FirstAlbum, color.White)
+	creationDate := canvas.NewText("Date de Création : "+strconv.Itoa(int(artist.CreationDate)), color.White)
+	album := canvas.NewText("Premier Album : "+artist.FirstAlbum, color.White)
 	concert := widget.NewButton("Concerts", func() {
 		ConcertPage(artist, MyApp)
 		myWindow.Hide()
