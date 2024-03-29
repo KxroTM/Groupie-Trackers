@@ -507,7 +507,9 @@ func AccountPage(myApp fyne.App) {
 		PasswordChange = false
 	}
 
-	content := container.NewVBox(navBar, spacer, spacer, title, spacer, changePasswordButton)
+	buttonContent := container.NewHBox(layout.NewSpacer(), changePasswordButton, layout.NewSpacer())
+
+	content := container.NewVBox(navBar, spacer, spacer, title, spacer, buttonContent)
 
 	scrollContainer := container.NewVScroll(content)
 
@@ -525,9 +527,13 @@ func ChangePasswordPage(myApp fyne.App) {
 	myWindow.SetIcon(Icon)
 	user = functions.UserBuild(user.Username)
 
-	spacer := canvas.NewText("", color.White)
 	navBar := createNavBar(myWindow)
 
+	title := canvas.NewText("Changer de mot de passe", color.White)
+	title.TextSize = 28
+	title.TextStyle = fyne.TextStyle{Bold: true}
+	title.Alignment = fyne.TextAlignCenter
+	spacer := canvas.NewText("", color.Transparent)
 	oldPassword := widget.NewPasswordEntry()
 	oldPassword.SetPlaceHolder("Ancien Mot de Passe")
 	newPassword := widget.NewPasswordEntry()
@@ -547,12 +553,13 @@ func ChangePasswordPage(myApp fyne.App) {
 		}
 	})
 
-	content := container.NewVBox(navBar, spacer, spacer, oldPassword, newPassword, confirmPassword, text, changePasswordButton)
+	buttonContent := container.NewHBox(layout.NewSpacer(), changePasswordButton, layout.NewSpacer())
+	form := container.NewVBox(navBar, spacer, spacer, spacer, spacer, title, spacer, spacer, spacer, oldPassword, newPassword, confirmPassword, spacer, text, spacer, buttonContent)
 
 	myWindow.SetOnClosed(func() {
 		myApp.Quit()
 	})
-	myWindow.SetContent(content)
+	myWindow.SetContent(form)
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()
