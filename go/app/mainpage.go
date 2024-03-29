@@ -226,6 +226,11 @@ func createFavoriteGrid(w fyne.Window, user functions.Account) fyne.CanvasObject
 	var artistCards []fyne.CanvasObject
 	var artists []functions.Artist
 
+	if len(user.Favorites) == 0 {
+		text := canvas.NewText("Vous n'avez pas d'artistes favoris", color.White)
+		return text
+	}
+
 	artistContent := functions.ArtistData()
 
 	for i := 0; i < 4; i++ {
@@ -256,6 +261,11 @@ func createFavoriteGrid(w fyne.Window, user functions.Account) fyne.CanvasObject
 func createAllFavoriteGrid(w fyne.Window, user functions.Account) fyne.CanvasObject {
 	var artistCards []fyne.CanvasObject
 	var artists []functions.Artist
+
+	if len(user.Favorites) == 0 {
+		text := canvas.NewText("Vous n'avez pas d'artistes favoris", color.White)
+		return text
+	}
 
 	artistContent := functions.ArtistData()
 
