@@ -99,10 +99,10 @@ func createNavBar(myWindow fyne.Window) *fyne.Container {
 		myWindow.Hide()
 	})
 
-	// aboutButton := widget.NewButton("À Propos", func() {
-	// 	Propospage(MyApp)
-	// 	myWindow.Hide()
-	// })
+	accountButton := widget.NewButton("Mon compte", func() {
+		AccountPage(MyApp)
+		myWindow.Hide()
+	})
 
 	favoriteButton := widget.NewButton("Favoris", func() {
 		FavoritePage(MyApp)
@@ -123,7 +123,7 @@ func createNavBar(myWindow fyne.Window) *fyne.Container {
 	space := canvas.NewText(text.Text, color.Transparent)
 	space2 := canvas.NewText("      ", color.Transparent)
 
-	return container.NewHBox(layout.NewSpacer(), space, space2, homeButton, researchButton, favoriteButton, logoutButton, layout.NewSpacer(), text, space2)
+	return container.NewHBox(layout.NewSpacer(), space, space2, homeButton, researchButton, favoriteButton, accountButton, logoutButton, layout.NewSpacer(), text, space2)
 }
 
 func createSearchBar(artists []functions.Artist, gridContainer *fyne.Container, w fyne.Window) fyne.CanvasObject {

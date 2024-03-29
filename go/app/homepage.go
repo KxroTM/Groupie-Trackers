@@ -17,7 +17,7 @@ import (
 
 var MyApp = app.New()
 var user *functions.Account
-var Icon, _ = fyne.LoadResourceFromPath("./src/icon/Groupie-Trackers.png")
+var Icon, _ = fyne.LoadResourceFromPath("./Icon.png")
 
 func LoginPage(app fyne.App) {
 	myWindow := app.NewWindow("Groupie Trackers")
@@ -477,6 +477,82 @@ func FavoritePage(myApp fyne.App) {
 		myApp.Quit()
 	})
 	myWindow.SetContent(scrollContainer)
+	myWindow.CenterOnScreen()
+	myWindow.Resize(fyne.NewSize(800, 600))
+	myWindow.Show()
+}
+
+var PasswordChange = false
+
+func AccountPage(myApp fyne.App) {
+	myWindow := MyApp.NewWindow("Groupie Trackers")
+	myWindow.SetIcon(Icon)
+	user = functions.UserBuild(user.Username)
+
+	spacer := canvas.NewText("", color.White)
+	navBar := createNavBar(myWindow)
+	title := canvas.NewText("Mon Compte", color.White)
+	title.TextSize = 30
+	title.TextStyle = fyne.TextStyle{Bold: true}
+	title.Alignment = fyne.TextAlignCenter
+
+	changePasswordButton := widget.NewButton("Changer de mot de passe", func() {
+		ChangePasswordPage(myApp)
+		myWindow.Hide()
+	})
+	changePasswordButton.Importance = widget.HighImportance
+
+	if PasswordChange {
+		dialog.ShowInformation("Changement de mot de passe", "Mot de passe changé", myWindow)
+		PasswordChange = false
+	}
+
+	content := container.NewVBox(navBar, spacer, spacer, title, spacer, changePasswordButton)
+
+	scrollContainer := container.NewVScroll(content)
+
+	myWindow.SetOnClosed(func() {
+		myApp.Quit()
+	})
+	myWindow.SetContent(scrollContainer)
+	myWindow.CenterOnScreen()
+	myWindow.Resize(fyne.NewSize(800, 600))
+	myWindow.Show()
+}
+
+func ChangePasswordPage(myApp fyne.App) {
+	myWindow := MyApp.NewWindow("Groupie Trackers")
+	myWindow.SetIcon(Icon)
+	user = functions.UserBuild(user.Username)
+
+	spacer := canvas.NewText("", color.White)
+	navBar := createNavBar(myWindow)
+
+	oldPassword := widget.NewPasswordEntry()
+	oldPassword.SetPlaceHolder("Ancien Mot de Passe")
+	newPassword := widget.NewPasswordEntry()
+	newPassword.SetPlaceHolder("Nouveau Mot de Passe")
+	confirmPassword := widget.NewPasswordEntry()
+	confirmPassword.SetPlaceHolder("Confirmer le Nouveau Mot de Passe")
+	text := canvas.NewText("", color.White)
+	text.Alignment = fyne.TextAlignCenter
+
+	changePasswordButton := widget.NewButton("Changer de mot de passe", func() {
+		if !functions.ChangePassword(user.Username, oldPassword.Text, newPassword.Text, confirmPassword.Text) {
+			text.Text = "Mot de passe incorrect ou les nouveaux mots de passe ne correspondent pas"
+		} else {
+			PasswordChange = true
+			AccountPage(myApp)
+			myWindow.Hide()
+		}
+	})
+
+	content := container.NewVBox(navBar, spacer, spacer, oldPassword, newPassword, confirmPassword, text, changePasswordButton)
+
+	myWindow.SetOnClosed(func() {
+		myApp.Quit()
+	})
+	myWindow.SetContent(content)
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()

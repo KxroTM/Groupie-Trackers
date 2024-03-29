@@ -8,6 +8,7 @@ import (
 	"os"
 )
 
+// Struct for the db
 type AccountData struct {
 	Account []struct {
 		Username  string   `json:"Username"`
@@ -16,12 +17,14 @@ type AccountData struct {
 	} `json:"account"`
 }
 
+// Struct for the user
 type Account struct {
 	Username  string   `json:"Username"`
 	Password  string   `json:"Password"`
 	Favorites []string `json:"Favorites"`
 }
 
+// Variable for the db
 var dataAccount AccountData
 
 // Function for loading the all db
@@ -68,7 +71,7 @@ func UserBuild(username string) *Account {
 
 // Create a new user and update the db
 func createUser(username string, password string) {
-	hashedPassword := hashPasswordSHA256(password)
+	hashedPassword := HashPasswordSHA256(password)
 
 	newUser := Account{
 		Username: username,
@@ -96,7 +99,7 @@ func updateDB() {
 
 // Return true if the password is the good one, false if not
 func checkPassword(password, hashedPassword string) bool {
-	return hashedPassword == hashPasswordSHA256(password)
+	return hashedPassword == HashPasswordSHA256(password)
 }
 
 // Function for login
@@ -121,8 +124,28 @@ func Register(username, password, passwordcheck string) bool {
 	return false
 }
 
+func ChangePassword(username, oldPassword, newPassword, newPasswordCheck string) bool {
+	if newPassword == newPasswordCheck && findAccount(username) {
+		user := UserBuild(username)
+		if !checkPassword(oldPassword, user.Password) {
+			return false
+		}
+		user.Password = HashPasswordSHA256(newPassword) // Hash the new password
+		for i := range dataAccount.Account {
+			if dataAccount.Account[i].Username == username {
+				dataAccount.Account[i] = *user
+				break
+			}
+		}
+		updateDB()
+		log.Printf("Mot de passe de %s modifié", username)
+		return true
+	}
+	return false
+}
+
 // Function for hash a password
-func hashPasswordSHA256(password string) string {
+func HashPasswordSHA256(password string) string {
 	hasher := sha256.New()
 	hasher.Write([]byte(password))
 	hash := hasher.Sum(nil)

@@ -58,6 +58,24 @@ func DeleteFavorite(username, content string) {
 	}
 }
 
+// Function to delete all user's favorites
+func DeleteAllFavorites(username string) {
+	user := UserBuild(username)
+	if user != nil {
+		user.Favorites = []string{}
+		for i := range dataAccount.Account {
+			if dataAccount.Account[i].Username == username {
+				dataAccount.Account[i] = *user
+				break
+			}
+		}
+		updateDB()
+		log.Printf("Tous les favoris de %s ont été supprimés", username)
+	} else {
+		log.Printf("Erreur %s n'est pas dans la base de donnée", username)
+	}
+}
+
 // Function to check if content is in user's favorites
 func IsInFavorite(username, content string) bool {
 	user := UserBuild(username)
