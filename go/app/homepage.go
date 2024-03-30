@@ -180,6 +180,11 @@ func SearchPage(myApp fyne.App) {
 	myWindow := myApp.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
 
+	filterButton := widget.NewButton("Recherche avec Filtre", func() {
+		FilterPage(MyApp)
+		myWindow.Hide()
+	})
+
 	navBar := createNavBar(myWindow)
 	artists := functions.ArtistData()
 
@@ -188,7 +193,100 @@ func SearchPage(myApp fyne.App) {
 	gridContainer.Add(artistsGrid)
 
 	searchBar := createSearchBar(artists, gridContainer, myWindow)
-	topContent := container.NewVBox(navBar, searchBar)
+	topContent := container.NewVBox(navBar, filterButton, searchBar)
+
+	myWindow.SetOnClosed(func() {
+		myApp.Quit()
+	})
+
+	myWindow.SetContent(container.NewBorder(topContent, nil, nil, nil, gridContainer))
+	myWindow.CenterOnScreen()
+	myWindow.Resize(fyne.NewSize(800, 600))
+	myWindow.Show()
+}
+
+func FilterPage(myApp fyne.App) {
+	myWindow := myApp.NewWindow("Groupie Trackers")
+	myWindow.SetIcon(Icon)
+
+	navBar := createNavBar(myWindow)
+	researchButton := widget.NewButton("Recherche sans Filtre", func() {
+		FilterPage(MyApp)
+		myWindow.Hide()
+	})
+
+	sliderCreationDateStart := widget.NewSlider(0, 2024)
+	sliderCreationDateEnd := widget.NewSlider(0, 2024)
+
+	creationDateRange := container.NewVBox(
+		widget.NewLabel("Creation Date Range"),
+		sliderCreationDateStart,
+		sliderCreationDateEnd,
+	)
+
+	// Déclaration et initialisation des sliders pour First Album Date Range
+	sliderFirstAlbumStart := widget.NewSlider(0, 2024)
+	sliderFirstAlbumEnd := widget.NewSlider(0, 2024)
+
+	firstAlbumRange := container.NewVBox(
+		widget.NewLabel("First Album Date Range"),
+		sliderFirstAlbumStart,
+		sliderFirstAlbumEnd,
+	)
+
+	// Déclaration et initialisation de l'entry pour Number of Members
+	entryNumMembers := widget.NewEntry()
+
+	numMembers := container.NewVBox(
+		widget.NewLabel("Number of Members"),
+		entryNumMembers,
+	)
+
+	// Déclaration et initialisation des checkboxes pour Locations
+	checkUSA := widget.NewCheck("USA", func(checked bool) {})
+	checkUK := widget.NewCheck("UK", func(checked bool) {})
+	checkFR := widget.NewCheck("FR", func(checked bool) {})
+
+	locations := container.NewVBox(
+		widget.NewLabel("Locations"),
+		container.NewHBox(
+			checkUSA,
+			checkUK,
+			checkFR,
+		),
+	)
+
+	applyButton := widget.NewButton("Apply Filters", func() {
+
+	})
+
+	resetButton := widget.NewButton("Reset Filters", func() {
+		// Ici, vous pouvez maintenant accéder directement aux variables
+		sliderCreationDateStart.SetValue(0)
+		sliderCreationDateEnd.SetValue(0)
+		sliderFirstAlbumStart.SetValue(0)
+		sliderFirstAlbumEnd.SetValue(0)
+		entryNumMembers.SetText("")
+		checkUSA.SetChecked(false)
+		checkUK.SetChecked(false)
+		checkFR.SetChecked(false)
+	})
+
+	filterContainer := container.NewVBox(
+		creationDateRange,
+		firstAlbumRange,
+		numMembers,
+		locations,
+		container.NewHBox(applyButton, resetButton),
+	)
+
+	artists := functions.ArtistData()
+
+	artistsGrid := createArtistsGrid(artists, myWindow)
+	gridContainer := container.NewStack() // Utilisation de NewMax pour pouvoir rafraîchir dynamiquement le contenu
+	gridContainer.Add(artistsGrid)
+
+	topContent := container.NewVBox(navBar, researchButton, filterContainer)
 
 	myWindow.SetOnClosed(func() {
 		myApp.Quit()
