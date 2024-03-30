@@ -215,44 +215,194 @@ func FilterPage(myApp fyne.App) {
 		myWindow.Hide()
 	})
 
-	sliderCreationDateStart := widget.NewSlider(0, 2024)
-	sliderCreationDateEnd := widget.NewSlider(0, 2024)
+	// Fonction pour mettre à jour le Label avec l'année correspondant à la valeur du slider
+	updateLabelYear := func(label *widget.Label, value float64) {
+		year := int(value)
+		label.SetText(strconv.Itoa(year))
+	}
+
+	// Créer des Labels pour afficher les années
+	labelCreationDateStart := widget.NewLabel("1958")
+	labelCreationDateEnd := widget.NewLabel("2015")
+
+	sliderCreationDateStart := widget.NewSlider(1958, 2015) // 1958 for Bee Gees and 2015 for Juice Wrld
+	sliderCreationDateEnd := widget.NewSlider(1958, 2015)   // 1958 for Bee Gees and 2015 for Juice Wrld
+
+	sliderCreationDateStart.SetValue(1958)
+	sliderCreationDateEnd.SetValue(2015)
+
+	// Mettre à jour les Labels à chaque fois que la valeur des sliders change
+	sliderCreationDateStart.OnChanged = func(value float64) {
+		updateLabelYear(labelCreationDateStart, value)
+	}
+	sliderCreationDateEnd.OnChanged = func(value float64) {
+		updateLabelYear(labelCreationDateEnd, value)
+	}
 
 	creationDateRange := container.NewVBox(
-		widget.NewLabel("Creation Date Range"),
-		sliderCreationDateStart,
-		sliderCreationDateEnd,
+		widget.NewLabel("Date de Création :"),
+		container.NewHBox(
+			sliderCreationDateStart,
+			labelCreationDateStart,
+		),
+		container.NewHBox(
+			sliderCreationDateEnd,
+			labelCreationDateEnd,
+		),
 	)
 
 	// Déclaration et initialisation des sliders pour First Album Date Range
-	sliderFirstAlbumStart := widget.NewSlider(0, 2024)
-	sliderFirstAlbumEnd := widget.NewSlider(0, 2024)
+
+	labelFirstAlbumStart := widget.NewLabel("1967")
+	labelFirstAlbumDateEnd := widget.NewLabel("2018")
+
+	sliderFirstAlbumStart := widget.NewSlider(1967, 2018) // 1967 for Pink Floyd and 2018 for Juice Wrld
+	sliderFirstAlbumEnd := widget.NewSlider(1967, 2018)   // 1967 for Pink Floyd and 2018 for Juice Wrld
+
+	sliderFirstAlbumStart.SetValue(1967)
+	sliderFirstAlbumEnd.SetValue(2018)
+
+	// Mettre à jour les Labels à chaque fois que la valeur des sliders change
+	sliderFirstAlbumStart.OnChanged = func(value float64) {
+		updateLabelYear(labelFirstAlbumStart, value)
+	}
+	sliderFirstAlbumEnd.OnChanged = func(value float64) {
+		updateLabelYear(labelFirstAlbumDateEnd, value)
+	}
 
 	firstAlbumRange := container.NewVBox(
-		widget.NewLabel("First Album Date Range"),
-		sliderFirstAlbumStart,
-		sliderFirstAlbumEnd,
+		widget.NewLabel("Publication du Premier Album :"),
+		container.NewHBox(
+			sliderFirstAlbumStart,
+			labelFirstAlbumStart,
+		),
+		container.NewHBox(
+			sliderFirstAlbumEnd,
+			labelFirstAlbumDateEnd,
+		),
 	)
 
 	// Déclaration et initialisation de l'entry pour Number of Members
-	entryNumMembers := widget.NewEntry()
+	oneM := widget.NewCheck("1", func(checked bool) {})
+	twoM := widget.NewCheck("2", func(checked bool) {})
+	threeM := widget.NewCheck("3", func(checked bool) {})
+	fourM := widget.NewCheck("4", func(checked bool) {})
+	fiveM := widget.NewCheck("5", func(checked bool) {})
+	sixM := widget.NewCheck("6", func(checked bool) {})
+	sevenM := widget.NewCheck("7", func(checked bool) {})
 
 	numMembers := container.NewVBox(
-		widget.NewLabel("Number of Members"),
-		entryNumMembers,
+		widget.NewLabel("Nombre de Membres :"),
+		container.NewHBox(
+			container.NewHBox(
+				oneM,
+				twoM,
+				threeM,
+				fourM,
+			),
+			container.NewHBox(
+				fiveM,
+				sixM,
+				sevenM,
+			),
+		),
+	)
+
+	DateRange := container.NewHBox(
+		creationDateRange,
+		firstAlbumRange,
+		numMembers,
 	)
 
 	// Déclaration et initialisation des checkboxes pour Locations
-	checkUSA := widget.NewCheck("USA", func(checked bool) {})
-	checkUK := widget.NewCheck("UK", func(checked bool) {})
-	checkFR := widget.NewCheck("FR", func(checked bool) {})
+	checkUSA := widget.NewCheck("États-Unis", func(checked bool) {})
+	checkJapan := widget.NewCheck("Japon", func(checked bool) {})
+	checkNewZealand := widget.NewCheck("Nouvelle-Zélande", func(checked bool) {})
+	checkMexico := widget.NewCheck("Mexique", func(checked bool) {})
+	checkFrenchPolynesia := widget.NewCheck("Polynésie française", func(checked bool) {})
+	checkNewCaledonia := widget.NewCheck("Nouvelle-Calédonie", func(checked bool) {})
+	checkUK := widget.NewCheck("Royaume-Uni", func(checked bool) {})
+	checkSwitzerland := widget.NewCheck("Suisse", func(checked bool) {})
+	checkFrance := widget.NewCheck("France", func(checked bool) {})
+	checkAustralia := widget.NewCheck("Australie", func(checked bool) {})
+	checkIndonesia := widget.NewCheck("Indonésie", func(checked bool) {})
+	checkSlovakia := widget.NewCheck("Slovaquie", func(checked bool) {})
+	checkHungary := widget.NewCheck("Hongrie", func(checked bool) {})
+	checkBelarus := widget.NewCheck("Biélorussie", func(checked bool) {})
+	checkBrazil := widget.NewCheck("Brésil", func(checked bool) {})
+	checkColombia := widget.NewCheck("Colombie", func(checked bool) {})
+	checkDenmark := widget.NewCheck("Danemark", func(checked bool) {})
+	checkGermany := widget.NewCheck("Allemagne", func(checked bool) {})
+	checkQatar := widget.NewCheck("Qatar", func(checked bool) {})
+	checkIndia := widget.NewCheck("Inde", func(checked bool) {})
+	checkUnitedArabEmirates := widget.NewCheck("Émirats arabes unis", func(checked bool) {})
+	checkCanada := widget.NewCheck("Canada", func(checked bool) {})
+	checkFinland := widget.NewCheck("Finlande", func(checked bool) {})
+	checkChile := widget.NewCheck("Chili", func(checked bool) {})
+	checkArgentina := widget.NewCheck("Argentine", func(checked bool) {})
+	checkPeru := widget.NewCheck("Pérou", func(checked bool) {})
+	checkPortugal := widget.NewCheck("Portugal", func(checked bool) {})
+	checkSweden := widget.NewCheck("Suède", func(checked bool) {})
+	checkNorway := widget.NewCheck("Norvège", func(checked bool) {})
+	checkNetherlands := widget.NewCheck("Pays-Bas", func(checked bool) {})
+	checkChina := widget.NewCheck("Chine", func(checked bool) {})
+	checkPhilippines := widget.NewCheck("Philippines", func(checked bool) {})
+	checkSaudiArabia := widget.NewCheck("Arabie saoudite", func(checked bool) {})
+	checkTaiwan := widget.NewCheck("Taïwan", func(checked bool) {})
+	checkSouthKorea := widget.NewCheck("Corée du Sud", func(checked bool) {})
+	checkCostaRica := widget.NewCheck("Costa Rica", func(checked bool) {})
+	checkAustria := widget.NewCheck("Autriche", func(checked bool) {})
 
 	locations := container.NewVBox(
-		widget.NewLabel("Locations"),
+		widget.NewLabel("Localisation des concerts :"),
 		container.NewHBox(
 			checkUSA,
+			checkJapan,
+			checkNewZealand,
+			checkMexico,
+			checkFrenchPolynesia,
+			checkNewCaledonia,
+		),
+		container.NewHBox(
 			checkUK,
-			checkFR,
+			checkSwitzerland,
+			checkFrance,
+			checkAustralia,
+			checkIndonesia,
+			checkSlovakia,
+		),
+		container.NewHBox(
+			checkHungary,
+			checkBelarus,
+			checkBrazil,
+			checkColombia,
+			checkDenmark,
+			checkGermany,
+		),
+		container.NewHBox(
+			checkQatar,
+			checkIndia,
+			checkUnitedArabEmirates,
+			checkCanada,
+			checkFinland,
+			checkChile,
+		),
+		container.NewHBox(
+			checkArgentina,
+			checkPeru,
+			checkPortugal,
+			checkSweden,
+			checkNorway,
+			checkNetherlands,
+		),
+		container.NewHBox(
+			checkChina,
+			checkPhilippines,
+			checkSaudiArabia,
+			checkTaiwan,
+			checkSouthKorea,
+			checkCostaRica,
+			checkAustria,
 		),
 	)
 
@@ -262,20 +412,26 @@ func FilterPage(myApp fyne.App) {
 
 	resetButton := widget.NewButton("Reset Filters", func() {
 		// Ici, vous pouvez maintenant accéder directement aux variables
-		sliderCreationDateStart.SetValue(0)
-		sliderCreationDateEnd.SetValue(0)
-		sliderFirstAlbumStart.SetValue(0)
-		sliderFirstAlbumEnd.SetValue(0)
-		entryNumMembers.SetText("")
-		checkUSA.SetChecked(false)
-		checkUK.SetChecked(false)
-		checkFR.SetChecked(false)
+		sliderCreationDateStart.SetValue(1958)
+		sliderCreationDateEnd.SetValue(2015)
+		sliderFirstAlbumStart.SetValue(1967)
+		sliderFirstAlbumEnd.SetValue(2018)
+
+		oneM.SetChecked(false)
+		twoM.SetChecked(false)
+		threeM.SetChecked(false)
+		fourM.SetChecked(false)
+		fiveM.SetChecked(false)
+		sixM.SetChecked(false)
+		sevenM.SetChecked(false)
+
+		// checkUSA.SetChecked(false)
+		// checkUK.SetChecked(false)
+		// checkFR.SetChecked(false)
 	})
 
 	filterContainer := container.NewVBox(
-		creationDateRange,
-		firstAlbumRange,
-		numMembers,
+		DateRange,
 		locations,
 		container.NewHBox(applyButton, resetButton),
 	)
@@ -283,8 +439,9 @@ func FilterPage(myApp fyne.App) {
 	artists := functions.ArtistData()
 
 	artistsGrid := createArtistsGrid(artists, myWindow)
-	gridContainer := container.NewStack() // Utilisation de NewMax pour pouvoir rafraîchir dynamiquement le contenu
-	gridContainer.Add(artistsGrid)
+	gridContainer := container.NewVBox(artistsGrid) // Ajouter artistsGrid à gridContainer
+
+	scrollContainer := container.NewVScroll(gridContainer) // Placer gridContainer dans un conteneur défilable
 
 	topContent := container.NewVBox(navBar, researchButton, filterContainer)
 
@@ -292,7 +449,7 @@ func FilterPage(myApp fyne.App) {
 		myApp.Quit()
 	})
 
-	myWindow.SetContent(container.NewBorder(topContent, nil, nil, nil, gridContainer))
+	myWindow.SetContent(container.NewBorder(topContent, nil, nil, nil, scrollContainer)) // Utiliser scrollContainer à la place de gridContainer
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()
