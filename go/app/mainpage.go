@@ -2,9 +2,11 @@ package app
 
 import (
 	"Groupie_Trackers/go/functions"
+	"bytes"
 	"fmt"
 	"image"
 	"image/color"
+	"image/jpeg"
 	"io"
 	"math/rand"
 	"net/http"
@@ -185,13 +187,23 @@ func createRandomArtistsGrid(w fyne.Window) fyne.CanvasObject {
 
 	for _, artist := range artists {
 		artistTemp := artist
-		image := loadImageFromURL(artist.Image)
-		image.FillMode = canvas.ImageFillContain
-		button := widget.NewButton(artist.Name, func() {
+		image, _ := fyne.LoadResourceFromURLString(artist.Image)
+
+		img := canvas.NewImageFromResource(image)
+
+		img.SetMinSize(fyne.NewSize(200, 200))
+		btn := widget.NewButton(" ", func() {
 			ArtistPage(artistTemp, MyApp)
 			w.Hide()
 		})
-		card := container.NewVBox(image, button)
+
+		container1 := container.New(
+			layout.NewStackLayout(),
+			btn,
+			widget.NewCard("", "  "+artist.Name, img),
+		)
+
+		card := container.NewVBox(container1)
 		artistCards = append(artistCards, card)
 	}
 
@@ -210,13 +222,23 @@ func createCustomArtistsGrid(w fyne.Window, artistContent functions.AllArtists) 
 
 	for _, artist := range artists {
 		artistTemp := artist
-		image := loadImageFromURL(artist.Image)
-		image.FillMode = canvas.ImageFillContain
-		button := widget.NewButton(artist.Name, func() {
+		image, _ := fyne.LoadResourceFromURLString(artist.Image)
+
+		img := canvas.NewImageFromResource(image)
+
+		img.SetMinSize(fyne.NewSize(200, 200))
+		btn := widget.NewButton(" ", func() {
 			ArtistPage(artistTemp, MyApp)
 			w.Hide()
 		})
-		card := container.NewVBox(image, button)
+
+		container1 := container.New(
+			layout.NewStackLayout(),
+			btn,
+			widget.NewCard("", "  "+artist.Name, img),
+		)
+
+		card := container.NewVBox(container1)
 		artistCards = append(artistCards, card)
 	}
 
@@ -248,13 +270,23 @@ func createFavoriteGrid(w fyne.Window, user functions.Account) fyne.CanvasObject
 
 	for _, artist := range artists {
 		artistTemp := artist
-		image := loadImageFromURL(artist.Image)
-		image.FillMode = canvas.ImageFillContain
-		button := widget.NewButton(artist.Name, func() {
+		image, _ := fyne.LoadResourceFromURLString(artist.Image)
+
+		img := canvas.NewImageFromResource(image)
+
+		img.SetMinSize(fyne.NewSize(200, 200))
+		btn := widget.NewButton(" ", func() {
 			ArtistPage(artistTemp, MyApp)
 			w.Hide()
 		})
-		card := container.NewVBox(image, button)
+
+		container1 := container.New(
+			layout.NewStackLayout(),
+			btn,
+			widget.NewCard("", "  "+artist.Name, img),
+		)
+
+		card := container.NewVBox(container1)
 		artistCards = append(artistCards, card)
 	}
 
@@ -284,17 +316,54 @@ func createAllFavoriteGrid(w fyne.Window, user functions.Account) fyne.CanvasObj
 
 	for _, artist := range artists {
 		artistTemp := artist
-		image := loadImageFromURL(artist.Image)
-		image.FillMode = canvas.ImageFillContain
-		button := widget.NewButton(artist.Name, func() {
+		image, _ := fyne.LoadResourceFromURLString(artist.Image)
+
+		img := canvas.NewImageFromResource(image)
+
+		img.SetMinSize(fyne.NewSize(200, 200))
+		btn := widget.NewButton(" ", func() {
 			ArtistPage(artistTemp, MyApp)
 			w.Hide()
 		})
-		card := container.NewVBox(image, button)
+
+		container1 := container.New(
+			layout.NewStackLayout(),
+			btn,
+			widget.NewCard("", "  "+artist.Name, img),
+		)
+
+		card := container.NewVBox(container1)
 		artistCards = append(artistCards, card)
 	}
 
 	grid := container.NewGridWithColumns(4, artistCards...)
 
 	return grid
+}
+
+func loadImageBinary(filename string) ([]byte, error) {
+	file, err := os.Open(filename)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	img, _, err := image.Decode(file)
+	if err != nil {
+		return nil, err
+	}
+
+	buf := new(bytes.Buffer)
+	err = jpeg.Encode(buf, img, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return buf.Bytes(), nil
+}
+
+func createCustomIcon(filename string) fyne.Resource {
+	image, _ := loadImageBinary(filename)
+	myImage := fyne.NewStaticResource("my_image.png", image)
+	return myImage
 }
