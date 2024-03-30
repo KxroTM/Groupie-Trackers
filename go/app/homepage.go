@@ -695,6 +695,7 @@ func HomePage(myApp fyne.App) {
 	favoriteButton.Importance = widget.HighImportance
 
 	favorite := container.NewHBox(subtitle4, layout.NewSpacer(), favoriteButton, spacer)
+	backgroundRect := canvas.NewRectangle(color.RGBA{R: 16, G: 16, B: 16, A: 255}) //
 
 	content := container.NewVBox(spacer, spacer, title, spacer, spacer,
 		subtitle, spacer, rdmBar, spacer, favorite, spacer, favoriteBar, spacer, subtitle2, spacer, lastAlbumBar, spacer, subtitle3, spacer, firstAlbumBar,
@@ -702,7 +703,7 @@ func HomePage(myApp fyne.App) {
 
 	scrollContainer := container.NewVScroll(content)
 
-	myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, scrollContainer))
+	myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, backgroundRect, scrollContainer))
 
 	myWindow.SetOnClosed(func() {
 		myApp.Quit()
