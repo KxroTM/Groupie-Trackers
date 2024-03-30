@@ -115,14 +115,14 @@ func createNavBar(myWindow fyne.Window) *fyne.Container {
 		myWindow.Hide()
 	})
 
-	researchButton := widget.NewButton("Rechercher", func() {
+	researchButton := widget.NewButtonWithIcon("Rechercher", theme.SearchReplaceIcon(), func() {
 		SearchPage(MyApp)
 		myWindow.Hide()
 	})
 
 	space2 := canvas.NewText("      ", color.Transparent)
 
-	content := container.NewHBox(layout.NewSpacer(), homeButton, researchButton, favoriteButton,
+	content := container.NewHBox(researchButton, layout.NewSpacer(), homeButton, favoriteButton,
 		accountButton, layout.NewSpacer(), logoutButton)
 
 	return container.NewVBox(space2, content, space2)
