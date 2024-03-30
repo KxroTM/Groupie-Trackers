@@ -14,6 +14,7 @@ import (
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -109,7 +110,7 @@ func createNavBar(myWindow fyne.Window) *fyne.Container {
 		myWindow.Hide()
 	})
 
-	logoutButton := widget.NewButton("Se déconnecter", func() {
+	logoutButton := widget.NewButtonWithIcon("", theme.LogoutIcon(), func() {
 		LoginPage(MyApp)
 		myWindow.Hide()
 	})
@@ -119,12 +120,10 @@ func createNavBar(myWindow fyne.Window) *fyne.Container {
 		myWindow.Hide()
 	})
 
-	text := canvas.NewText("Bienvenue "+user.Username, color.White)
-	space := canvas.NewText(text.Text, color.Transparent)
 	space2 := canvas.NewText("      ", color.Transparent)
 
-	content := container.NewHBox(layout.NewSpacer(), space, space2, homeButton, researchButton, favoriteButton,
-		accountButton, logoutButton, layout.NewSpacer(), text, space2)
+	content := container.NewHBox(layout.NewSpacer(), homeButton, researchButton, favoriteButton,
+		accountButton, layout.NewSpacer(), logoutButton)
 
 	return container.NewVBox(space2, content, space2)
 }
