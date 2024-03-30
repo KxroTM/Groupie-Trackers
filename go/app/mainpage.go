@@ -115,7 +115,7 @@ func createNavBar(myWindow fyne.Window) *fyne.Container {
 		myWindow.Hide()
 	})
 
-	researchButton := widget.NewButtonWithIcon("Rechercher", theme.SearchReplaceIcon(), func() {
+	researchButton := widget.NewButtonWithIcon("", theme.SearchIcon(), func() {
 		SearchPage(MyApp)
 		myWindow.Hide()
 	})
