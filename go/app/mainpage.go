@@ -20,6 +20,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
+// struct to store an image and its URL
 type ImageEntry struct {
 	URL   string
 	Image *canvas.Image
@@ -27,6 +28,7 @@ type ImageEntry struct {
 
 var imageCache []*ImageEntry
 
+// load an image from a URL, caching it for future use
 func loadImageFromURL(url string) *canvas.Image {
 	for _, imageEntry := range imageCache {
 		if imageEntry.URL == url {
@@ -41,6 +43,7 @@ func loadImageFromURL(url string) *canvas.Image {
 	return image
 }
 
+// download an image from a URL
 func downloadImage(url string) *canvas.Image {
 	resp, err := http.Get(url)
 	if err != nil {
@@ -145,6 +148,7 @@ func createSearchBar(artists []functions.Artist, gridContainer *fyne.Container, 
 	return searchEntry
 }
 
+// Create a grid with 4 random artists
 func createRandomArtistsGrid(w fyne.Window) fyne.CanvasObject {
 	var artistCards []fyne.CanvasObject
 	var artists []functions.Artist
@@ -212,6 +216,7 @@ func createRandomArtistsGrid(w fyne.Window) fyne.CanvasObject {
 	return grid
 }
 
+// Create a grid with 4 artists by a list of artists
 func createCustomArtistsGrid(w fyne.Window, artistContent functions.AllArtists) fyne.CanvasObject {
 	var artistCards []fyne.CanvasObject
 	var artists []functions.Artist
@@ -247,6 +252,7 @@ func createCustomArtistsGrid(w fyne.Window, artistContent functions.AllArtists) 
 	return grid
 }
 
+// Create a grid with the 4 first favorites artists
 func createFavoriteGrid(w fyne.Window, user functions.Account) fyne.CanvasObject {
 	var artistCards []fyne.CanvasObject
 	var artists []functions.Artist
@@ -295,6 +301,7 @@ func createFavoriteGrid(w fyne.Window, user functions.Account) fyne.CanvasObject
 	return grid
 }
 
+// Create a grid with all the favorite artists
 func createAllFavoriteGrid(w fyne.Window, user functions.Account) fyne.CanvasObject {
 	var artistCards []fyne.CanvasObject
 	var artists []functions.Artist
@@ -341,6 +348,7 @@ func createAllFavoriteGrid(w fyne.Window, user functions.Account) fyne.CanvasObj
 	return grid
 }
 
+// Load an image from a file and encode
 func loadImageBinary(filename string) ([]byte, error) {
 	file, err := os.Open(filename)
 	if err != nil {
@@ -362,6 +370,7 @@ func loadImageBinary(filename string) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
+// Create a custom icon by a local image file
 func createCustomIcon(filename string) fyne.Resource {
 	image, _ := loadImageBinary(filename)
 	myImage := fyne.NewStaticResource("my_image.png", image)
