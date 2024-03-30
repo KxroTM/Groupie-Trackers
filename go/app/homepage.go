@@ -697,8 +697,8 @@ func HomePage(myApp fyne.App) {
 	favorite := container.NewHBox(subtitle4, layout.NewSpacer(), favoriteButton, spacer)
 
 	content := container.NewVBox(spacer, spacer, title, spacer, spacer,
-		subtitle, spacer, rdmBar, spacer, subtitle2, spacer, lastAlbumBar, spacer, subtitle3, spacer, firstAlbumBar,
-		spacer, favorite, spacer, favoriteBar)
+		subtitle, spacer, rdmBar, spacer, favorite, spacer, favoriteBar, spacer, subtitle2, spacer, lastAlbumBar, spacer, subtitle3, spacer, firstAlbumBar,
+		spacer)
 
 	scrollContainer := container.NewVScroll(content)
 
