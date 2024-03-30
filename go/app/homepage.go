@@ -601,10 +601,9 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 			})
 
 			favoriteButton := container.NewHBox(layout.NewSpacer(), favorite, layout.NewSpacer())
-			form := container.NewVBox(navBar, txt, txt, txt, txt, image, favoriteButton, txt, name, member, member2, creationDate, album, txt, concertButton)
+			form := container.NewVBox(txt, txt, image, txt, favoriteButton, txt, name, member, member2, creationDate, album, txt, concertButton)
 			myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, form))
 
-			myWindow.SetContent(form)
 		} else {
 			like := createCustomIcon("src/like.png")
 			favorite := widget.NewButtonWithIcon("", like, func() {
@@ -614,10 +613,9 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 			})
 
 			favoriteButton := container.NewHBox(layout.NewSpacer(), favorite, layout.NewSpacer())
-			form := container.NewVBox(navBar, txt, txt, txt, txt, image, favoriteButton, txt, name, member, member2, creationDate, album, txt, concertButton)
+			form := container.NewVBox(txt, txt, image, txt, favoriteButton, txt, name, member, member2, creationDate, album, txt, concertButton)
 			myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, form))
 
-			myWindow.SetContent(form)
 		}
 	} else {
 		if !functions.IsInFavorite(user.Username, artist.Name) {
@@ -629,10 +627,9 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 			})
 
 			favoriteButton := container.NewHBox(layout.NewSpacer(), favorite, layout.NewSpacer())
-			form := container.NewVBox(navBar, txt, txt, txt, txt, image, favoriteButton, txt, name, member, creationDate, album, txt, concertButton)
+			form := container.NewVBox(txt, txt, image, txt, favoriteButton, txt, name, member, creationDate, album, txt, concertButton)
 			myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, form))
 
-			myWindow.SetContent(form)
 		} else {
 			like := createCustomIcon("src/like.png")
 			favorite := widget.NewButtonWithIcon("", like, func() {
@@ -642,10 +639,8 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 			})
 
 			favoriteButton := container.NewHBox(layout.NewSpacer(), favorite, layout.NewSpacer())
-			form := container.NewVBox(navBar, txt, txt, txt, txt, image, favoriteButton, txt, name, member, creationDate, album, txt, concertButton)
+			form := container.NewVBox(txt, txt, image, txt, favoriteButton, txt, name, member, creationDate, album, txt, concertButton)
 			myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, form))
-
-			myWindow.SetContent(form)
 
 		}
 	}
