@@ -110,28 +110,35 @@ func ArtistbyLocations(allArtists AllArtists, allLocations AllLocations, locatio
 	return artistList
 }
 
-func ArtistbyCountry(allArtists AllArtists, allLocations AllLocations, country []string) AllArtists {
+func ArtistbyCountry(allArtists AllArtists, allLocations AllLocations, countries []string) AllArtists {
 	var artistList AllArtists
 
-	for i := 0; i < len(allLocations.Index); i++ {
-
-		for j := 0; j < len(country); j++ {
-
-			for k := 0; k < len(allLocations.Index[i].Locations); k++ {
-
-				if strings.Split(allLocations.Index[i].Locations[k], "-")[len(strings.Split(allLocations.Index[i].Locations[k], "-"))-1] == country[j] {
-					if i == 0 {
-						artistList = append(artistList, allArtists[i])
-					} else {
-						artistList = append(artistList, allArtists[i-1])
-					}
+	for _, artist := range allArtists {
+		for _, country := range countries {
+			for _, location := range allLocations.Index[artist.ID-1].Locations {
+				if strings.Split(location, "-")[len(strings.Split(location, "-"))-1] == country {
+					artistList = append(artistList, artist)
 					break
+
 				}
 			}
 		}
-
 	}
-	return artistList
+	return RemoveDuplicates(artistList)
+}
+
+func RemoveDuplicates(allArtists AllArtists) AllArtists {
+	uniqueArtists := make(map[int64]Artist)
+	var result AllArtists
+
+	for _, artist := range allArtists {
+		if _, found := uniqueArtists[artist.ID]; !found {
+			uniqueArtists[artist.ID] = artist
+			result = append(result, artist)
+		}
+	}
+
+	return result
 }
 
 // Sort Artist by date of First Album (Ascending)
