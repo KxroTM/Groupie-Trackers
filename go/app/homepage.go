@@ -18,6 +18,7 @@ import (
 var MyApp = app.New()
 var user *functions.Account
 var Icon, _ = fyne.LoadResourceFromPath("./Icon.png")
+var BackgroundRect = canvas.NewRectangle(color.RGBA{R: 16, G: 16, B: 16, A: 255}) //Background color (dark grey)
 
 func LoginPage(app fyne.App) {
 	myWindow := app.NewWindow("Groupie Trackers")
@@ -199,7 +200,7 @@ func SearchPage(myApp fyne.App) {
 		myApp.Quit()
 	})
 
-	myWindow.SetContent(container.NewBorder(topContent, nil, nil, nil, gridContainer))
+	myWindow.SetContent(container.NewBorder(topContent, nil, nil, nil, BackgroundRect, gridContainer))
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()
@@ -342,48 +343,54 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 
 	if len(artist.Members) > 4 {
 		if !functions.IsInFavorite(user.Username, artist.Name) {
-			favorite := widget.NewButton("Ajouter aux favoris", func() {
+			dislike := createCustomIcon("src/dislike.png")
+			favorite := widget.NewButtonWithIcon("", dislike, func() {
 				functions.AddToFavorites(user.Username, artist.Name)
 				ArtistPage(artist, myApp)
 				myWindow.Hide()
 			})
 
 			favoriteButton := container.NewHBox(layout.NewSpacer(), favorite, layout.NewSpacer())
-			form := container.NewVBox(navBar, txt, txt, txt, txt, image, favoriteButton, txt, name, member, member2, creationDate, album, txt, concertButton)
-			myWindow.SetContent(form)
+			form := container.NewVBox(txt, txt, image, txt, favoriteButton, txt, name, member, member2, creationDate, album, txt, concertButton)
+			myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, form))
+
 		} else {
-			favorite := widget.NewButton("Retirer des favoris", func() {
+			like := createCustomIcon("src/like.png")
+			favorite := widget.NewButtonWithIcon("", like, func() {
 				functions.DeleteFavorite(user.Username, artist.Name)
 				ArtistPage(artist, myApp)
 				myWindow.Hide()
 			})
 
 			favoriteButton := container.NewHBox(layout.NewSpacer(), favorite, layout.NewSpacer())
-			form := container.NewVBox(navBar, txt, txt, txt, txt, image, favoriteButton, txt, name, member, member2, creationDate, album, txt, concertButton)
-			myWindow.SetContent(form)
+			form := container.NewVBox(txt, txt, image, txt, favoriteButton, txt, name, member, member2, creationDate, album, txt, concertButton)
+			myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, form))
 
 		}
 	} else {
 		if !functions.IsInFavorite(user.Username, artist.Name) {
-			favorite := widget.NewButton("Ajouter aux favoris", func() {
+			dislike := createCustomIcon("src/dislike.png")
+			favorite := widget.NewButtonWithIcon("", dislike, func() {
 				functions.AddToFavorites(user.Username, artist.Name)
 				ArtistPage(artist, myApp)
 				myWindow.Hide()
 			})
 
 			favoriteButton := container.NewHBox(layout.NewSpacer(), favorite, layout.NewSpacer())
-			form := container.NewVBox(navBar, txt, txt, txt, txt, image, favoriteButton, txt, name, member, creationDate, album, txt, concertButton)
-			myWindow.SetContent(form)
+			form := container.NewVBox(txt, txt, image, txt, favoriteButton, txt, name, member, creationDate, album, txt, concertButton)
+			myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, form))
+
 		} else {
-			favorite := widget.NewButton("Retirer des favoris", func() {
+			like := createCustomIcon("src/like.png")
+			favorite := widget.NewButtonWithIcon("", like, func() {
 				functions.DeleteFavorite(user.Username, artist.Name)
 				ArtistPage(artist, myApp)
 				myWindow.Hide()
 			})
 
 			favoriteButton := container.NewHBox(layout.NewSpacer(), favorite, layout.NewSpacer())
-			form := container.NewVBox(navBar, txt, txt, txt, txt, image, favoriteButton, txt, name, member, creationDate, album, txt, concertButton)
-			myWindow.SetContent(form)
+			form := container.NewVBox(txt, txt, image, txt, favoriteButton, txt, name, member, creationDate, album, txt, concertButton)
+			myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, form))
 
 		}
 	}
@@ -423,36 +430,29 @@ func HomePage(myApp fyne.App) {
 	lastAlbumBar := createCustomArtistsGrid(myWindow, functions.SortByFirstAlbumDescending(functions.ArtistData()))
 	firstAlbumBar := createCustomArtistsGrid(myWindow, functions.SortByFirstAlbumAscending(functions.ArtistData()))
 	favoriteBar := createFavoriteGrid(myWindow, *user)
-	spacer := canvas.NewText("", color.White)
-	title := canvas.NewText("Groupie Trackers", color.White)
-	title.TextSize = 42
-	title.Alignment = fyne.TextAlignCenter
-	title.TextStyle = fyne.TextStyle{Bold: true}
-	subtitle := canvas.NewText(" Découvrez de nouveaux artistes : ", color.White)
-	subtitle.TextSize = 16
-	subtitle2 := canvas.NewText(" Découvrez les dernières sorties : ", color.White)
-	subtitle2.TextSize = 16
-	subtitle3 := canvas.NewText(" Redécouvrez le meilleur des vieux albums : ", color.White)
-	subtitle3.TextSize = 16
-	subtitle4 := canvas.NewText(" Vos favoris : ", color.White)
-	subtitle4.TextSize = 16
+	spacer := canvas.NewText("  ", color.White)
+	subtitle := canvas.NewText("  Découvrez de nouveaux artistes", color.White)
+	subtitle.TextSize = 22
+	subtitle.TextStyle = fyne.TextStyle{Bold: true}
+	subtitle2 := canvas.NewText("  Découvrez les dernières sorties", color.White)
+	subtitle2.TextSize = 22
+	subtitle2.TextStyle = fyne.TextStyle{Bold: true}
+	subtitle3 := canvas.NewText("  Redécouvrez le meilleur des vieux albums", color.White)
+	subtitle3.TextSize = 22
+	subtitle3.TextStyle = fyne.TextStyle{Bold: true}
+	subtitle4 := canvas.NewText("  Vos favoris", color.White)
+	subtitle4.TextSize = 22
+	subtitle4.TextStyle = fyne.TextStyle{Bold: true}
 
-	favoriteButton := widget.NewButton("Mes favoris", func() {
-		FavoritePage(myApp)
-		myWindow.Hide()
-	})
+	favorite := container.NewHBox(subtitle4, layout.NewSpacer())
 
-	favoriteButton.Importance = widget.HighImportance
-
-	favorite := container.NewHBox(subtitle4, layout.NewSpacer(), favoriteButton, spacer)
-
-	content := container.NewVBox(spacer, spacer, title, spacer, spacer,
-		subtitle, spacer, rdmBar, spacer, subtitle2, spacer, lastAlbumBar, spacer, subtitle3, spacer, firstAlbumBar,
-		spacer, favorite, spacer, favoriteBar)
+	content := container.NewVBox(spacer, spacer, spacer,
+		subtitle, spacer, rdmBar, spacer, favorite, spacer, favoriteBar, spacer, subtitle2, spacer, lastAlbumBar, spacer, subtitle3, spacer, firstAlbumBar,
+		spacer)
 
 	scrollContainer := container.NewVScroll(content)
 
-	myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, scrollContainer))
+	myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, scrollContainer))
 
 	myWindow.SetOnClosed(func() {
 		myApp.Quit()
@@ -481,7 +481,7 @@ func FavoritePage(myApp fyne.App) {
 	myWindow.SetOnClosed(func() {
 		myApp.Quit()
 	})
-	myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, scrollContainer))
+	myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, scrollContainer))
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()
@@ -541,7 +541,7 @@ func AccountPage(myApp fyne.App) {
 		)
 
 		centeredContent := container.NewCenter(content)
-		myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, centeredContent))
+		myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, centeredContent))
 	} else {
 
 		ppf := loadImageFromURL(user.Ppf) // JARRIVE PAS A REDIMENTIONNER LIMAGE
@@ -559,7 +559,7 @@ func AccountPage(myApp fyne.App) {
 		)
 
 		centeredContent := container.NewCenter(content)
-		myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, centeredContent))
+		myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, centeredContent))
 	}
 
 	myWindow.SetOnClosed(func() {
