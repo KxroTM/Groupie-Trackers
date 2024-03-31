@@ -14,6 +14,7 @@ import (
 func FilterPage(myApp fyne.App) {
 	myWindow := myApp.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
+	gridContainer := container.NewGridWithColumns(1)
 
 	navBar := createNavBar(myWindow)
 	researchButton := widget.NewButton("Recherche sans Filtre", func() {
@@ -56,12 +57,16 @@ func FilterPage(myApp fyne.App) {
 	creationDateRange := container.NewVBox(
 		widget.NewLabel("Date de Création :"),
 		container.NewHBox(
+			layout.NewSpacer(),
 			sliderCreationDateStart,
 			labelCreationDateStart,
+			layout.NewSpacer(),
 		),
 		container.NewHBox(
+			layout.NewSpacer(),
 			sliderCreationDateEnd,
 			labelCreationDateEnd,
+			layout.NewSpacer(),
 		),
 	)
 
@@ -96,12 +101,16 @@ func FilterPage(myApp fyne.App) {
 	firstAlbumRange := container.NewVBox(
 		widget.NewLabel("Publication du Premier Album :"),
 		container.NewHBox(
+			layout.NewSpacer(),
 			sliderFirstAlbumStart,
 			labelFirstAlbumStart,
+			layout.NewSpacer(),
 		),
 		container.NewHBox(
+			layout.NewSpacer(),
 			sliderFirstAlbumEnd,
 			labelFirstAlbumDateEnd,
+			layout.NewSpacer(),
 		),
 	)
 
@@ -118,18 +127,29 @@ func FilterPage(myApp fyne.App) {
 		widget.NewLabel("Nombre de Membres :"),
 		container.NewVBox(
 			container.NewHBox(
+				layout.NewSpacer(),
 				oneM,
 				twoM,
 				threeM,
 				fourM,
+				layout.NewSpacer(),
 			),
 			container.NewHBox(
+				layout.NewSpacer(),
 				fiveM,
 				sixM,
 				sevenM,
+				layout.NewSpacer(),
 			),
 		),
 	)
+	oneM.SetChecked(true)
+	twoM.SetChecked(true)
+	threeM.SetChecked(true)
+	fourM.SetChecked(true)
+	fiveM.SetChecked(true)
+	sixM.SetChecked(true)
+	sevenM.SetChecked(true)
 
 	DateRange := container.NewHBox(
 		layout.NewSpacer(),
@@ -271,14 +291,25 @@ func FilterPage(myApp fyne.App) {
 	)
 
 	applyButton := widget.NewButton("Apply Filters", func() {
-		fmt.Println(sliderCreationDateStart.Value)
-		fmt.Println(sliderCreationDateEnd.Value)
-		fmt.Println(sliderFirstAlbumStart.Value)
-		fmt.Println(sliderFirstAlbumEnd.Value)
+		artists := functions.ArtistData()
 
-		ArtistData := functions.ArtistData()
-		LocationsData := functions.LocationsData()
-		fmt.Println(len(functions.ArtistbyCountry(ArtistData, LocationsData, []string{"chile"})))
+		artists = functions.ArtistbyCreationDateRange(artists, sliderCreationDateStart.Value, sliderCreationDateEnd.Value)
+
+		// Convert float64 values to strings
+		artists = functions.ArtistbyFirstAlbumDateRange(artists, sliderFirstAlbumStart.Value, sliderFirstAlbumEnd.Value)
+
+		// Obtenir les nombres de membres cochés
+		checkedNumbers := getCheckedNumbers(oneM, twoM, threeM, fourM, fiveM, sixM, sevenM)
+		fmt.Println(checkedNumbers)
+
+		// Appliquer le filtre sur le nombre de membres
+		artists = functions.ArtistbyNumberofMemberCheck(artists, checkedNumbers)
+
+		artistsGrid := createArtistsGrid(artists, myWindow)
+
+		// Remplacez le contenu du gridContainer par le nouveau artistsGrid
+		gridContainer.Objects = []fyne.CanvasObject{artistsGrid}
+		gridContainer.Refresh()
 	})
 
 	resetButton := widget.NewButton("Reset Filters", func() {
@@ -318,12 +349,6 @@ func FilterPage(myApp fyne.App) {
 		),
 	)
 
-	artists := functions.ArtistData()
-
-	artistsGrid := createArtistsGrid(artists, myWindow)
-	gridContainer := container.NewStack() // Utilisation de NewMax pour pouvoir rafraîchir dynamiquement le contenu
-	gridContainer.Add(artistsGrid)
-
 	botContent := container.NewVScroll(gridContainer) // Placer gridContainer dans un conteneur défilable
 
 	topContent := container.NewVBox(navBar, researchButton, filterContainer)
@@ -342,4 +367,17 @@ func uncheckChecks(checks ...*widget.Check) {
 	for _, check := range checks {
 		check.SetChecked(false)
 	}
+}
+
+func getCheckedNumbers(checks ...*widget.Check) []int {
+	var checkedNumbers []int
+
+	fmt.Println(checks)
+	for i, check := range checks {
+		if check.Checked {
+			checkedNumbers = append(checkedNumbers, i+1) // Ajouter 1 car les nombres de membres commencent à partir de 1
+		}
+	}
+	fmt.Println(checkedNumbers)
+	return checkedNumbers
 }

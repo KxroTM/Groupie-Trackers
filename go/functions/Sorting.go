@@ -8,11 +8,11 @@ import (
 
 // Sort Artist by Date
 
-func ArtistbyCreationDateRange(allArtists AllArtists, startdate, enddate int) AllArtists { // Range Version
+func ArtistbyCreationDateRange(allArtists AllArtists, startdate, enddate float64) AllArtists {
 	var artistList AllArtists
 
 	for i := 0; i < len(allArtists); i++ {
-		if int64(startdate) <= allArtists[i].CreationDate && allArtists[i].CreationDate <= int64(enddate) {
+		if startdate <= allArtists[i].CreationDate && allArtists[i].CreationDate <= enddate {
 			artistList = append(artistList, allArtists[i])
 		}
 	}
@@ -32,29 +32,17 @@ func ArtistbyCreationDateCheck(allArtists AllArtists, dates []int) AllArtists { 
 
 // Sort Artist by date of First Album
 
-func ArtistbyFirstAlbumDateRange(allArtists AllArtists, startdate, enddate string) AllArtists { // Range Version
+func ArtistbyFirstAlbumDateRange(allArtists AllArtists, startyear, endyear float64) AllArtists { // Range Version
 	var artistList AllArtists
 
-	startParts, err := DateStringToIntSlice(startdate)
-	if err != nil {
-		fmt.Println("Error:", err)
-	}
-
-	endParts, err := DateStringToIntSlice(startdate)
-	if err != nil {
-		fmt.Println("Error:", err)
-	}
-
 	for i := 0; i < len(allArtists); i++ {
-		artistParts, err := DateStringToIntSlice(allArtists[i].FirstAlbum)
+		artistYear, err := DateStringToYear(allArtists[i].FirstAlbum)
 		if err != nil {
 			fmt.Println("Error:", err)
 		}
-		if artistParts[2] >= startParts[2] && artistParts[1] >= startParts[1] && artistParts[0] >= startParts[0] &&
-			artistParts[2] <= endParts[2] && artistParts[1] <= endParts[1] && artistParts[0] <= endParts[0] {
+		if artistYear >= startyear && artistYear <= endyear {
 			artistList = append(artistList, allArtists[i])
 		}
-
 	}
 	return artistList
 }
@@ -157,3 +145,5 @@ func SortByFirstAlbumAscending(allArtists AllArtists) AllArtists {
 	})
 	return allArtists
 }
+
+

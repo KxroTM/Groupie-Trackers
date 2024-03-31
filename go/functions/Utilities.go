@@ -1,6 +1,7 @@
 package functions
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -44,4 +45,18 @@ func parseDate(dateStr string) string {
 		return ""
 	}
 	return parts[2] + "-" + parts[1] + "-" + parts[0]
+}
+
+func DateStringToYear(date string) (float64, error) {
+	parts := strings.Split(date, "-")
+	if len(parts) != 3 {
+		return 0, fmt.Errorf("invalid date format: %s", date)
+	}
+
+	year, err := strconv.ParseFloat(parts[2], 64)
+	if err != nil {
+		return 0, fmt.Errorf("failed to parse year: %s", parts[2])
+	}
+
+	return year, nil
 }
