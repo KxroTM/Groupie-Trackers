@@ -17,13 +17,17 @@ import (
 
 var MyApp = app.New()
 var user *functions.Account
+var checkRemember = false
 var Icon, _ = fyne.LoadResourceFromPath("./Icon.png")
 var BackgroundRect = canvas.NewRectangle(color.RGBA{R: 16, G: 16, B: 16, A: 255}) //Background color (dark grey)
+var PasswordChange = false
+var PpfChange = false
 
 func LoginPage(app fyne.App) {
 	myWindow := app.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
-	// Configuration de base pour agrandir les éléments de formulaire
+	checkRemember = false
+
 	username := widget.NewEntry()
 	username.SetPlaceHolder("Nom d'Utilisateur")
 	password := widget.NewPasswordEntry()
@@ -52,6 +56,16 @@ func LoginPage(app fyne.App) {
 		app.Quit()
 	})
 
+	check := widget.NewCheck("Se souvenir de moi", func(value bool) {
+		if value {
+			checkRemember = true
+		} else {
+			checkRemember = false
+		}
+	})
+
+	checkButton := container.NewHBox(layout.NewSpacer(), check, layout.NewSpacer())
+
 	loginBtn.Importance = widget.HighImportance  // Augmente l'importance du bouton
 	signupBtn.Importance = widget.HighImportance // Augmente l'importance du bouton
 
@@ -62,6 +76,7 @@ func LoginPage(app fyne.App) {
 		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace supplémentaire
 		username,
 		password,
+		checkButton,
 		text,
 		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace pour séparer les éléments
 		container.NewVBox(layout.NewSpacer()), // Ajout d'un espace supplémentaire
@@ -418,9 +433,19 @@ func ConcertPage(artist functions.Artist, myApp fyne.App) {
 }
 
 func HomePage(myApp fyne.App) {
-	user = functions.UserBuild(user.Username)
+
+	if functions.UserRemember.Username == "" {
+		user = functions.UserBuild(user.Username)
+	} else {
+		user = functions.UserBuild(functions.UserRemember.Username)
+	}
+
 	myWindow := MyApp.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
+
+	if checkRemember {
+		functions.RememberMe(user.Username)
+	}
 
 	navBar := createNavBar(myWindow)
 	rdmBar := createRandomArtistsGrid(myWindow)
@@ -483,8 +508,6 @@ func FavoritePage(myApp fyne.App) {
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()
 }
-
-var PasswordChange = false
 
 func AccountPage(myApp fyne.App) {
 	myWindow := MyApp.NewWindow("Groupie Trackers")
@@ -628,8 +651,6 @@ func ChangePasswordPage(myApp fyne.App) {
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()
 }
-
-var PpfChange = false
 
 func ChangePpf(myApp fyne.App) {
 	myWindow := myApp.NewWindow("Image Copier")

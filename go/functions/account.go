@@ -26,8 +26,15 @@ type Account struct {
 	Ppf       string   `json:"Ppf"`
 }
 
+// Struct for the remember me
+type Remember struct {
+	Username string `json:"Username"`
+}
+
 // Variable for the db
 var dataAccount AccountData
+
+var UserRemember Remember
 
 // Function for loading the all db
 func LoadDb() {
@@ -37,6 +44,17 @@ func LoadDb() {
 	}
 
 	err = json.Unmarshal(data, &dataAccount)
+	if err != nil {
+		log.Println("Erreur lors de la conversion JSON :", err)
+	}
+
+	data, err = os.ReadFile("./database/saveAccount.json")
+
+	if err != nil {
+		log.Println("Erreur lors de la lecture du fichier :", err)
+	}
+
+	err = json.Unmarshal(data, &UserRemember)
 	if err != nil {
 		log.Println("Erreur lors de la conversion JSON :", err)
 	}
@@ -153,4 +171,39 @@ func HashPasswordSHA256(password string) string {
 	hasher.Write([]byte(password))
 	hash := hasher.Sum(nil)
 	return hex.EncodeToString(hash)
+}
+
+// Function for remember me
+func RememberMe(username string) {
+
+	UserRemember.Username = username
+
+	data, err := json.Marshal(UserRemember)
+	if err != nil {
+		log.Println("Erreur lors de la conversion JSON :", err)
+		return
+	}
+
+	err = os.WriteFile("./database/saveAccount.json", data, 0644)
+	if err != nil {
+		log.Println("Erreur lors de l'écriture dans le fichier :", err)
+		return
+	}
+}
+
+// Function for log out
+func LogOut() {
+	UserRemember.Username = ""
+
+	data, err := json.Marshal(UserRemember)
+	if err != nil {
+		log.Println("Erreur lors de la conversion JSON :", err)
+		return
+	}
+
+	err = os.WriteFile("./database/saveAccount.json", data, 0644)
+	if err != nil {
+		log.Println("Erreur lors de l'écriture dans le fichier :", err)
+		return
+	}
 }

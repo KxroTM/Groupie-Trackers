@@ -7,7 +7,11 @@ import (
 
 func main() {
 	// start the app by calling the login page
-	app.LoginPage(app.MyApp)
+	if functions.UserRemember.Username == "" {
+		app.LoginPage(app.MyApp)
+	} else {
+		app.HomePage(app.MyApp)
+	}
 	app.MyApp.Run()
 }
 

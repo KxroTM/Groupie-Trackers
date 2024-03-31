@@ -116,6 +116,7 @@ func createNavBar(myWindow fyne.Window) *fyne.Container {
 	})
 
 	logoutButton := widget.NewButtonWithIcon("", theme.LogoutIcon(), func() {
+		functions.LogOut()
 		LoginPage(MyApp)
 		myWindow.Hide()
 	})
