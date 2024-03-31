@@ -333,6 +333,7 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 		myWindow.Hide()
 	})
 	concertButton := container.NewHBox(layout.NewSpacer(), concert, layout.NewSpacer())
+	spacer := canvas.NewText("              ", color.White)
 
 	name.Alignment = fyne.TextAlignCenter
 	member.Alignment = fyne.TextAlignCenter
@@ -349,9 +350,8 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 				ArtistPage(artist, myApp)
 				myWindow.Hide()
 			})
-
-			favoriteButton := container.NewHBox(layout.NewSpacer(), favorite, layout.NewSpacer())
-			form := container.NewVBox(txt, txt, image, txt, favoriteButton, txt, name, member, member2, creationDate, album, txt, concertButton)
+			favoriteButton := container.NewHBox(layout.NewSpacer(), layout.NewSpacer(), favorite, spacer)
+			form := container.NewVBox(txt, txt, favoriteButton, txt, image, txt, name, member, member2, creationDate, album, txt, concertButton)
 			myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, form))
 
 		} else {
@@ -361,9 +361,8 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 				ArtistPage(artist, myApp)
 				myWindow.Hide()
 			})
-
-			favoriteButton := container.NewHBox(layout.NewSpacer(), favorite, layout.NewSpacer())
-			form := container.NewVBox(txt, txt, image, txt, favoriteButton, txt, name, member, member2, creationDate, album, txt, concertButton)
+			favoriteButton := container.NewHBox(layout.NewSpacer(), layout.NewSpacer(), favorite, spacer)
+			form := container.NewVBox(txt, txt, favoriteButton, txt, image, txt, favoriteButton, txt, name, member, member2, creationDate, album, txt, concertButton)
 			myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, form))
 
 		}
@@ -375,9 +374,8 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 				ArtistPage(artist, myApp)
 				myWindow.Hide()
 			})
-
-			favoriteButton := container.NewHBox(layout.NewSpacer(), favorite, layout.NewSpacer())
-			form := container.NewVBox(txt, txt, image, txt, favoriteButton, txt, name, member, creationDate, album, txt, concertButton)
+			favoriteButton := container.NewHBox(layout.NewSpacer(), layout.NewSpacer(), favorite, spacer)
+			form := container.NewVBox(txt, txt, favoriteButton, txt, image, txt, name, member, creationDate, album, txt, concertButton)
 			myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, form))
 
 		} else {
@@ -387,9 +385,8 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 				ArtistPage(artist, myApp)
 				myWindow.Hide()
 			})
-
-			favoriteButton := container.NewHBox(layout.NewSpacer(), favorite, layout.NewSpacer())
-			form := container.NewVBox(txt, txt, image, txt, favoriteButton, txt, name, member, creationDate, album, txt, concertButton)
+			favoriteButton := container.NewHBox(layout.NewSpacer(), layout.NewSpacer(), favorite, spacer)
+			form := container.NewVBox(txt, txt, favoriteButton, txt, image, txt, name, member, creationDate, album, txt, concertButton)
 			myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, form))
 
 		}
