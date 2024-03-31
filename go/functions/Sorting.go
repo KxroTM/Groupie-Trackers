@@ -120,7 +120,11 @@ func ArtistbyCountry(allArtists AllArtists, allLocations AllLocations, country [
 			for k := 0; k < len(allLocations.Index[i].Locations); k++ {
 
 				if strings.Split(allLocations.Index[i].Locations[k], "-")[len(strings.Split(allLocations.Index[i].Locations[k], "-"))-1] == country[j] {
-					artistList = append(artistList, allArtists[i])
+					if i == 0 {
+						artistList = append(artistList, allArtists[i])
+					} else {
+						artistList = append(artistList, allArtists[i-1])
+					}
 					break
 				}
 			}
@@ -145,5 +149,3 @@ func SortByFirstAlbumAscending(allArtists AllArtists) AllArtists {
 	})
 	return allArtists
 }
-
-

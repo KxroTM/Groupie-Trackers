@@ -2,7 +2,6 @@ package app
 
 import (
 	"Groupie_Trackers/go/functions"
-	"fmt"
 	"strconv"
 
 	"fyne.io/fyne/v2"
@@ -162,6 +161,14 @@ func FilterPage(myApp fyne.App) {
 	)
 
 	// Déclaration et initialisation des checkboxes pour Locations
+	countriesname := []string{"germany", "saudi_arabia", "netherlands_antilles", "argentina", "australia",
+		"austria", "belgium", "belarus", "brazil", "canada", "chile", "china", "colombia",
+		"south_korea", "costa_rica", "denmark", "united_arab_emirates", "usa", "spain",
+		"finland", "france", "greece", "hungary", "india", "indonesia", "ireland", "italy",
+		"japan", "mexico", "norway", "new_caledonia", "new_zealand", "netherlands", "peru",
+		"philippines", "poland", "french_polynesia", "portugal", "qatar", "romania", "uk",
+		"slovakia", "sweden", "switzerland", "taiwan", "czechia", "thailand",
+	}
 
 	germany := widget.NewCheck("Allemagne", func(checked bool) {})
 	saudi_arabia := widget.NewCheck("Arabie saoudite", func(checked bool) {})
@@ -211,11 +218,53 @@ func FilterPage(myApp fyne.App) {
 	czechia := widget.NewCheck("Tchéquie", func(checked bool) {})
 	thailand := widget.NewCheck("Thaïlande", func(checked bool) {})
 
+	countrieswidget := []*widget.Check{
+		germany, saudi_arabia, netherlands_antilles, argentina, australia,
+		austria, belgium, belarus, brazil, canada, chile, china, colombia,
+		south_korea, costa_rica, denmark, united_arab_emirates, usa, spain,
+		finland, france, greece, hungary, india, indonesia, ireland, italy,
+		japan, mexico, norway, new_caledonia, new_zealand, netherlands, peru,
+		philippines, poland, french_polynesia, portugal, qatar, romania, uk,
+		slovakia, sweden, switzerland, taiwan, czechia, thailand,
+	}
+
+	countriesUncheck := widget.NewButton("Uncheck All Countries", func() {
+		uncheckChecks(
+			germany, saudi_arabia, netherlands_antilles, argentina, australia,
+			austria, belgium, belarus, brazil, canada, chile, china, colombia,
+			south_korea, costa_rica, denmark, united_arab_emirates, usa, spain,
+			finland, france, greece, hungary, india, indonesia, ireland, italy,
+			japan, mexico, norway, new_caledonia, new_zealand, netherlands, peru,
+			philippines, poland, french_polynesia, portugal, qatar, romania, uk,
+			slovakia, sweden, switzerland, taiwan, czechia, thailand,
+		)
+	})
+
+	countriesCheck := widget.NewButton("Check All Countries", func() {
+		checkChecks(
+			germany, saudi_arabia, netherlands_antilles, argentina, australia,
+			austria, belgium, belarus, brazil, canada, chile, china, colombia,
+			south_korea, costa_rica, denmark, united_arab_emirates, usa, spain,
+			finland, france, greece, hungary, india, indonesia, ireland, italy,
+			japan, mexico, norway, new_caledonia, new_zealand, netherlands, peru,
+			philippines, poland, french_polynesia, portugal, qatar, romania, uk,
+			slovakia, sweden, switzerland, taiwan, czechia, thailand,
+		)
+	})
+
 	locations := container.NewVBox(
-		container.NewHBox(
-			layout.NewSpacer(),
-			widget.NewLabel("Localisation des concerts :"),
-			layout.NewSpacer(),
+		container.NewVBox(
+			container.NewHBox(
+				layout.NewSpacer(),
+				widget.NewLabel("Localisation des concerts :"),
+				layout.NewSpacer(),
+			),
+			container.NewHBox(
+				layout.NewSpacer(),
+				countriesUncheck,
+				countriesCheck,
+				layout.NewSpacer(),
+			),
 		),
 		container.NewHBox(
 			layout.NewSpacer(),
@@ -300,10 +349,14 @@ func FilterPage(myApp fyne.App) {
 
 		// Obtenir les nombres de membres cochés
 		checkedNumbers := getCheckedNumbers(oneM, twoM, threeM, fourM, fiveM, sixM, sevenM)
-		fmt.Println(checkedNumbers)
-
 		// Appliquer le filtre sur le nombre de membres
 		artists = functions.ArtistbyNumberofMemberCheck(artists, checkedNumbers)
+
+		// Obtenir les pays cochés
+		checkedcountries := getCheckedCountries(countrieswidget, countriesname)
+		// Appliquer le filtre sur les pays cochés
+		LocationsData := functions.LocationsData()
+		artists = functions.ArtistbyCountry(artists, LocationsData, checkedcountries)
 
 		artistsGrid := createArtistsGrid(artists, myWindow)
 
@@ -319,23 +372,14 @@ func FilterPage(myApp fyne.App) {
 		sliderFirstAlbumStart.SetValue(1967)
 		sliderFirstAlbumEnd.SetValue(2018)
 
-		oneM.SetChecked(false)
-		twoM.SetChecked(false)
-		threeM.SetChecked(false)
-		fourM.SetChecked(false)
-		fiveM.SetChecked(false)
-		sixM.SetChecked(false)
-		sevenM.SetChecked(false)
+		oneM.SetChecked(true)
+		twoM.SetChecked(true)
+		threeM.SetChecked(true)
+		fourM.SetChecked(true)
+		fiveM.SetChecked(true)
+		sixM.SetChecked(true)
+		sevenM.SetChecked(true)
 
-		uncheckChecks(
-			germany, saudi_arabia, netherlands_antilles, argentina, australia,
-			austria, belgium, belarus, brazil, canada, chile, china, colombia,
-			south_korea, costa_rica, denmark, united_arab_emirates, usa, spain,
-			finland, france, greece, hungary, india, indonesia, ireland, italy,
-			japan, mexico, norway, new_caledonia, new_zealand, netherlands, peru,
-			philippines, poland, french_polynesia, portugal, qatar, romania, uk,
-			slovakia, sweden, switzerland, taiwan, czechia, thailand,
-		)
 	})
 
 	filterContainer := container.NewVBox(
@@ -359,7 +403,7 @@ func FilterPage(myApp fyne.App) {
 
 	myWindow.SetContent(container.NewBorder(topContent, nil, nil, nil, botContent)) // Utiliser scrollContainer à la place de gridContainer
 	myWindow.CenterOnScreen()
-	myWindow.Resize(fyne.NewSize(800, 800))
+	myWindow.Resize(fyne.NewSize(800, 850))
 	myWindow.Show()
 }
 
@@ -369,15 +413,31 @@ func uncheckChecks(checks ...*widget.Check) {
 	}
 }
 
+func checkChecks(checks ...*widget.Check) {
+	for _, check := range checks {
+		check.SetChecked(true)
+	}
+}
+
 func getCheckedNumbers(checks ...*widget.Check) []int {
 	var checkedNumbers []int
-
-	fmt.Println(checks)
 	for i, check := range checks {
 		if check.Checked {
 			checkedNumbers = append(checkedNumbers, i+1) // Ajouter 1 car les nombres de membres commencent à partir de 1
 		}
 	}
-	fmt.Println(checkedNumbers)
 	return checkedNumbers
+}
+
+func getCheckedCountries(widgets []*widget.Check, countriesname []string) []string {
+	var checkedCountries []string
+
+	for i, widget := range widgets {
+		// i += 1
+		if widget.Checked {
+			checkedCountries = append(checkedCountries, countriesname[i])
+		}
+	}
+
+	return checkedCountries
 }
