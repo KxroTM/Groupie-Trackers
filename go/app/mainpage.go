@@ -11,6 +11,7 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"time"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
@@ -376,4 +377,111 @@ func createCustomIcon(filename string) fyne.Resource {
 	image, _ := loadImageBinary(filename)
 	myImage := fyne.NewStaticResource("my_image.png", image)
 	return myImage
+}
+
+func SpotifyEmbed(artist functions.Artist) *fyne.Container {
+	var date *canvas.Text
+	var date2 *canvas.Text
+	var embed *fyne.Container
+
+	img := loadImageFromURL(artist.Image)
+	img.SetMinSize(fyne.NewSize(150, 150))
+	title := canvas.NewText(artist.Name, color.White)
+	title.TextStyle = fyne.TextStyle{Bold: true}
+	title.TextSize = 20
+
+	if len(artist.Members) > 4 {
+		members := ""
+		members2 := ""
+
+		for i := 0; i < len(artist.Members)/2; i++ {
+			if i == 0 {
+				members += artist.Members[i]
+			} else {
+				members += ", " + artist.Members[i]
+			}
+		}
+
+		for i := len(artist.Members) / 2; i < len(artist.Members); i++ {
+			if i == len(artist.Members) {
+				members2 += artist.Members[i]
+			} else if i == len(artist.Members)/2 {
+				members2 += artist.Members[i]
+			} else {
+				members2 += ", " + artist.Members[i]
+			}
+		}
+
+		date = canvas.NewText(artist.FirstAlbum+", "+members, color.White)
+		date2 = canvas.NewText(members2, color.White)
+	} else {
+		artistMembers := ""
+		for i := 0; i < len(artist.Members); i++ {
+			artistMembers += artist.Members[i]
+			if i != len(artist.Members)-1 {
+				artistMembers += ", "
+			}
+		}
+		date = canvas.NewText(artist.FirstAlbum+", "+artistMembers, color.White)
+	}
+
+	spacer := canvas.NewText("  ", color.White)
+	spacertxt := canvas.NewText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", color.Transparent)
+
+	musicTime := 190.0
+
+	timeLeftTxt := canvas.NewText("03:10", color.White)
+	currentTimetxt := canvas.NewText("00:00", color.White)
+
+	s := widget.NewSlider(0, musicTime)
+
+	var isPlaying = true
+	var playButton *widget.Button
+	playButton = widget.NewButtonWithIcon("", theme.MediaPauseIcon(), func() {
+		if isPlaying {
+			playButton.SetIcon(theme.MediaPauseIcon())
+			isPlaying = false
+		} else {
+			playButton.SetIcon(theme.MediaPlayIcon())
+			isPlaying = true
+		}
+	})
+
+	go func() {
+		for {
+			if isPlaying {
+				for i := 0.0; i <= musicTime; i++ {
+					time.Sleep(time.Second)
+					s.Value = i
+					s.Refresh()
+					currentSeconds := int(s.Value) % 60
+					currentMinutes := int(s.Value) / 60
+					currentTime := fmt.Sprintf("%02d:%02d", currentMinutes, currentSeconds)
+					currentTimetxt.Text = currentTime
+					currentTimetxt.Refresh()
+
+					remainingSeconds := int(musicTime-s.Value) % 60
+					remainingMinutes := int(musicTime-s.Value) / 60
+					remainingTime := fmt.Sprintf("%02d:%02d", remainingMinutes, remainingSeconds)
+					timeLeftTxt.Text = remainingTime
+					timeLeftTxt.Refresh()
+				}
+			}
+		}
+	}()
+
+	rightContent := container.NewHBox(timeLeftTxt, spacer, spacer, spacer, playButton)
+	slider := container.NewBorder(nil, nil, currentTimetxt, rightContent, s)
+
+	if len(artist.Members) > 4 {
+		embed = container.NewVBox(title, date, date2, spacer, spacertxt, slider)
+	} else {
+		embed = container.NewVBox(title, date, spacer, spacertxt, slider)
+	}
+
+	body := container.NewHBox(img, spacer, embed)
+	bg := canvas.NewRectangle(color.RGBA{4, 59, 92, 255})
+	img.Resize(fyne.NewSize(180, 180))
+
+	return container.NewBorder(nil, nil, nil, nil, bg, body)
 }

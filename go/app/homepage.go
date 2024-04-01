@@ -421,7 +421,9 @@ func ConcertPage(artist functions.Artist, myApp fyne.App) {
 
 	navBar := createNavBar(myWindow)
 
-	content := container.NewStack(container.NewBorder(navBar, nil, nil, nil))
+	test := SpotifyEmbed(artist)
+
+	content := container.NewStack(container.NewBorder(navBar, test, nil, nil))
 
 	myWindow.SetOnClosed(func() {
 		myApp.Quit()
