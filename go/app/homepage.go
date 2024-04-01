@@ -404,7 +404,7 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 			})
 			favoriteButton := container.NewHBox(layout.NewSpacer(), layout.NewSpacer(), favorite, spacer)
 			imgContentCenter := container.NewCenter(container.NewHBox(layout.NewSpacer(), image, layout.NewSpacer()))
-			form := container.NewVScroll(container.NewVBox(txt, txt, favoriteButton, txt, txt, imgContentCenter, txt, playButton, txt, favoriteButton, txt, name, member, member2, creationDate, album, txt, concertButton, txt))
+			form := container.NewVScroll(container.NewVBox(txt, txt, favoriteButton, txt, txt, imgContentCenter, txt, playButton, txt, name, member, member2, creationDate, album, txt, concertButton, txt))
 			if !isPlaying {
 				content = container.NewBorder(navBar, nil, nil, nil, BackgroundRect, form)
 			} else {
