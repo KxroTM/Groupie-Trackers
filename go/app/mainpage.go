@@ -383,6 +383,7 @@ func SpotifyEmbed(artist functions.Artist) *fyne.Container {
 	var date *canvas.Text
 	var date2 *canvas.Text
 	var embed *fyne.Container
+	var sliderValue float64
 
 	img := loadImageFromURL(artist.Image)
 	img.SetMinSize(fyne.NewSize(150, 150))
@@ -430,42 +431,77 @@ func SpotifyEmbed(artist functions.Artist) *fyne.Container {
 
 	musicTime := 190.0
 
-	timeLeftTxt := canvas.NewText("03:10", color.White)
-	currentTimetxt := canvas.NewText("00:00", color.White)
-
 	s := widget.NewSlider(0, musicTime)
 
 	var isPlaying = true
 	var playButton *widget.Button
+
+	timeLeftTxt := canvas.NewText("03:10", color.White)
+	currentTimetxt := canvas.NewText("00:00", color.White)
+
 	playButton = widget.NewButtonWithIcon("", theme.MediaPauseIcon(), func() {
 		if isPlaying {
-			playButton.SetIcon(theme.MediaPauseIcon())
+			playButton.SetIcon(theme.MediaPlayIcon())
 			isPlaying = false
 		} else {
-			playButton.SetIcon(theme.MediaPlayIcon())
+			playButton.SetIcon(theme.MediaPauseIcon())
 			isPlaying = true
+
+			go func() {
+				for {
+					if !isPlaying {
+						break
+					}
+					for i := sliderValue; i <= musicTime; i++ {
+						if !isPlaying {
+							break
+						}
+						time.Sleep(time.Second)
+						s.Value = i
+						s.Refresh()
+
+						currentSeconds := int(s.Value) % 60
+						currentMinutes := int(s.Value) / 60
+						currentTime := fmt.Sprintf("%02d:%02d", currentMinutes, currentSeconds)
+						currentTimetxt.Text = currentTime
+						currentTimetxt.Refresh()
+
+						remainingSeconds := int(musicTime-s.Value) % 60
+						remainingMinutes := int(musicTime-s.Value) / 60
+						remainingTime := fmt.Sprintf("%02d:%02d", remainingMinutes, remainingSeconds)
+						timeLeftTxt.Text = remainingTime
+						timeLeftTxt.Refresh()
+					}
+				}
+			}()
 		}
 	})
 
 	go func() {
 		for {
-			if isPlaying {
-				for i := 0.0; i <= musicTime; i++ {
-					time.Sleep(time.Second)
-					s.Value = i
-					s.Refresh()
-					currentSeconds := int(s.Value) % 60
-					currentMinutes := int(s.Value) / 60
-					currentTime := fmt.Sprintf("%02d:%02d", currentMinutes, currentSeconds)
-					currentTimetxt.Text = currentTime
-					currentTimetxt.Refresh()
-
-					remainingSeconds := int(musicTime-s.Value) % 60
-					remainingMinutes := int(musicTime-s.Value) / 60
-					remainingTime := fmt.Sprintf("%02d:%02d", remainingMinutes, remainingSeconds)
-					timeLeftTxt.Text = remainingTime
-					timeLeftTxt.Refresh()
+			if !isPlaying {
+				break
+			}
+			for i := 0.0; i <= musicTime; i++ {
+				if !isPlaying {
+					break
 				}
+				time.Sleep(time.Second)
+				s.Value = i
+				s.Refresh()
+				sliderValue = s.Value
+
+				currentSeconds := int(s.Value) % 60
+				currentMinutes := int(s.Value) / 60
+				currentTime := fmt.Sprintf("%02d:%02d", currentMinutes, currentSeconds)
+				currentTimetxt.Text = currentTime
+				currentTimetxt.Refresh()
+
+				remainingSeconds := int(musicTime-s.Value) % 60
+				remainingMinutes := int(musicTime-s.Value) / 60
+				remainingTime := fmt.Sprintf("%02d:%02d", remainingMinutes, remainingSeconds)
+				timeLeftTxt.Text = remainingTime
+				timeLeftTxt.Refresh()
 			}
 		}
 	}()
@@ -474,9 +510,9 @@ func SpotifyEmbed(artist functions.Artist) *fyne.Container {
 	slider := container.NewBorder(nil, nil, currentTimetxt, rightContent, s)
 
 	if len(artist.Members) > 4 {
-		embed = container.NewVBox(title, date, date2, spacer, spacertxt, slider)
+		embed = container.NewVBox(spacer, title, date, date2, spacertxt, slider)
 	} else {
-		embed = container.NewVBox(title, date, spacer, spacertxt, slider)
+		embed = container.NewVBox(spacer, title, date, spacertxt, slider)
 	}
 
 	body := container.NewHBox(img, spacer, embed)
