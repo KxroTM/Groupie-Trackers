@@ -22,6 +22,7 @@ var Icon, _ = fyne.LoadResourceFromPath("./Icon.png")
 var BackgroundRect = canvas.NewRectangle(color.RGBA{R: 16, G: 16, B: 16, A: 255}) //Background color (dark grey)
 var PasswordChange = false
 var PpfChange = false
+var isPlaying = false
 
 func LoginPage(app fyne.App) {
 	myWindow := app.NewWindow("Groupie Trackers")
@@ -195,6 +196,7 @@ func SignupPage(app fyne.App) {
 func SearchPage(myApp fyne.App) {
 	myWindow := myApp.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
+	isPlaying = false
 
 	filterButton := widget.NewButton("Recherche avec Filtre", func() {
 		FilterPage(MyApp)
@@ -298,7 +300,8 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 	myWindow := MyApp.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
 	user = functions.UserBuild(user.Username)
-
+	var content *fyne.Container
+	var playButtonText string
 	navBar := createNavBar(myWindow)
 
 	image := loadImageFromURL(artist.Image)
@@ -307,6 +310,7 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 	name := canvas.NewText("Nom : "+artist.Name, color.White)
 	members := ""
 	members2 := ""
+
 	if len(artist.Members) > 4 {
 		for i := 0; i < len(artist.Members)/2; i++ {
 			if i == 0 {
@@ -325,7 +329,6 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 				members2 += ", " + artist.Members[i]
 			}
 		}
-
 	} else {
 		for i := 0; i < len(artist.Members); i++ {
 			if i == 0 {
@@ -350,12 +353,31 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 	concertButton := container.NewHBox(layout.NewSpacer(), concert, layout.NewSpacer())
 	spacer := canvas.NewText("              ", color.White)
 
+	if !isPlaying {
+		playButtonText = "Écouter un extrait"
+	} else {
+		playButtonText = "Arrêter l'extrait"
+	}
+
+	play := widget.NewButton(playButtonText, func() {
+		if !isPlaying {
+			isPlaying = true
+		} else {
+			isPlaying = false
+		}
+		ArtistPage(artist, myApp)
+		myWindow.Hide()
+	})
+
+	playButton := container.NewHBox(layout.NewSpacer(), play, layout.NewSpacer())
+
 	name.Alignment = fyne.TextAlignCenter
 	member.Alignment = fyne.TextAlignCenter
 	member2.Alignment = fyne.TextAlignCenter
 	creationDate.Alignment = fyne.TextAlignCenter
 	album.Alignment = fyne.TextAlignCenter
 	txt := canvas.NewText("", color.White)
+	embed := SpotifyEmbed(artist)
 
 	if len(artist.Members) > 4 {
 		if !functions.IsInFavorite(user.Username, artist.Name) {
@@ -366,9 +388,13 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 				myWindow.Hide()
 			})
 			favoriteButton := container.NewHBox(layout.NewSpacer(), layout.NewSpacer(), favorite, spacer)
-			form := container.NewVBox(txt, txt, favoriteButton, txt, image, txt, name, member, member2, creationDate, album, txt, concertButton)
-			myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, form))
-
+			imgContentCenter := container.NewCenter(container.NewHBox(layout.NewSpacer(), image, layout.NewSpacer()))
+			form := container.NewVScroll(container.NewVBox(txt, txt, favoriteButton, txt, txt, imgContentCenter, txt, playButton, txt, name, member, member2, creationDate, album, txt, concertButton, txt))
+			if !isPlaying {
+				content = container.NewBorder(navBar, nil, nil, nil, BackgroundRect, form)
+			} else {
+				content = container.NewBorder(navBar, embed, nil, nil, BackgroundRect, form)
+			}
 		} else {
 			like := createCustomIcon("src/like.png")
 			favorite := widget.NewButtonWithIcon("", like, func() {
@@ -377,9 +403,13 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 				myWindow.Hide()
 			})
 			favoriteButton := container.NewHBox(layout.NewSpacer(), layout.NewSpacer(), favorite, spacer)
-			form := container.NewVBox(txt, txt, favoriteButton, txt, image, txt, favoriteButton, txt, name, member, member2, creationDate, album, txt, concertButton)
-			myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, form))
-
+			imgContentCenter := container.NewCenter(container.NewHBox(layout.NewSpacer(), image, layout.NewSpacer()))
+			form := container.NewVScroll(container.NewVBox(txt, txt, favoriteButton, txt, txt, imgContentCenter, txt, playButton, txt, favoriteButton, txt, name, member, member2, creationDate, album, txt, concertButton, txt))
+			if !isPlaying {
+				content = container.NewBorder(navBar, nil, nil, nil, BackgroundRect, form)
+			} else {
+				content = container.NewBorder(navBar, embed, nil, nil, BackgroundRect, form)
+			}
 		}
 	} else {
 		if !functions.IsInFavorite(user.Username, artist.Name) {
@@ -390,9 +420,13 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 				myWindow.Hide()
 			})
 			favoriteButton := container.NewHBox(layout.NewSpacer(), layout.NewSpacer(), favorite, spacer)
-			form := container.NewVBox(txt, txt, favoriteButton, txt, image, txt, name, member, creationDate, album, txt, concertButton)
-			myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, form))
-
+			imgContentCenter := container.NewCenter(container.NewHBox(layout.NewSpacer(), image, layout.NewSpacer()))
+			form := container.NewVScroll(container.NewVBox(txt, txt, favoriteButton, txt, txt, imgContentCenter, txt, playButton, txt, name, member, creationDate, album, txt, concertButton, txt))
+			if !isPlaying {
+				content = container.NewBorder(navBar, nil, nil, nil, BackgroundRect, form)
+			} else {
+				content = container.NewBorder(navBar, embed, nil, nil, BackgroundRect, form)
+			}
 		} else {
 			like := createCustomIcon("src/like.png")
 			favorite := widget.NewButtonWithIcon("", like, func() {
@@ -401,15 +435,21 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 				myWindow.Hide()
 			})
 			favoriteButton := container.NewHBox(layout.NewSpacer(), layout.NewSpacer(), favorite, spacer)
-			form := container.NewVBox(txt, txt, favoriteButton, txt, image, txt, name, member, creationDate, album, txt, concertButton)
-			myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, form))
-
+			imgContentCenter := container.NewCenter(container.NewHBox(layout.NewSpacer(), image, layout.NewSpacer()))
+			form := container.NewVScroll(container.NewVBox(txt, txt, favoriteButton, txt, txt, imgContentCenter, txt, playButton, txt, name, member, creationDate, album, txt, concertButton, txt))
+			if !isPlaying {
+				content = container.NewBorder(navBar, nil, nil, nil, BackgroundRect, form)
+			} else {
+				content = container.NewBorder(navBar, embed, nil, nil, BackgroundRect, form)
+			}
 		}
 	}
 
 	myWindow.SetOnClosed(func() {
 		myApp.Quit()
 	})
+
+	myWindow.SetContent(content)
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()
@@ -418,12 +458,11 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 func ConcertPage(artist functions.Artist, myApp fyne.App) {
 	myWindow := MyApp.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
+	isPlaying = false
 
 	navBar := createNavBar(myWindow)
 
-	test := SpotifyEmbed(artist)
-
-	content := container.NewStack(container.NewBorder(navBar, test, nil, nil))
+	content := container.NewStack(container.NewBorder(navBar, nil, nil, nil))
 
 	myWindow.SetOnClosed(func() {
 		myApp.Quit()
@@ -435,6 +474,7 @@ func ConcertPage(artist functions.Artist, myApp fyne.App) {
 }
 
 func HomePage(myApp fyne.App) {
+	isPlaying = false
 
 	if functions.UserRemember.Username == "" {
 		user = functions.UserBuild(user.Username)
@@ -487,6 +527,8 @@ func HomePage(myApp fyne.App) {
 }
 
 func FavoritePage(myApp fyne.App) {
+	isPlaying = false
+
 	myWindow := MyApp.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
 	user = functions.UserBuild(user.Username)
@@ -512,6 +554,8 @@ func FavoritePage(myApp fyne.App) {
 }
 
 func AccountPage(myApp fyne.App) {
+	isPlaying = false
+
 	myWindow := MyApp.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
 	user = functions.UserBuild(user.Username)

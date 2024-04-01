@@ -379,6 +379,7 @@ func createCustomIcon(filename string) fyne.Resource {
 	return myImage
 }
 
+// Create a fake spotify embed
 func SpotifyEmbed(artist functions.Artist) *fyne.Container {
 	var date *canvas.Text
 	var date2 *canvas.Text
@@ -520,5 +521,5 @@ func SpotifyEmbed(artist functions.Artist) *fyne.Container {
 	bg := canvas.NewRectangle(color.RGBA{4, 59, 92, 255})
 	img.Resize(fyne.NewSize(180, 180))
 
-	return container.NewBorder(nil, container.NewVBox(spacer, spacer), container.NewVBox(spacer, spacer), spacer, bg, body)
+	return container.NewBorder(nil, nil, nil, nil, bg, body)
 }
