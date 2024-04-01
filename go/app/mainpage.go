@@ -427,6 +427,7 @@ func SpotifyEmbed(artist functions.Artist) *fyne.Container {
 	}
 
 	spacer := canvas.NewText("  ", color.White)
+	borderSpacer := canvas.NewText("", color.Transparent)
 	spacertxt := canvas.NewText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", color.Transparent)
 
 	musicTime := 190.0
@@ -510,14 +511,14 @@ func SpotifyEmbed(artist functions.Artist) *fyne.Container {
 	slider := container.NewBorder(nil, nil, currentTimetxt, rightContent, s)
 
 	if len(artist.Members) > 4 {
-		embed = container.NewVBox(spacer, title, date, date2, spacertxt, slider)
+		embed = container.NewVBox(spacer, title, date, date2, spacertxt, slider, spacertxt)
 	} else {
-		embed = container.NewVBox(spacer, title, date, spacertxt, slider)
+		embed = container.NewVBox(spacer, title, date, spacertxt, slider, spacertxt)
 	}
 
-	body := container.NewHBox(img, spacer, embed)
+	body := container.NewHBox(borderSpacer, img, spacer, embed)
 	bg := canvas.NewRectangle(color.RGBA{4, 59, 92, 255})
 	img.Resize(fyne.NewSize(180, 180))
 
-	return container.NewBorder(nil, nil, nil, nil, bg, body)
+	return container.NewBorder(nil, container.NewVBox(spacer, spacer), container.NewVBox(spacer, spacer), spacer, bg, body)
 }
