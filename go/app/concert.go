@@ -62,7 +62,7 @@ func ConcertPage(artist functions.Artist, myApp fyne.App) {
 		printable_location := CodeToShowLocation(location)
 
 		locationButton := widget.NewButton(printable_location, func() {
-			ConcertMap(MyApp)
+			ConcertMap(artist, myApp)
 			myWindow.Hide()
 		})
 		hbox := container.NewHBox(
@@ -74,11 +74,11 @@ func ConcertPage(artist functions.Artist, myApp fyne.App) {
 		for _, date := range dates {
 			datebox.Add(widget.NewLabel(CodeToShowDates(date)))
 		}
-		scrollContainer := container.NewVScroll(datebox)
+		// scrollContainer := container.NewHScroll(datebox)
 
 		allbox := container.NewHBox(
 			hbox,
-			scrollContainer,
+			datebox,
 		)
 
 		concerts.Add(allbox)
