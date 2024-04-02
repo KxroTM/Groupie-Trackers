@@ -4,10 +4,12 @@ import (
 	"Groupie_Trackers/go/functions"
 	"fmt"
 	"strings"
+	"time"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -23,6 +25,11 @@ func ConcertPage(artist functions.Artist, myApp fyne.App) {
 	var artistlocations []string
 	var artistdates []string
 
+	backButton := widget.NewButtonWithIcon("", theme.NavigateBackIcon(), func() {
+		ArtistPage(artist, myApp)
+		myWindow.Hide()
+	})
+
 	for _, location := range locations.Index {
 		if artist.ID == location.ID {
 			artistlocations = location.Locations
@@ -35,44 +42,49 @@ func ConcertPage(artist functions.Artist, myApp fyne.App) {
 		}
 	}
 
-	fmt.Println(artistlocations, artistdates)
-	fmt.Println(len(artistlocations), len(artistdates))
-
 	// Création de la planification des concerts pour l'artiste
 	concertSchedule := GetConcertSchedule(artistlocations, artistdates)
 
-	// Affichage de la planification des concerts
-	fmt.Println(concertSchedule)
-
 	// Création du conteneur VBox pour afficher les informations
-	creationDateRange := container.NewVBox(
+	topContent := container.NewVBox(
 		container.NewHBox(
+			backButton,
 			layout.NewSpacer(),
 			widget.NewLabel("Concerts :"),
 			layout.NewSpacer(),
 		),
 	)
 
+	concerts := container.NewVBox()
+
 	// Itération sur la planification des concerts pour créer les éléments d'interface graphique
 	for location, dates := range concertSchedule {
+		printable_location := CodeToShowLocation(location)
+
+		locationButton := widget.NewButton(printable_location, func() {
+			ConcertMap(MyApp)
+			myWindow.Hide()
+		})
 		hbox := container.NewHBox(
-			layout.NewSpacer(),
-			widget.NewLabel(location), // Ajout du label de l'emplacement
+			locationButton,
 		)
-
-		// Ajout des dates à la HBox
-		for _, date := range dates {
-			hbox.Add(widget.NewLabel(date))
-		}
-
-		// Espace flexible à droite pour aligner les dates au centre
 		hbox.Add(layout.NewSpacer())
 
-		// Ajout de la HBox au conteneur VBox
-		creationDateRange.Add(hbox)
+		datebox := container.NewHBox()
+		for _, date := range dates {
+			datebox.Add(widget.NewLabel(CodeToShowDates(date)))
+		}
+		scrollContainer := container.NewVScroll(datebox)
+
+		allbox := container.NewHBox(
+			hbox,
+			scrollContainer,
+		)
+
+		concerts.Add(allbox)
 	}
 
-	content := container.NewStack(container.NewBorder(navBar, nil, nil, nil, creationDateRange))
+	content := container.NewStack(container.NewBorder(container.NewVBox(navBar, topContent), nil, nil, nil, concerts))
 
 	myWindow.SetOnClosed(func() {
 		myApp.Quit()
@@ -107,4 +119,35 @@ func GetConcertSchedule(locations, dates []string) map[string][]string {
 		}
 	}
 	return concertSchedule
+}
+
+func CodeToShowLocation(location string) string {
+	Splitlocation := strings.Split(location, "-")
+
+	city := Splitlocation[0]
+	city = strings.ReplaceAll(city, "_", " ")
+	city = strings.ToUpper(city)
+
+	country := Splitlocation[1]
+	country = strings.ReplaceAll(country, "_", " ")
+	country = strings.ToUpper(country)
+
+	return city + ", " + country
+}
+
+func CodeToShowDates(date string) string {
+	if date[0] == '*' {
+		date = date[1:]
+	}
+	slicedate, err := functions.DateStringToIntSlice(date)
+	if err != nil {
+		fmt.Println("Error:", err)
+	}
+
+	printabledate := time.Date(slicedate[2], time.Month(slicedate[1]), slicedate[0], 0, 0, 0, 0, time.UTC)
+
+	formattedDate := printabledate.Format("Mon. 2 Jan. 2006")
+
+	return formattedDate
+
 }
