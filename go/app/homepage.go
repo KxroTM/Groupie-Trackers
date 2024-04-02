@@ -585,7 +585,7 @@ func HomePage(myApp fyne.App) {
 		myApp.Quit()
 	})
 	myWindow.CenterOnScreen()
-	myWindow.Resize(fyne.NewSize(800, 600))
+	myWindow.Resize(fyne.NewSize(900, 650))
 	myWindow.Show()
 }
 
@@ -812,10 +812,13 @@ func ChangePpf(myApp fyne.App) {
 
 	centeredContent := container.NewCenter(content)
 
+	myWindow.SetOnClosed(func() {
+		myApp.Quit()
+	})
+
 	myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, centeredContent))
-	myWindow.SetContent(form)
 	myWindow.CenterOnScreen()
-	myWindow.Resize(fyne.NewSize(300, 200))
+	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()
 }
 
@@ -833,6 +836,12 @@ func PlaylistPage(myApp fyne.App) {
 	title.TextStyle = fyne.TextStyle{Bold: true}
 	title.Alignment = fyne.TextAlignCenter
 
+	createOneButton := widget.NewButton("Créer une playlist", func() {
+		CreatePlaylistPage(myApp, functions.Artist{})
+		myWindow.Hide()
+	})
+	buttonContent := container.NewHBox(layout.NewSpacer(), createOneButton)
+
 	playlistsContainer := container.NewVBox()
 
 	for _, playlist := range user.Playlists.Playlist {
@@ -840,7 +849,7 @@ func PlaylistPage(myApp fyne.App) {
 		Title.TextSize = 22
 		Title.TextStyle = fyne.TextStyle{Bold: true}
 		playlistButton := widget.NewButtonWithIcon("", theme.NavigateNextIcon(), func() {
-			OnePlaylistPage(myApp, *user, playlist.Name)
+			OnePlaylistPage(myApp, user, playlist.Name)
 			myWindow.Hide()
 		})
 		deleteButton := widget.NewButtonWithIcon("", theme.DeleteIcon(), func() {
@@ -854,7 +863,7 @@ func PlaylistPage(myApp fyne.App) {
 		playlistsContainer.Add(container.NewVBox(titleContent, spacer, playlistGrid, spacer))
 	}
 
-	fullContent := container.NewVScroll(container.NewVBox(spacer, title, spacer, playlistsContainer, spacer))
+	fullContent := container.NewVScroll(container.NewVBox(spacer, buttonContent, title, spacer, playlistsContainer, spacer))
 	content := container.NewStack(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, fullContent))
 
 	myWindow.SetOnClosed(func() {
@@ -866,15 +875,23 @@ func PlaylistPage(myApp fyne.App) {
 	myWindow.Show()
 }
 
-func OnePlaylistPage(myApp fyne.App, user functions.Account, playlist string) {
+func OnePlaylistPage(myApp fyne.App, user *functions.Account, playlist string) {
 	myWindow := myApp.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
-
+	user = functions.UserBuild(user.Username)
 	navBar := createNavBar(myWindow)
 
-	playlistGrid := createFullPlaylistGrid(myWindow, user, playlist)
+	backButton := widget.NewButtonWithIcon("", theme.NavigateBackIcon(), func() {
+		PlaylistPage(myApp)
+		myWindow.Hide()
+	})
 
-	content := container.NewStack(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, playlistGrid))
+	playlistGrid := createFullPlaylistGrid(myWindow, user, playlist)
+	gridContainer := container.NewStack()
+	gridContainer.Add(playlistGrid)
+
+	content := container.NewStack(container.NewBorder(container.NewVBox(navBar, container.NewHBox(backButton, layout.NewSpacer())),
+		nil, nil, nil, BackgroundRect, gridContainer))
 
 	myWindow.SetOnClosed(func() {
 		myApp.Quit()
@@ -905,9 +922,14 @@ func CreatePlaylistPage(myApp fyne.App, artist functions.Artist) {
 			}
 		}
 		functions.CreatePlaylist(user.Username, playlistName.Text)
-		playlistCreate = true
-		ArtistPage(artist, myApp)
-		myWindow.Hide()
+		if artist.Name != "" {
+			playlistCreate = true
+			ArtistPage(artist, myApp)
+			myWindow.Hide()
+		} else {
+			PlaylistPage(myApp)
+			myWindow.Hide()
+		}
 	})
 
 	submitButton.Importance = widget.HighImportance

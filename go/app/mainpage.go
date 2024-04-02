@@ -462,12 +462,12 @@ func createPlaylistGrid(w fyne.Window, user functions.Account, playlist string) 
 	return grid
 }
 
-func createFullPlaylistGrid(w fyne.Window, user functions.Account, playlist string) fyne.CanvasObject {
+func createFullPlaylistGrid(w fyne.Window, user *functions.Account, playlist string) fyne.CanvasObject {
 	var artistCards []fyne.CanvasObject
 	var artists []functions.Artist
 	var index int
 
-	for i := 0; i < len(user.Playlists.Playlist); i++ {
+	for i := 0; i < len(user.Playlists.Playlist)-1; i++ {
 		if user.Playlists.Playlist[i].Name == playlist {
 			index = i
 			break
@@ -494,6 +494,7 @@ func createFullPlaylistGrid(w fyne.Window, user functions.Account, playlist stri
 		artistTemp := artist
 		image := loadImageFromURL(artist.Image)
 		image.FillMode = canvas.ImageFillContain
+		image.SetMinSize(fyne.NewSize(200, 200))
 		fmt.Println(image.Size())
 		button := widget.NewButton(artist.Name, func() {
 			ArtistPage(artistTemp, MyApp)
@@ -505,7 +506,8 @@ func createFullPlaylistGrid(w fyne.Window, user functions.Account, playlist stri
 			w.Hide()
 		})
 		buttonContainer := container.NewHBox(button, deleteButton)
-		card := container.NewVBox(image, buttonContainer)
+		centeredContent := container.NewCenter(buttonContainer)
+		card := container.NewVBox(image, centeredContent)
 		artistCards = append(artistCards, card)
 	}
 
