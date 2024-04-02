@@ -74,22 +74,23 @@ func ConcertPage(artist functions.Artist, myApp fyne.App) {
 		for _, date := range dates {
 			datebox.Add(widget.NewLabel(CodeToShowDates(date)))
 		}
-		// scrollContainer := container.NewHScroll(datebox)
+		scrollContainer := container.NewHScroll(datebox)
 
-		allbox := container.NewHBox(
+		allbox := container.NewVBox(
 			hbox,
-			datebox,
+			scrollContainer,
 		)
 
 		concerts.Add(allbox)
 	}
 
 	content := container.NewStack(container.NewBorder(container.NewVBox(navBar, topContent), nil, nil, nil, concerts))
+	scrollContent := container.NewVScroll(content)
 
 	myWindow.SetOnClosed(func() {
 		myApp.Quit()
 	})
-	myWindow.SetContent(content)
+	myWindow.SetContent(scrollContent)
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()
