@@ -407,6 +407,7 @@ func createHistoryGrid(w fyne.Window, user functions.Account) fyne.CanvasObject 
 	return grid
 }
 
+// Create a playlist grid with the 4 first playlists
 func createPlaylistGrid(w fyne.Window, user functions.Account, playlist string) fyne.CanvasObject {
 	var artistCards []fyne.CanvasObject
 	var artists []functions.Artist
@@ -462,6 +463,7 @@ func createPlaylistGrid(w fyne.Window, user functions.Account, playlist string) 
 	return grid
 }
 
+// Create a playlist grid with all the artists in the playlist
 func createFullPlaylistGrid(w fyne.Window, user *functions.Account, playlist string) fyne.CanvasObject {
 	var artistCards []fyne.CanvasObject
 	var artists []functions.Artist
@@ -495,7 +497,6 @@ func createFullPlaylistGrid(w fyne.Window, user *functions.Account, playlist str
 		image := loadImageFromURL(artist.Image)
 		image.FillMode = canvas.ImageFillContain
 		image.SetMinSize(fyne.NewSize(200, 200))
-		fmt.Println(image.Size())
 		button := widget.NewButton(artist.Name, func() {
 			ArtistPage(artistTemp, MyApp)
 			w.Hide()
@@ -506,8 +507,7 @@ func createFullPlaylistGrid(w fyne.Window, user *functions.Account, playlist str
 			w.Hide()
 		})
 		buttonContainer := container.NewHBox(button, deleteButton)
-		centeredContent := container.NewCenter(buttonContainer)
-		card := container.NewVBox(image, centeredContent)
+		card := container.NewVBox(image, buttonContainer)
 		artistCards = append(artistCards, card)
 	}
 
