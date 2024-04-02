@@ -456,24 +456,6 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 	myWindow.Show()
 }
 
-func ConcertPage(artist functions.Artist, myApp fyne.App) {
-	myWindow := MyApp.NewWindow("Groupie Trackers")
-	myWindow.SetIcon(Icon)
-	isPlaying = false
-
-	navBar := createNavBar(myWindow)
-
-	content := container.NewStack(container.NewBorder(navBar, nil, nil, nil))
-
-	myWindow.SetOnClosed(func() {
-		myApp.Quit()
-	})
-	myWindow.SetContent(content)
-	myWindow.CenterOnScreen()
-	myWindow.Resize(fyne.NewSize(800, 600))
-	myWindow.Show()
-}
-
 func HomePage(myApp fyne.App) {
 	isPlaying = false
 
