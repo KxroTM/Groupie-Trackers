@@ -350,6 +350,63 @@ func createAllFavoriteGrid(w fyne.Window, user functions.Account) fyne.CanvasObj
 	return grid
 }
 
+// Create a grid with the 4 first history artists
+func createHistoryGrid(w fyne.Window, user functions.Account) fyne.CanvasObject {
+	var artistCards []fyne.CanvasObject
+	var artists []functions.Artist
+
+	if len(user.History) == 0 {
+		spacer := canvas.NewText("", color.White)
+		card := container.NewVBox(spacer, spacer, spacer, spacer, spacer, spacer, spacer, spacer)
+		return card
+	}
+
+	artistContent := functions.ArtistData()
+
+	// Get the last 4 artists in the history
+	for i := len(user.History) - 1; i >= 0 && len(artists) < 4; i-- {
+		for j := 0; j < len(artistContent); j++ {
+			if len(artists) == 0 {
+				if user.History[i] == artistContent[j].Name {
+					artists = append(artists, artistContent[j])
+				}
+			} else {
+				if user.History[i] != artists[len(artists)-1].Name {
+					if user.History[i] == artistContent[j].Name {
+						artists = append(artists, artistContent[j])
+					}
+				}
+			}
+		}
+	}
+
+	for _, artist := range artists {
+		artistTemp := artist
+		image, _ := fyne.LoadResourceFromURLString(artist.Image)
+
+		img := canvas.NewImageFromResource(image)
+
+		img.SetMinSize(fyne.NewSize(200, 200))
+		btn := widget.NewButton(" ", func() {
+			ArtistPage(artistTemp, MyApp)
+			w.Hide()
+		})
+
+		container1 := container.New(
+			layout.NewStackLayout(),
+			btn,
+			widget.NewCard("", "  "+artist.Name, img),
+		)
+
+		card := container.NewVBox(container1)
+		artistCards = append(artistCards, card)
+	}
+
+	grid := container.NewGridWithColumns(4, artistCards...)
+
+	return grid
+}
+
 // Load an image from a file and encode
 func loadImageBinary(filename string) ([]byte, error) {
 	file, err := os.Open(filename)

@@ -297,6 +297,7 @@ func Contactpage(myApp fyne.App) {
 }
 
 func ArtistPage(artist functions.Artist, myApp fyne.App) {
+	functions.AddHistory(user.Username, artist.Name)
 	myWindow := MyApp.NewWindow("Groupie Trackers")
 	myWindow.SetIcon(Icon)
 	user = functions.UserBuild(user.Username)
@@ -494,6 +495,7 @@ func HomePage(myApp fyne.App) {
 	lastAlbumBar := createCustomArtistsGrid(myWindow, functions.SortByFirstAlbumDescending(functions.ArtistData()))
 	firstAlbumBar := createCustomArtistsGrid(myWindow, functions.SortByFirstAlbumAscending(functions.ArtistData()))
 	favoriteBar := createFavoriteGrid(myWindow, *user)
+	historyBar := createHistoryGrid(myWindow, *user)
 	spacer := canvas.NewText("  ", color.White)
 	subtitle := canvas.NewText("  Découvrez de nouveaux artistes", color.White)
 	subtitle.TextSize = 22
@@ -507,12 +509,16 @@ func HomePage(myApp fyne.App) {
 	subtitle4 := canvas.NewText("  Vos favoris", color.White)
 	subtitle4.TextSize = 22
 	subtitle4.TextStyle = fyne.TextStyle{Bold: true}
+	subtitle5 := canvas.NewText("  Récemment consulté", color.White)
+	subtitle5.TextSize = 22
+	subtitle5.TextStyle = fyne.TextStyle{Bold: true}
 
 	favorite := container.NewHBox(subtitle4, layout.NewSpacer())
 
 	content := container.NewVBox(spacer, spacer, spacer,
-		subtitle, spacer, rdmBar, spacer, favorite, spacer, favoriteBar, spacer, subtitle2, spacer, lastAlbumBar, spacer, subtitle3, spacer, firstAlbumBar,
-		spacer)
+		subtitle, spacer, rdmBar, spacer, favorite, spacer, favoriteBar, spacer,
+		subtitle2, spacer, lastAlbumBar, spacer, subtitle3, spacer, firstAlbumBar,
+		spacer, subtitle5, spacer, historyBar, spacer)
 
 	scrollContainer := container.NewVScroll(content)
 

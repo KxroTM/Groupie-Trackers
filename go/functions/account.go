@@ -15,6 +15,7 @@ type AccountData struct {
 		Password  string   `json:"Password"`
 		Favorites []string `json:"Favorites"`
 		Ppf       string   `json:"Ppf"`
+		History   []string `json:"History"`
 	} `json:"account"`
 }
 
@@ -24,6 +25,7 @@ type Account struct {
 	Password  string   `json:"Password"`
 	Favorites []string `json:"Favorites"`
 	Ppf       string   `json:"Ppf"`
+	History   []string `json:"History"`
 }
 
 // Struct for the remember me
@@ -83,6 +85,7 @@ func UserBuild(username string) *Account {
 				Password:  dataAccount.Account[i].Password,
 				Favorites: dataAccount.Account[i].Favorites,
 				Ppf:       dataAccount.Account[i].Ppf,
+				History:   dataAccount.Account[i].History,
 			}
 			return user
 		}
@@ -206,4 +209,15 @@ func LogOut() {
 		log.Println("Erreur lors de l'écriture dans le fichier :", err)
 		return
 	}
+}
+
+// Function for add an artist in the history list
+func AddHistory(username, history string) {
+	for i := range dataAccount.Account {
+		if dataAccount.Account[i].Username == username {
+			dataAccount.Account[i].History = append(dataAccount.Account[i].History, history)
+			break
+		}
+	}
+	UpdateDB()
 }
