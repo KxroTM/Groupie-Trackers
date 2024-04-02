@@ -744,7 +744,7 @@ func ChangePasswordPage(myApp fyne.App) {
 	myWindow.SetOnClosed(func() {
 		myApp.Quit()
 	})
-	myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, centeredContent))
+	myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, centeredContent))
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()
@@ -798,7 +798,7 @@ func ChangePpf(myApp fyne.App) {
 		myApp.Quit()
 	})
 
-	myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, centeredContent))
+	myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, centeredContent))
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 600))
 	myWindow.Show()
