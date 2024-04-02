@@ -90,13 +90,13 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 		myWindow.Hide()
 	})
 
-	playlistbutton := widget.NewButton("Ajouter à une playlist", func() {
+	playlistbutton := widget.NewButton("Ajouter à une Playlist", func() {
 		CreatePlaylistPage(myApp, artist)
 		myWindow.Hide()
 	})
 
 	var playlistList []string
-	playlistList = append(playlistList, "Créer à une playlist")
+	playlistList = append(playlistList, "Créer à une Playlist")
 	for _, playlist := range user.Playlists.Playlist {
 		playlistList = append(playlistList, playlist.Name)
 	}

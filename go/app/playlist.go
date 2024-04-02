@@ -143,7 +143,7 @@ func CreatePlaylistPage(myApp fyne.App, artist functions.Artist) {
 		myApp.Quit()
 	})
 
-	myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, centeredContent))
+	myWindow.SetContent(container.NewBorder(container.NewVBox(navBar), nil, nil, nil, BackgroundRect, centeredContent))
 	myWindow.Resize(fyne.NewSize(600, 400))
 	myWindow.CenterOnScreen()
 

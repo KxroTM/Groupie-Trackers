@@ -132,6 +132,8 @@ func CodeToShowLocation(location string) string {
 	country := Splitlocation[1]
 	country = strings.ReplaceAll(country, "_", " ")
 	country = strings.ToUpper(country)
+	fmt.Println(country)
+	country = translateFrenchCountries(country)
 
 	return city + ", " + country
 }
@@ -148,7 +150,105 @@ func CodeToShowDates(date string) string {
 	printabledate := time.Date(slicedate[2], time.Month(slicedate[1]), slicedate[0], 0, 0, 0, 0, time.UTC)
 
 	formattedDate := printabledate.Format("Mon. 2 Jan. 2006")
+	formattedDate = translateFrenchFormattedDate(formattedDate)
 
 	return formattedDate
 
+}
+
+func translateFrenchFormattedDate(date string) string {
+	// Remplacer les abréviations des noms de jours et de mois en anglais par les abréviations en français
+	frenchDays := map[string]string{
+		"Mon.": "Lun.",
+		"Tue.": "Mar.",
+		"Wed.": "Mer.",
+		"Thu.": "Jeu.",
+		"Fri.": "Ven.",
+		"Sat.": "Sam.",
+		"Sun.": "Dim.",
+	}
+
+	frenchMonths := map[string]string{
+		"Jan.": "Janv.",
+		"Feb.": "Févr.",
+		"Mar.": "Mars",
+		"Apr.": "Avr.",
+		"May":  "Mai",
+		"Jun.": "Juin",
+		"Jul.": "Juil.",
+		"Aug.": "Août",
+		"Sep.": "Sept.",
+		"Oct.": "Oct.",
+		"Nov.": "Nov.",
+		"Dec.": "Déc.",
+	}
+
+	for english, french := range frenchDays {
+		date = strings.ReplaceAll(date, english, french)
+	}
+
+	for english, french := range frenchMonths {
+		date = strings.ReplaceAll(date, english, french)
+	}
+
+	return date
+}
+
+func translateFrenchCountries(country string) string {
+	invertedCountryTranslations := map[string]string{
+		"GERMANY":              "ALLEMAGNE",
+		"SAUDI ARABIA":         "ARABIE SAOUDITE",
+		"NETHERLANDS ANTILLES": "ANTILLES NÉERLANDAISES",
+		"ARGENTINA":            "ARGENTINE",
+		"AUSTRALIA":            "AUSTRALIE",
+		"AUSTRIA":              "AUTRICHE",
+		"BELGIUM":              "BELGIQUE",
+		"BELARUS":              "BIÉLORUSSIE",
+		"BRAZIL":               "BRÉSIL",
+		"CANADA":               "CANADA",
+		"CHILE":                "CHILI",
+		"CHINA":                "CHINE",
+		"COLOMBIA":             "COLOMBIE",
+		"SOUTH KOREA":          "CORÉE DU SUD",
+		"COSTA RICA":           "COSTA RICA",
+		"DENMARK":              "DANEMARK",
+		"UNITED ARAB EMIRATES": "ÉMIRATS ARABES UNIS",
+		"USA":                  "ÉTATS-UNIS",
+		"SPAIN":                "ESPAGNE",
+		"FINLAND":              "FINLANDE",
+		"FRANCE":               "FRANCE",
+		"GREECE":               "GRÈCE",
+		"HUNGARY":              "HONGRIE",
+		"INDIA":                "INDE",
+		"INDONESIA":            "INDONÉSIE",
+		"IRELAND":              "IRLANDE",
+		"ITALY":                "ITALIE",
+		"JAPAN":                "JAPON",
+		"MEXICO":               "MEXIQUE",
+		"NORWAY":               "NORVÈGE",
+		"NEW CALEDONIA":        "NOUVELLE-CALÉDONIE",
+		"NEW ZEALAND":          "NOUVELLE-ZÉLANDE",
+		"NETHERLANDS":          "PAYS-BAS",
+		"PERU":                 "PÉROU",
+		"PHILIPPINES":          "PHILIPPINES",
+		"POLAND":               "POLOGNE",
+		"FRENCH POLYNESIA":     "POLYNÉSIE FRANÇAISE",
+		"PORTUGAL":             "PORTUGAL",
+		"QATAR":                "QATAR",
+		"ROMANIA":              "ROUMANIE",
+		"UNITED KINGDOM":       "ROYAUME-UNI",
+		"SLOVAKIA":             "SLOVAQUIE",
+		"SWEDEN":               "SUÈDE",
+		"SWITZERLAND":          "SUISSE",
+		"TAIWAN":               "TAÏWAN",
+		"CZECH REPUBLIC":       "TCHÉQUIE",
+		"THAILAND":             "THAÏLANDE",
+	}
+
+	// Convertit le nom du pays entré en majuscules pour correspondre aux clés de la map
+	if translatedCountry, ok := invertedCountryTranslations[country]; ok {
+		return translatedCountry
+	}
+	// Renvoie le pays non trouvé tel quel ou un message spécifique
+	return "Pays non trouvé"
 }
