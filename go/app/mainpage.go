@@ -407,6 +407,114 @@ func createHistoryGrid(w fyne.Window, user functions.Account) fyne.CanvasObject 
 	return grid
 }
 
+func createPlaylistGrid(w fyne.Window, user functions.Account, playlist string) fyne.CanvasObject {
+	var artistCards []fyne.CanvasObject
+	var artists []functions.Artist
+	var index int
+
+	for i := 0; i < len(user.Playlists.Playlist); i++ {
+		if user.Playlists.Playlist[i].Name == playlist {
+			index = i
+			break
+		}
+	}
+
+	if len(user.Playlists.Playlist[index].Songs) == 0 {
+		spacer := canvas.NewText("", color.White)
+		card := container.NewVBox(spacer, spacer, spacer, spacer, spacer, spacer, spacer, spacer)
+		return card
+	}
+
+	artistContent := functions.ArtistData()
+
+	for i := 0; i < len(user.Playlists.Playlist[index].Songs) && i < 4; i++ {
+		for j := 0; j < len(artistContent); j++ {
+			if user.Playlists.Playlist[index].Songs[i] == artistContent[j].Name {
+				artists = append(artists, artistContent[j])
+			}
+		}
+	}
+
+	for _, artist := range artists {
+		artistTemp := artist
+		image, _ := fyne.LoadResourceFromURLString(artist.Image)
+
+		img := canvas.NewImageFromResource(image)
+
+		img.SetMinSize(fyne.NewSize(200, 200))
+		btn := widget.NewButton(" ", func() {
+			ArtistPage(artistTemp, MyApp)
+			w.Hide()
+		})
+
+		container1 := container.New(
+			layout.NewStackLayout(),
+			btn,
+			widget.NewCard("", "  "+artist.Name, img),
+		)
+
+		card := container.NewVBox(container1)
+		artistCards = append(artistCards, card)
+	}
+
+	grid := container.NewGridWithColumns(4, artistCards...)
+
+	return grid
+}
+
+func createFullPlaylistGrid(w fyne.Window, user functions.Account, playlist string) fyne.CanvasObject {
+	var artistCards []fyne.CanvasObject
+	var artists []functions.Artist
+	var index int
+
+	for i := 0; i < len(user.Playlists.Playlist); i++ {
+		if user.Playlists.Playlist[i].Name == playlist {
+			index = i
+			break
+		}
+	}
+
+	if len(user.Playlists.Playlist[index].Songs) == 0 {
+		spacer := canvas.NewText("", color.White)
+		card := container.NewVBox(spacer, spacer, spacer, spacer, spacer, spacer, spacer, spacer)
+		return card
+	}
+
+	artistContent := functions.ArtistData()
+
+	for i := 0; i < len(user.Playlists.Playlist[index].Songs); i++ {
+		for j := 0; j < len(artistContent); j++ {
+			if user.Playlists.Playlist[index].Songs[i] == artistContent[j].Name {
+				artists = append(artists, artistContent[j])
+			}
+		}
+	}
+
+	for _, artist := range artists {
+		artistTemp := artist
+		image := loadImageFromURL(artist.Image)
+		image.FillMode = canvas.ImageFillContain
+		fmt.Println(image.Size())
+		button := widget.NewButton(artist.Name, func() {
+			ArtistPage(artistTemp, MyApp)
+			w.Hide()
+		})
+		deleteButton := widget.NewButtonWithIcon("", theme.DeleteIcon(), func() {
+			functions.DeleteSongFromPlaylist(user.Username, playlist, artistTemp.Name)
+			OnePlaylistPage(MyApp, user, playlist)
+			w.Hide()
+		})
+		buttonContainer := container.NewHBox(button, deleteButton)
+		card := container.NewVBox(image, buttonContainer)
+		artistCards = append(artistCards, card)
+	}
+
+	grid := container.NewGridWithColumns(4, artistCards...)
+	scrollContainer := container.NewVScroll(grid)
+
+	return scrollContainer
+}
+
 // Load an image from a file and encode
 func loadImageBinary(filename string) ([]byte, error) {
 	file, err := os.Open(filename)

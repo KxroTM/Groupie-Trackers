@@ -88,21 +88,3 @@ func IsInFavorite(username, content string) bool {
 	}
 	return false
 }
-
-func AddPpf(username, content string) {
-	user := UserBuild(username)
-	if user != nil {
-		user.Ppf = content
-
-		for i := range dataAccount.Account {
-			if dataAccount.Account[i].Username == username {
-				dataAccount.Account[i] = *user
-				break
-			}
-		}
-		UpdateDB()
-		log.Printf("%s ajouté aux ppf de %s", content, username)
-	} else {
-		log.Printf("Erreur %s n'est pas dans la base de donnée", username)
-	}
-}

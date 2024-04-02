@@ -16,6 +16,7 @@ type AccountData struct {
 		Favorites []string `json:"Favorites"`
 		Ppf       string   `json:"Ppf"`
 		History   []string `json:"History"`
+		Playlists Playlist `json:"Playlists"`
 	} `json:"account"`
 }
 
@@ -26,6 +27,15 @@ type Account struct {
 	Favorites []string `json:"Favorites"`
 	Ppf       string   `json:"Ppf"`
 	History   []string `json:"History"`
+	Playlists Playlist `json:"Playlists"`
+}
+
+// Struct for the playlist
+type Playlist struct {
+	Playlist []struct {
+		Name  string   `json:"Name"`
+		Songs []string `json:"Songs"`
+	} `json:"Playlist"`
 }
 
 // Struct for the remember me
@@ -86,6 +96,7 @@ func UserBuild(username string) *Account {
 				Favorites: dataAccount.Account[i].Favorites,
 				Ppf:       dataAccount.Account[i].Ppf,
 				History:   dataAccount.Account[i].History,
+				Playlists: dataAccount.Account[i].Playlists,
 			}
 			return user
 		}
@@ -211,6 +222,25 @@ func LogOut() {
 	}
 }
 
+// Function for add a profile picture
+func AddPpf(username, content string) {
+	user := UserBuild(username)
+	if user != nil {
+		user.Ppf = content
+
+		for i := range dataAccount.Account {
+			if dataAccount.Account[i].Username == username {
+				dataAccount.Account[i] = *user
+				break
+			}
+		}
+		UpdateDB()
+		log.Printf("%s ajouté aux ppf de %s", content, username)
+	} else {
+		log.Printf("Erreur %s n'est pas dans la base de donnée", username)
+	}
+}
+
 // Function for add an artist in the history list
 func AddHistory(username, history string) {
 	for i := range dataAccount.Account {
@@ -220,4 +250,95 @@ func AddHistory(username, history string) {
 		}
 	}
 	UpdateDB()
+}
+
+// Function for create a playlist
+func CreatePlaylist(username, playlistName string) {
+	for i := range dataAccount.Account {
+		if dataAccount.Account[i].Username == username {
+			newPlaylist := struct {
+				Name  string   `json:"Name"`
+				Songs []string `json:"Songs"`
+			}{
+				Name:  playlistName,
+				Songs: nil,
+			}
+			dataAccount.Account[i].Playlists.Playlist = append(dataAccount.Account[i].Playlists.Playlist, newPlaylist)
+			break
+		}
+	}
+	UpdateDB()
+}
+
+// Function for delete a playlist
+func DeletePlaylist(username, playlistName string) {
+	for i := range dataAccount.Account {
+		if dataAccount.Account[i].Username == username {
+			for j := range dataAccount.Account[i].Playlists.Playlist {
+				if dataAccount.Account[i].Playlists.Playlist[j].Name == playlistName {
+					dataAccount.Account[i].Playlists.Playlist = append(dataAccount.Account[i].Playlists.Playlist[:j], dataAccount.Account[i].Playlists.Playlist[j+1:]...)
+					break
+				}
+			}
+			break
+		}
+	}
+	UpdateDB()
+}
+
+// Function for add a song in a playlist
+func AddSongToPlaylist(username, playlistName, song string) {
+	for i := range dataAccount.Account {
+		if dataAccount.Account[i].Username == username {
+			for j := range dataAccount.Account[i].Playlists.Playlist {
+				if dataAccount.Account[i].Playlists.Playlist[j].Name == playlistName {
+					dataAccount.Account[i].Playlists.Playlist[j].Songs = append(dataAccount.Account[i].Playlists.Playlist[j].Songs, song)
+					break
+				}
+			}
+			break
+		}
+	}
+	UpdateDB()
+}
+
+// Function for delete a song in a playlist
+func DeleteSongFromPlaylist(username, playlistName, song string) {
+	for i := range dataAccount.Account {
+		if dataAccount.Account[i].Username == username {
+			for j := range dataAccount.Account[i].Playlists.Playlist {
+				if dataAccount.Account[i].Playlists.Playlist[j].Name == playlistName {
+					for k := range dataAccount.Account[i].Playlists.Playlist[j].Songs {
+						if dataAccount.Account[i].Playlists.Playlist[j].Songs[k] == song {
+							dataAccount.Account[i].Playlists.Playlist[j].Songs = append(dataAccount.Account[i].Playlists.Playlist[j].Songs[:k], dataAccount.Account[i].Playlists.Playlist[j].Songs[k+1:]...)
+							break
+						}
+					}
+					break
+				}
+			}
+			break
+		}
+	}
+	UpdateDB()
+}
+
+// Function for check if a song is in a playlist
+func IsInPlaylist(username, playlistName, song string) bool {
+	for i := range dataAccount.Account {
+		if dataAccount.Account[i].Username == username {
+			for j := range dataAccount.Account[i].Playlists.Playlist {
+				if dataAccount.Account[i].Playlists.Playlist[j].Name == playlistName {
+					for k := range dataAccount.Account[i].Playlists.Playlist[j].Songs {
+						if dataAccount.Account[i].Playlists.Playlist[j].Songs[k] == song {
+							return true
+						}
+					}
+					break
+				}
+			}
+			break
+		}
+	}
+	return false
 }

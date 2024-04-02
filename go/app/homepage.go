@@ -23,6 +23,7 @@ var BackgroundRect = canvas.NewRectangle(color.RGBA{R: 16, G: 16, B: 16, A: 255}
 var PasswordChange = false
 var PpfChange = false
 var isPlaying = false
+var playlistCreate = false
 
 func LoginPage(app fyne.App) {
 	myWindow := app.NewWindow("Groupie Trackers")
@@ -303,6 +304,9 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 	user = functions.UserBuild(user.Username)
 	var content *fyne.Container
 	var playButtonText string
+	var favoriteButton *fyne.Container
+	var selecter *widget.Select
+
 	navBar := createNavBar(myWindow)
 
 	image := loadImageFromURL(artist.Image)
@@ -370,6 +374,38 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 		myWindow.Hide()
 	})
 
+	playlistbutton := widget.NewButton("Ajouter à une playlist", func() {
+		CreatePlaylistPage(myApp, artist)
+		myWindow.Hide()
+	})
+
+	var playlistList []string
+	playlistList = append(playlistList, "Créer à une playlist")
+	for _, playlist := range user.Playlists.Playlist {
+		playlistList = append(playlistList, playlist.Name)
+	}
+
+	selecter = widget.NewSelect(playlistList, func(s string) {
+		if s == "Créer à une playlist" {
+			CreatePlaylistPage(myApp, artist)
+			myWindow.Hide()
+		} else {
+			if functions.IsInPlaylist(user.Username, s, artist.Name) {
+				dialog.ShowInformation("Erreur", "Déjà dans la playlist "+s, myWindow)
+				selecter.Selected = "Ajouter à une playlist"
+				selecter.Refresh()
+				return
+			} else {
+				dialog.ShowInformation("Ajout à la playlist", "Ajouté à la playlist "+s, myWindow)
+				functions.AddSongToPlaylist(user.Username, s, artist.Name)
+				selecter.Selected = "Ajouter à une playlist"
+				selecter.Refresh()
+			}
+		}
+	})
+
+	selecter.PlaceHolder = "Ajouter à une playlist"
+
 	playButton := container.NewHBox(layout.NewSpacer(), play, layout.NewSpacer())
 
 	name.Alignment = fyne.TextAlignCenter
@@ -380,6 +416,11 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 	txt := canvas.NewText("", color.White)
 	embed := SpotifyEmbed(artist)
 
+	if playlistCreate {
+		dialog.ShowInformation("Création de playlist", "Playlist créée", myWindow)
+		playlistCreate = false
+	}
+
 	if len(artist.Members) > 4 {
 		if !functions.IsInFavorite(user.Username, artist.Name) {
 			dislike := createCustomIcon("src/dislike.png")
@@ -388,7 +429,11 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 				ArtistPage(artist, myApp)
 				myWindow.Hide()
 			})
-			favoriteButton := container.NewHBox(layout.NewSpacer(), layout.NewSpacer(), favorite, spacer)
+			if len(user.Playlists.Playlist) == 0 {
+				favoriteButton = container.NewHBox(layout.NewSpacer(), layout.NewSpacer(), playlistbutton, favorite, spacer)
+			} else {
+				favoriteButton = container.NewHBox(layout.NewSpacer(), layout.NewSpacer(), selecter, favorite, spacer)
+			}
 			imgContentCenter := container.NewCenter(container.NewHBox(layout.NewSpacer(), image, layout.NewSpacer()))
 			form := container.NewVScroll(container.NewVBox(txt, txt, favoriteButton, txt, txt, imgContentCenter, txt, playButton, txt, name, member, member2, creationDate, album, txt, concertButton, txt))
 			if !isPlaying {
@@ -403,7 +448,11 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 				ArtistPage(artist, myApp)
 				myWindow.Hide()
 			})
-			favoriteButton := container.NewHBox(layout.NewSpacer(), layout.NewSpacer(), favorite, spacer)
+			if len(user.Playlists.Playlist) == 0 {
+				favoriteButton = container.NewHBox(layout.NewSpacer(), layout.NewSpacer(), playlistbutton, favorite, spacer)
+			} else {
+				favoriteButton = container.NewHBox(layout.NewSpacer(), layout.NewSpacer(), selecter, favorite, spacer)
+			}
 			imgContentCenter := container.NewCenter(container.NewHBox(layout.NewSpacer(), image, layout.NewSpacer()))
 			form := container.NewVScroll(container.NewVBox(txt, txt, favoriteButton, txt, txt, imgContentCenter, txt, playButton, txt, name, member, member2, creationDate, album, txt, concertButton, txt))
 			if !isPlaying {
@@ -420,7 +469,11 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 				ArtistPage(artist, myApp)
 				myWindow.Hide()
 			})
-			favoriteButton := container.NewHBox(layout.NewSpacer(), layout.NewSpacer(), favorite, spacer)
+			if len(user.Playlists.Playlist) == 0 {
+				favoriteButton = container.NewHBox(layout.NewSpacer(), layout.NewSpacer(), playlistbutton, favorite, spacer)
+			} else {
+				favoriteButton = container.NewHBox(layout.NewSpacer(), layout.NewSpacer(), selecter, favorite, spacer)
+			}
 			imgContentCenter := container.NewCenter(container.NewHBox(layout.NewSpacer(), image, layout.NewSpacer()))
 			form := container.NewVScroll(container.NewVBox(txt, txt, favoriteButton, txt, txt, imgContentCenter, txt, playButton, txt, name, member, creationDate, album, txt, concertButton, txt))
 			if !isPlaying {
@@ -435,7 +488,11 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 				ArtistPage(artist, myApp)
 				myWindow.Hide()
 			})
-			favoriteButton := container.NewHBox(layout.NewSpacer(), layout.NewSpacer(), favorite, spacer)
+			if len(user.Playlists.Playlist) == 0 {
+				favoriteButton = container.NewHBox(layout.NewSpacer(), layout.NewSpacer(), playlistbutton, favorite, spacer)
+			} else {
+				favoriteButton = container.NewHBox(layout.NewSpacer(), layout.NewSpacer(), selecter, favorite, spacer)
+			}
 			imgContentCenter := container.NewCenter(container.NewHBox(layout.NewSpacer(), image, layout.NewSpacer()))
 			form := container.NewVScroll(container.NewVBox(txt, txt, favoriteButton, txt, txt, imgContentCenter, txt, playButton, txt, name, member, creationDate, album, txt, concertButton, txt))
 			if !isPlaying {
@@ -597,6 +654,11 @@ func AccountPage(myApp fyne.App) {
 		myWindow.Hide()
 	})
 
+	playlistButton := widget.NewButton("Mes playlists", func() {
+		PlaylistPage(myApp)
+		myWindow.Hide()
+	})
+
 	if user.Ppf == "" {
 		form := container.NewVBox(
 			spacer,
@@ -605,6 +667,7 @@ func AccountPage(myApp fyne.App) {
 			spacer,
 			changePasswordButton,
 			changePpfButton,
+			playlistButton,
 		)
 
 		content := container.NewVBox(
@@ -621,6 +684,7 @@ func AccountPage(myApp fyne.App) {
 			spacer,
 			changePasswordButton,
 			changePpfButton,
+			playlistButton,
 		)
 
 		content := container.NewVBox(
@@ -752,5 +816,124 @@ func ChangePpf(myApp fyne.App) {
 	myWindow.SetContent(form)
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(300, 200))
+	myWindow.Show()
+}
+
+func PlaylistPage(myApp fyne.App) {
+	myWindow := myApp.NewWindow("Groupie Trackers")
+	myWindow.SetIcon(Icon)
+	user = functions.UserBuild(user.Username)
+	var playlistGrid fyne.CanvasObject
+
+	navBar := createNavBar(myWindow)
+
+	title := canvas.NewText("Mes Playlists", color.White)
+	spacer := canvas.NewText("   ", color.White)
+	title.TextSize = 30
+	title.TextStyle = fyne.TextStyle{Bold: true}
+	title.Alignment = fyne.TextAlignCenter
+
+	playlistsContainer := container.NewVBox()
+
+	for _, playlist := range user.Playlists.Playlist {
+		Title := canvas.NewText(" "+playlist.Name, color.White)
+		Title.TextSize = 22
+		Title.TextStyle = fyne.TextStyle{Bold: true}
+		playlistButton := widget.NewButtonWithIcon("", theme.NavigateNextIcon(), func() {
+			OnePlaylistPage(myApp, *user, playlist.Name)
+			myWindow.Hide()
+		})
+		deleteButton := widget.NewButtonWithIcon("", theme.DeleteIcon(), func() {
+			functions.DeletePlaylist(user.Username, playlist.Name)
+			PlaylistPage(myApp)
+			myWindow.Hide()
+		})
+
+		titleContent := container.NewHBox(Title, layout.NewSpacer(), deleteButton, playlistButton, spacer)
+		playlistGrid = createPlaylistGrid(myWindow, *user, playlist.Name)
+		playlistsContainer.Add(container.NewVBox(titleContent, spacer, playlistGrid, spacer))
+	}
+
+	fullContent := container.NewVScroll(container.NewVBox(spacer, title, spacer, playlistsContainer, spacer))
+	content := container.NewStack(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, fullContent))
+
+	myWindow.SetOnClosed(func() {
+		myApp.Quit()
+	})
+	myWindow.SetContent(content)
+	myWindow.CenterOnScreen()
+	myWindow.Resize(fyne.NewSize(800, 600))
+	myWindow.Show()
+}
+
+func OnePlaylistPage(myApp fyne.App, user functions.Account, playlist string) {
+	myWindow := myApp.NewWindow("Groupie Trackers")
+	myWindow.SetIcon(Icon)
+
+	navBar := createNavBar(myWindow)
+
+	playlistGrid := createFullPlaylistGrid(myWindow, user, playlist)
+
+	content := container.NewStack(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, playlistGrid))
+
+	myWindow.SetOnClosed(func() {
+		myApp.Quit()
+	})
+	myWindow.SetContent(content)
+	myWindow.CenterOnScreen()
+	myWindow.Resize(fyne.NewSize(800, 600))
+	myWindow.Show()
+}
+
+func CreatePlaylistPage(myApp fyne.App, artist functions.Artist) {
+	myWindow := myApp.NewWindow("Groupie Trackers")
+	myWindow.SetIcon(Icon)
+
+	navBar := createNavBar(myWindow)
+
+	playlistName := widget.NewEntry()
+	playlistName.SetPlaceHolder("Nom de la playlist")
+	spacer := canvas.NewText("==============================", color.Transparent)
+	text := canvas.NewText("", color.White)
+	text.Alignment = fyne.TextAlignCenter
+
+	submitButton := widget.NewButton("Créer", func() {
+		for _, playlist := range user.Playlists.Playlist {
+			if playlist.Name == playlistName.Text {
+				text.Text = "Nom de playlist déjà existant"
+				return
+			}
+		}
+		functions.CreatePlaylist(user.Username, playlistName.Text)
+		playlistCreate = true
+		ArtistPage(artist, myApp)
+		myWindow.Hide()
+	})
+
+	submitButton.Importance = widget.HighImportance
+
+	form := container.NewVBox(
+		container.NewVBox(layout.NewSpacer()),
+		container.NewVBox(layout.NewSpacer()),
+		container.NewVBox(layout.NewSpacer()),
+		container.NewVBox(layout.NewSpacer()),
+		spacer,
+		playlistName,
+		text,
+		container.NewVBox(layout.NewSpacer()),
+		container.NewVBox(layout.NewSpacer()),
+		container.NewVBox(submitButton),
+	)
+
+	centeredContent := container.NewCenter(form)
+
+	myWindow.SetOnClosed(func() {
+		myApp.Quit()
+	})
+
+	myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, centeredContent))
+	myWindow.Resize(fyne.NewSize(600, 400))
+	myWindow.CenterOnScreen()
+
 	myWindow.Show()
 }
