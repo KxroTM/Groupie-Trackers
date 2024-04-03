@@ -81,9 +81,7 @@ func ConcertPage(artist functions.Artist, myApp fyne.App) {
 						fmt.Println("Error:", err)
 					}
 					openURL("https://calendar.google.com/calendar/u/0/r/day/" + slicedate[2] + "/" + slicedate[1] + "/" + slicedate[0])
-					fmt.Println("https://calendar.google.com/calendar/u/0/r/day/" + slicedate[2] + "/" + slicedate[1] + "/" + slicedate[0])
 				}))
-			// datebox.Add(widget.NewLabel(CodeToShowDates(date)))
 		}
 		scrollContainer := container.NewHScroll(datebox)
 
@@ -94,7 +92,6 @@ func ConcertPage(artist functions.Artist, myApp fyne.App) {
 
 		concerts.Add(allbox)
 	}
-
 	content := container.NewStack(container.NewBorder(container.NewVBox(navBar, topContent), nil, nil, nil, concerts))
 	scrollContent := container.NewVScroll(content)
 
@@ -139,6 +136,7 @@ func CodeToShowLocation(location string) string {
 	city := Splitlocation[0]
 	city = strings.ReplaceAll(city, "_", " ")
 	city = strings.ToUpper(city)
+	city = translateFrenchCity(city)
 
 	country := Splitlocation[1]
 	country = strings.ReplaceAll(country, "_", " ")
@@ -204,6 +202,205 @@ func translateFrenchFormattedDate(date string) string {
 	return date
 }
 
+func translateFrenchCity(city string) string {
+	cities := map[string]string{
+		"NORTH CAROLINA":         "CAROLINE DU NORD",
+		"GEORGIA":                "GÉORGIE",
+		"LOS ANGELES":            "LOS ANGELES",
+		"SAITAMA":                "SAITAMA",
+		"OSAKA":                  "OSAKA",
+		"NAGOYA":                 "NAGOYA",
+		"PENROSE":                "PENROSE",
+		"DUNEDIN":                "DUNEDIN",
+		"PLAYA DEL CARMEN":       "PLAYA DEL CARMEN",
+		"PAPEETE":                "PAPEETE",
+		"NOUMEA":                 "NOUMÉA",
+		"LONDON":                 "LONDRES",
+		"LAUSANNE":               "LAUSANNE",
+		"LYON":                   "LYON",
+		"VICTORIA":               "VICTORIA",
+		"NEW SOUTH WALES":        "NOUVELLE-GALLES DU SUD",
+		"QUEENSLAND":             "QUEENSLAND",
+		"AUCKLAND":               "AUCKLAND",
+		"YOGYAKARTA":             "YOGYAKARTA",
+		"BRATISLAVA":             "BRATISLAVA",
+		"BUDAPEST":               "BUDAPEST",
+		"MINSK":                  "MINSK",
+		"CALIFORNIA":             "CALIFORNIE",
+		"NEVADA":                 "NEVADA",
+		"SAO PAULO":              "SAO PAULO",
+		"SAN ISIDRO":             "SAN ISIDRO",
+		"ARIZONA":                "ARIZONA",
+		"TEXAS":                  "TEXAS",
+		"STOCKHOLM":              "STOCKHOLM",
+		"WERCHTER":               "WERCHTER",
+		"LISBON":                 "LISBONNE",
+		"BILBAO":                 "BILBAO",
+		"BOGOTA":                 "BOGOTA",
+		"NEW YORK":               "NEW YORK",
+		"DUSSELDORF":             "DÜSSELDORF",
+		"AARHUS":                 "AARHUS",
+		"MANCHESTER":             "MANCHESTER",
+		"FRANKFURT":              "FRANCFORT",
+		"BERLIN":                 "BERLIN",
+		"COPENHAGEN":             "COPENHAGUE",
+		"DOHA":                   "DOHA",
+		"MINNESOTA":              "MINNESOTA",
+		"ILLINOIS":               "ILLINOIS",
+		"MUMBAI":                 "MUMBAI",
+		"ABU DHABI":              "ABOU DHABI",
+		"PENNSYLVANIA":           "PENNSYLVANIE",
+		"WESTCLIFF ON SEA":       "WESTCLIFF-ON-SEA",
+		"MERKERS":                "MERKERS",
+		"MAINE":                  "MAINE",
+		"GOTHENBURG":             "GOTHENBURG",
+		"FLORIDA":                "FLORIDE",
+		"SOUTH CAROLINA":         "CAROLINE DU SUD",
+		"PAGNEY DERRIERE BARINE": "PAGNEY-DERRIÈRE-BARINE",
+		"HAMBURG":                "HAMBURG",
+		"BOULOGNE BILLANCOURT":   "BOULOGNE-BILLANCOURT",
+		"NIMES":                  "NÎMES",
+		"SION":                   "SION",
+		"OSTRAVA":                "OSTRAVA",
+		"KLAGENFURT":             "KLAGENFURT",
+		"FREYMING MERLEBACH":     "FREYMING-MERLEBACH",
+		"ZARAGOZA":               "ZARAGOZA",
+		"MADRID":                 "MADRID",
+		"BARCELONA":              "BARCELONE",
+		"RIO DE JANEIRO":         "RIO DE JANEIRO",
+		"RECIFE":                 "RECIFE",
+		"LEIPZIG":                "LEIPZIG",
+		"SALEM":                  "SALEM",
+		"MONCHENGLADBACH":        "MONCHENGLADBACH",
+		"CUXHAVEN":               "CUXHAVEN",
+		"SKANDERBORG":            "SKANDERBORG",
+		"AMSTERDAM":              "AMSTERDAM",
+		"BURRIANA":               "BURRIANA",
+		"OULU":                   "OULU",
+		"NAPOCA":                 "NAPOCA",
+		"RIYADH":                 "RIYAD",
+		"CANTON":                 "CANTON",
+		"QUEBEC":                 "QUÉBEC",
+		"LAS VEGAS":              "LAS VEGAS",
+		"MEXICO CITY":            "MEXICO",
+		"MONTERREY":              "MONTERREY",
+		"DEL MAR":                "DEL MAR",
+		"WASHINGTON":             "WASHINGTON",
+		"WEST MELBOURNE":         "WEST MELBOURNE",
+		"PARIS":                  "PARIS",
+		"MISSOURI":               "MISSOURI",
+		"CHICAGO":                "CHICAGO",
+		"BIRMINGHAM":             "BIRMINGHAM",
+		"SYDNEY":                 "SYDNEY",
+		"MADISON":                "MADISON",
+		"TORONTO":                "TORONTO",
+		"CLEVELAND":              "CLEVELAND",
+		"BOSTON":                 "BOSTON",
+		"UTAH":                   "UTAH",
+		"GLASGOW":                "GLASGOW",
+		"DUBLIN":                 "DUBLIN",
+		"CARDIFF":                "CARDIFF",
+		"ABERDEEN":               "ABERDEEN",
+		"WARSAW":                 "VARSOVIE",
+		"MILAN":                  "MILAN",
+		"MICHIGAN":               "MICHIGAN",
+		"NEW HAMPSHIRE":          "NEW HAMPSHIRE",
+		"SOCHAUX":                "SOCHAUX",
+		"EINDHOVEN":              "EINDHOVEN",
+		"OSLO":                   "OSLO",
+		"COLORADO":               "COLORADO",
+		"JAKARTA":                "JAKARTA",
+		"HUIZHOU":                "HUIZHOU",
+		"CHANGZHOU":              "CHANGZHOU",
+		"HONG KONG":              "HONG KONG",
+		"SANYA":                  "SANYA",
+		"AALBORG":                "AALBORG",
+		"SEATTLE":                "SEATTLE",
+		"OMAHA":                  "OMAHA",
+		"KANSAS CITY":            "KANSAS CITY",
+		"ST LOUIS":               "ST LOUIS",
+		"INDIANAPOLIS":           "INDIANAPOLIS",
+		"ROSEMONT":               "ROSEMONT",
+		"GRAND RAPIDS":           "GRAND RAPIDS",
+		"MONTREAL":               "MONTRÉAL",
+		"NEWARK":                 "NEWARK",
+		"UNIONDALE":              "UNIONDALE",
+		"PHILADELPHIA":           "PHILADELPHIE",
+		"HERSHEY":                "HERSHEY",
+		"PITTSBURGH":             "PITTSBURGH",
+		"COLUMBIA":               "COLUMBIA",
+		"SANTIAGO":               "SANTIAGO",
+		"HOUSTON":                "HOUSTON",
+		"ATLANTA":                "ATLANTA",
+		"NEW ORLEANS":            "NOUVELLE-ORLÉANS",
+		"FRAUENFELD":             "FRAUENFELD",
+		"TURKU":                  "TURKU",
+		"BROOKLYN":               "BROOKLYN",
+		"IMOLA":                  "IMOLA",
+		"VIENNA":                 "VIENNE",
+		"KRAKOW":                 "CRACOVIE",
+		"ZURICH":                 "ZURICH",
+		"AMITYVILLE":             "AMITYVILLE",
+		"MINNEAPOLIS":            "MINNEAPOLIS",
+		"DETROIT":                "DÉTROIT",
+		"OAKLAND":                "OAKLAND",
+		"CHARLOTTE":              "CHARLOTTE",
+		"INGLEWOOD":              "INGLEWOOD",
+		"WINDSOR":                "WINDSOR",
+		"CINCINNATI":             "CINCINNATI",
+		"ANAHEIM":                "ANAHEIM",
+		"MANILA":                 "MANILLE",
+		"BRISBANE":               "BRISBANE",
+		"MELBOURNE":              "MELBOURNE",
+		"LIMA":                   "LIMA",
+		"GRONINGEN":              "GRONINGEN",
+		"ANTWERP":                "ANVERS",
+		"PICO RIVERA":            "PICO RIVERA",
+		"BERWYN":                 "BERWYN",
+		"DALLAS":                 "DALLAS",
+		"BRIXTON":                "BRIXTON",
+		"ROTSELAAR":              "ROTSELAAR",
+		"ALABAMA":                "ALABAMA",
+		"MASSACHUSETTS":          "MASSACHUSETTS",
+		"ATHENS":                 "ATHÈNES",
+		"FLORENCE":               "FLORENCE",
+		"LANDGRAAF":              "LANDGRAAF",
+		"BURSWOOD":               "BURSWOOD",
+		"WELLINGTON":             "WELLINGTON",
+		"SEVILLE":                "SÉVILLE",
+		"BANGKOK":                "BANGKOK",
+		"TAIPEI":                 "TAÏPEI",
+		"SEOUL":                  "SÉOUL",
+		"MUNICH":                 "MUNICH",
+		"MANNHEIM":               "MANNHEIM",
+		"SAN FRANCISCO":          "SAN FRANCISCO",
+		"BUENOS AIRES":           "BUENOS AIRES",
+		"PORTO ALEGRE":           "PORTO ALEGRE",
+		"BELO HORIZONTE":         "BELO HORIZONTE",
+		"LA PLATA":               "LA PLATA",
+		"DUBAI":                  "DUBAÏ",
+		"WILLEMSTAD":             "WILLEMSTAD",
+		"BRASILIA":               "BRASILIA",
+		"OKLAHOMA":               "OKLAHOMA",
+		"SCHEESSEL":              "SCHEESSEL",
+		"ST GALLEN":              "SAINT-GALL",
+		"GDYNIA":                 "GDYNIA",
+		"ARRAS":                  "ARRAS",
+		"SAN JOSE":               "SAN JOSÉ",
+		"NICKELSDORF":            "NICKELSDORF",
+		"OREGON":                 "OREGON",
+		"VANCOUVER":              "VANCOUVER",
+		"PRAGUE":                 "PRAGUE",
+	}
+
+	// Convertit le nom du pays entré en majuscules pour correspondre aux clés de la map
+	if translatedCountry, ok := cities[city]; ok {
+		return translatedCountry
+	}
+	// Renvoie le pays non trouvé tel quel ou un message spécifique
+	return city
+}
+
 func translateFrenchCountries(country string) string {
 	invertedCountryTranslations := map[string]string{
 		"GERMANY":              "ALLEMAGNE",
@@ -246,12 +443,12 @@ func translateFrenchCountries(country string) string {
 		"PORTUGAL":             "PORTUGAL",
 		"QATAR":                "QATAR",
 		"ROMANIA":              "ROUMANIE",
-		"UNITED KINGDOM":       "ROYAUME-UNI",
+		"UK":                   "ROYAUME-UNI",
 		"SLOVAKIA":             "SLOVAQUIE",
 		"SWEDEN":               "SUÈDE",
 		"SWITZERLAND":          "SUISSE",
 		"TAIWAN":               "TAÏWAN",
-		"CZECH REPUBLIC":       "TCHÉQUIE",
+		"CZECHIA":              "TCHÉQUIE",
 		"THAILAND":             "THAÏLANDE",
 	}
 
@@ -260,7 +457,7 @@ func translateFrenchCountries(country string) string {
 		return translatedCountry
 	}
 	// Renvoie le pays non trouvé tel quel ou un message spécifique
-	return "Pays non trouvé"
+	return country
 }
 
 func openURL(url string) error {
@@ -282,4 +479,13 @@ func openURL(url string) error {
 		return err
 	}
 	return nil
+}
+
+func containsString(slice []string, element string) bool {
+	for _, e := range slice {
+		if e == element {
+			return true
+		}
+	}
+	return false
 }
