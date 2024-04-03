@@ -3,6 +3,8 @@ package app
 import (
 	"Groupie_Trackers/go/functions"
 	"fmt"
+	"os/exec"
+	"runtime"
 	"strings"
 	"time"
 
@@ -72,7 +74,16 @@ func ConcertPage(artist functions.Artist, myApp fyne.App) {
 
 		datebox := container.NewHBox()
 		for _, date := range dates {
-			datebox.Add(widget.NewLabel(CodeToShowDates(date)))
+			datebox.Add(
+				widget.NewButton(CodeToShowDates(date), func() {
+					slicedate, err := functions.DateStringToStringSlice(date)
+					if err != nil {
+						fmt.Println("Error:", err)
+					}
+					openURL("https://calendar.google.com/calendar/u/0/r/day/" + slicedate[2] + "/" + slicedate[1] + "/" + slicedate[0])
+					fmt.Println("https://calendar.google.com/calendar/u/0/r/day/" + slicedate[2] + "/" + slicedate[1] + "/" + slicedate[0])
+				}))
+			// datebox.Add(widget.NewLabel(CodeToShowDates(date)))
 		}
 		scrollContainer := container.NewHScroll(datebox)
 
@@ -132,7 +143,6 @@ func CodeToShowLocation(location string) string {
 	country := Splitlocation[1]
 	country = strings.ReplaceAll(country, "_", " ")
 	country = strings.ToUpper(country)
-	fmt.Println(country)
 	country = translateFrenchCountries(country)
 
 	return city + ", " + country
@@ -251,4 +261,25 @@ func translateFrenchCountries(country string) string {
 	}
 	// Renvoie le pays non trouvé tel quel ou un message spécifique
 	return "Pays non trouvé"
+}
+
+func openURL(url string) error {
+	var cmd *exec.Cmd
+
+	// Détermine le système d'exploitation en cours
+	switch runtime.GOOS {
+	case "windows":
+		cmd = exec.Command("cmd", "/c", "start", url)
+	case "darwin":
+		cmd = exec.Command("open", url)
+	default:
+		cmd = exec.Command("xdg-open", url)
+	}
+
+	// Exécute la commande pour ouvrir le navigateur
+	err := cmd.Start()
+	if err != nil {
+		return err
+	}
+	return nil
 }

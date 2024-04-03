@@ -21,6 +21,20 @@ func DateStringToIntSlice(dateString string) ([]int, error) {
 	return intSlice, nil
 }
 
+func DateStringToStringSlice(dateString string) ([]string, error) {
+	if dateString[0] == '*' {
+		dateString = dateString[1:]
+	}
+	dateParts := strings.Split(dateString, "-")
+
+	var stringSlice []string
+	for _, part := range dateParts {
+		stringSlice = append(stringSlice, part)
+	}
+
+	return stringSlice, nil
+}
+
 func IsNumberinSlice(number int, slice []int) bool {
 	for _, value := range slice {
 		if value == number {
