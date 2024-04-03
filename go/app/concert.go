@@ -62,7 +62,7 @@ func ConcertPage(artist functions.Artist, myApp fyne.App) {
 		printable_location := CodeToShowLocation(location)
 
 		locationButton := widget.NewButton(printable_location, func() {
-			ConcertMap(artist, myApp)
+			ConcertMap(artist, myApp, printable_location)
 			myWindow.Hide()
 		})
 		hbox := container.NewHBox(
@@ -132,7 +132,6 @@ func CodeToShowLocation(location string) string {
 	country := Splitlocation[1]
 	country = strings.ReplaceAll(country, "_", " ")
 	country = strings.ToUpper(country)
-	fmt.Println(country)
 	country = translateFrenchCountries(country)
 
 	return city + ", " + country

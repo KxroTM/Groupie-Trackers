@@ -35,15 +35,17 @@ func PlaylistPage(myApp fyne.App) {
 	playlistsContainer := container.NewVBox()
 
 	for _, playlist := range user.Playlists.Playlist {
+		playlistTemp := playlist
+
 		Title := canvas.NewText(" "+playlist.Name, color.White)
 		Title.TextSize = 22
 		Title.TextStyle = fyne.TextStyle{Bold: true}
 		playlistButton := widget.NewButtonWithIcon("", theme.NavigateNextIcon(), func() {
-			OnePlaylistPage(myApp, user, playlist.Name)
+			OnePlaylistPage(myApp, user, playlistTemp.Name)
 			myWindow.Hide()
 		})
 		deleteButton := widget.NewButtonWithIcon("", theme.DeleteIcon(), func() {
-			functions.DeletePlaylist(user.Username, playlist.Name)
+			functions.DeletePlaylist(user.Username, playlistTemp.Name)
 			PlaylistPage(myApp)
 			myWindow.Hide()
 		})

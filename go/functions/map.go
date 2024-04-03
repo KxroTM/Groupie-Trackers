@@ -8,8 +8,8 @@ import (
 	"net/url"
 )
 
-const apiKey = ""
-const bingMapsAPIKey = ""
+const apiKey = "23d3dac97e2f46f9b2568cf1cd68eb61"
+const bingMapsAPIKey = "AheBNDfySH1_8Np0XZwNBaAoclcGtKKDbhblCqTpcIkNQjGsTISV1_T_kUdQW0b1"
 
 func AddressToCoordinates(address string) (float64, float64, error) {
 	baseURL := "https://api.opencagedata.com/geocode/v1/json"
