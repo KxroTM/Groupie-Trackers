@@ -64,7 +64,7 @@ func ConcertPage(artist functions.Artist, myApp fyne.App) {
 		printable_location := CodeToShowLocation(location)
 
 		locationButton := widget.NewButton(printable_location, func() {
-			ConcertMap(artist, myApp)
+			ConcertMap(artist, myApp, printable_location)
 			myWindow.Hide()
 		})
 		hbox := container.NewHBox(

@@ -96,7 +96,7 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 	})
 
 	var playlistList []string
-	playlistList = append(playlistList, "Créer à une Playlist")
+	playlistList = append(playlistList, "Créer à une playlist")
 	for _, playlist := range user.Playlists.Playlist {
 		playlistList = append(playlistList, playlist.Name)
 	}

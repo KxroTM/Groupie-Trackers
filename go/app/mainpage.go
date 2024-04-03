@@ -469,7 +469,7 @@ func createFullPlaylistGrid(w fyne.Window, user *functions.Account, playlist str
 	var artists []functions.Artist
 	var index int
 
-	for i := 0; i < len(user.Playlists.Playlist)-1; i++ {
+	for i := 0; i < len(user.Playlists.Playlist); i++ {
 		if user.Playlists.Playlist[i].Name == playlist {
 			index = i
 			break
