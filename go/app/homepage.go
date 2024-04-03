@@ -77,6 +77,7 @@ func HomePage(myApp fyne.App) {
 	})
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(900, 650))
+	myWindow.SetFixedSize(true)
 	myWindow.Show()
 }
 
@@ -106,7 +107,8 @@ func SearchPage(myApp fyne.App) {
 
 	myWindow.SetContent(container.NewBorder(topContent, nil, nil, nil, BackgroundRect, gridContainer))
 	myWindow.CenterOnScreen()
-	myWindow.Resize(fyne.NewSize(800, 600))
+	myWindow.Resize(fyne.NewSize(900, 650))
+	myWindow.SetFixedSize(true)
 	myWindow.Show()
 }
 
@@ -133,7 +135,8 @@ func FavoritePage(myApp fyne.App) {
 	})
 	myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, scrollContainer))
 	myWindow.CenterOnScreen()
-	myWindow.Resize(fyne.NewSize(800, 600))
+	myWindow.Resize(fyne.NewSize(900, 650))
+	myWindow.SetFixedSize(true)
 	myWindow.Show()
 }
 

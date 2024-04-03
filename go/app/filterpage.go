@@ -404,6 +404,7 @@ func FilterPage(myApp fyne.App) {
 	myWindow.SetContent(container.NewBorder(topContent, nil, nil, nil, botContent)) // Utiliser scrollContainer à la place de gridContainer
 	myWindow.CenterOnScreen()
 	myWindow.Resize(fyne.NewSize(800, 850))
+	myWindow.SetFixedSize(true)
 	myWindow.Show()
 }
 

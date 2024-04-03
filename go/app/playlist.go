@@ -63,7 +63,8 @@ func PlaylistPage(myApp fyne.App) {
 	})
 	myWindow.SetContent(content)
 	myWindow.CenterOnScreen()
-	myWindow.Resize(fyne.NewSize(800, 600))
+	myWindow.Resize(fyne.NewSize(900, 650))
+	myWindow.SetFixedSize(true)
 	myWindow.Show()
 }
 
@@ -90,7 +91,8 @@ func OnePlaylistPage(myApp fyne.App, user *functions.Account, playlist string) {
 	})
 	myWindow.SetContent(content)
 	myWindow.CenterOnScreen()
-	myWindow.Resize(fyne.NewSize(800, 600))
+	myWindow.Resize(fyne.NewSize(900, 650))
+	myWindow.SetFixedSize(true)
 	myWindow.Show()
 }
 
@@ -146,7 +148,8 @@ func CreatePlaylistPage(myApp fyne.App, artist functions.Artist) {
 	})
 
 	myWindow.SetContent(container.NewBorder(container.NewVBox(navBar), nil, nil, nil, BackgroundRect, centeredContent))
-	myWindow.Resize(fyne.NewSize(600, 400))
+	myWindow.Resize(fyne.NewSize(900, 650))
+	myWindow.SetFixedSize(true)
 	myWindow.CenterOnScreen()
 
 	myWindow.Show()

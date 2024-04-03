@@ -100,7 +100,8 @@ func ConcertPage(artist functions.Artist, myApp fyne.App) {
 	})
 	myWindow.SetContent(scrollContent)
 	myWindow.CenterOnScreen()
-	myWindow.Resize(fyne.NewSize(800, 600))
+	myWindow.Resize(fyne.NewSize(900, 650))
+	myWindow.SetFixedSize(true)
 	myWindow.Show()
 }
 

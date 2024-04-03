@@ -225,6 +225,7 @@ func ArtistPage(artist functions.Artist, myApp fyne.App) {
 
 	myWindow.SetContent(content)
 	myWindow.CenterOnScreen()
-	myWindow.Resize(fyne.NewSize(800, 650))
+	myWindow.Resize(fyne.NewSize(900, 650))
+	myWindow.SetFixedSize(true)
 	myWindow.Show()
 }

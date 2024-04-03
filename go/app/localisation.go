@@ -50,6 +50,7 @@ func ConcertMap(artist functions.Artist, myApp fyne.App, location string) {
 	})
 	myWindow.SetContent(content)
 	myWindow.CenterOnScreen()
-	myWindow.Resize(fyne.NewSize(800, 600))
+	myWindow.Resize(fyne.NewSize(900, 650))
+	myWindow.SetFixedSize(true)
 	myWindow.Show()
 }

@@ -98,7 +98,7 @@ func LoginPage(app fyne.App) {
 	myWindow.SetContent(centeredContent)
 	myWindow.Resize(fyne.NewSize(600, 400)) // Agrandissement de la fenêtre
 	myWindow.CenterOnScreen()
-
+	myWindow.SetFixedSize(true)
 	myWindow.Show() // Affiche la fenêtre et lance l'application
 }
 
@@ -178,7 +178,7 @@ func SignupPage(app fyne.App) {
 	myWindow.SetContent(centeredContent)
 	myWindow.Resize(fyne.NewSize(600, 400)) // Agrandissement de la fenêtre
 	myWindow.CenterOnScreen()
-
+	myWindow.SetFixedSize(true)
 	myWindow.Show() // Affiche la fenêtre et lance l'application
 }
 
@@ -268,7 +268,8 @@ func AccountPage(myApp fyne.App) {
 		myApp.Quit()
 	})
 	myWindow.CenterOnScreen()
-	myWindow.Resize(fyne.NewSize(800, 600))
+	myWindow.Resize(fyne.NewSize(900, 650))
+	myWindow.SetFixedSize(true)
 	myWindow.Show()
 }
 
@@ -330,7 +331,8 @@ func ChangePasswordPage(myApp fyne.App) {
 	})
 	myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, centeredContent))
 	myWindow.CenterOnScreen()
-	myWindow.Resize(fyne.NewSize(800, 600))
+	myWindow.Resize(fyne.NewSize(900, 650))
+	myWindow.SetFixedSize(true)
 	myWindow.Show()
 }
 
@@ -384,6 +386,7 @@ func ChangePpf(myApp fyne.App) {
 
 	myWindow.SetContent(container.NewBorder(navBar, nil, nil, nil, BackgroundRect, centeredContent))
 	myWindow.CenterOnScreen()
-	myWindow.Resize(fyne.NewSize(800, 600))
+	myWindow.Resize(fyne.NewSize(900, 650))
+	myWindow.SetFixedSize(true)
 	myWindow.Show()
 }
