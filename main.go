@@ -1,7 +1,7 @@
 package main
 
 import (
-	"Groupie_Trackers/go/app"
+	app "Groupie_Trackers/go/app"
 	functions "Groupie_Trackers/go/functions"
 )
 

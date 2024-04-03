@@ -136,12 +136,12 @@ func CodeToShowLocation(location string) string {
 	city := Splitlocation[0]
 	city = strings.ReplaceAll(city, "_", " ")
 	city = strings.ToUpper(city)
-	city = translateFrenchCity(city)
+	city = TranslateFrenchCity(city)
 
 	country := Splitlocation[1]
 	country = strings.ReplaceAll(country, "_", " ")
 	country = strings.ToUpper(country)
-	country = translateFrenchCountries(country)
+	country = TranslateFrenchCountries(country)
 
 	return city + ", " + country
 }
@@ -202,7 +202,7 @@ func translateFrenchFormattedDate(date string) string {
 	return date
 }
 
-func translateFrenchCity(city string) string {
+func TranslateFrenchCity(city string) string {
 	cities := map[string]string{
 		"NORTH CAROLINA":         "CAROLINE DU NORD",
 		"GEORGIA":                "GÉORGIE",
@@ -401,7 +401,7 @@ func translateFrenchCity(city string) string {
 	return city
 }
 
-func translateFrenchCountries(country string) string {
+func TranslateFrenchCountries(country string) string {
 	invertedCountryTranslations := map[string]string{
 		"GERMANY":              "ALLEMAGNE",
 		"SAUDI ARABIA":         "ARABIE SAOUDITE",
