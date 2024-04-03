@@ -6,6 +6,7 @@ import (
 
 func Search(data AllArtists, input string) []Artist {
 	var result []Artist
+	loc := LocationsData()
 	var in = false
 	for i := 0; i < len(data); i++ {
 		if strings.Contains(strings.ToLower(data[i].Name), strings.ToLower(input)) {
@@ -13,6 +14,19 @@ func Search(data AllArtists, input string) []Artist {
 		}
 		for j := 0; j < len(data[i].Members); j++ {
 			if strings.Contains(strings.ToLower(data[i].Members[j]), strings.ToLower(input)) {
+				for k := 0; k < len(result); k++ {
+					if result[k].ID == data[i].ID {
+						in = true
+					}
+				}
+				if !in {
+					result = append(result, data[i])
+				}
+				in = false
+			}
+		}
+		for j := 0; j < len(loc.Index[i].Locations); j++ {
+			if strings.Contains(strings.ToLower(loc.Index[i].Locations[j]), strings.ToLower(input)) {
 				for k := 0; k < len(result); k++ {
 					if result[k].ID == data[i].ID {
 						in = true
