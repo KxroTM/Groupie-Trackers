@@ -8,3 +8,6 @@ Groupie Trackers is an application designed to receive data from a given API and
 - Tom
 - Yohan
 - Youssef
+
+# Lien de l'exposé
+https://1drv.ms/p/s!AjHk3EAdoKpsvn0AgqRqxmAD9D6t
